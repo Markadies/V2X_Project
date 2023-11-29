@@ -38,4 +38,5 @@ Bluetooth: HC-05
 Showcased on an RC car.
 # Additional Documentation
 Drive : https://drive.google.com/drive/folders/1nebVVTy2VRCJ-NF3PGbqPUDHoXjTnorL?usp=drive_link
+
 Slides : https://docs.google.com/presentation/d/1J0bNqVI_JlAhHnhn6w28LNjJr5SJ-hBG/edit?usp=sharing&ouid=111720471842626202523&rtpof=true&sd=true
