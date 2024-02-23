@@ -1,4 +1,4 @@
-@ -1,42 +0,0 @@
+
 # Introduction
 V2V communication is one of the recent technologies in modern day cars. It's a technology that makes roads safer and makes cars more reliable. It allows cars to communicate with each other, and with the infrastructure around them. This project aims at implementing a V2V communication system, and using it to implement some use-cases.
 
