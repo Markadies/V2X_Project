@@ -1,0 +1,4 @@
+../Core/Src/Buzzer.c:6:6:Buzzer_voidLowSound	1
+../Core/Src/Buzzer.c:93:6:Buzzer_voidMidSound	1
+../Core/Src/Buzzer.c:186:6:Buzzer_voidHighSound	1
+../Core/Src/Buzzer.c:280:6:Buzzer_voidStop	1
