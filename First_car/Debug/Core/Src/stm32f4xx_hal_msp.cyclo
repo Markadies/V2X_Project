@@ -1,0 +1,12 @@
+../Core/Src/stm32f4xx_hal_msp.c:66:6:HAL_MspInit	1
+../Core/Src/stm32f4xx_hal_msp.c:90:6:HAL_I2C_MspInit	4
+../Core/Src/stm32f4xx_hal_msp.c:182:6:HAL_I2C_MspDeInit	4
+../Core/Src/stm32f4xx_hal_msp.c:253:6:HAL_TIM_IC_MspInit	2
+../Core/Src/stm32f4xx_hal_msp.c:292:6:HAL_TIM_PWM_MspInit	3
+../Core/Src/stm32f4xx_hal_msp.c:325:6:HAL_TIM_Base_MspInit	2
+../Core/Src/stm32f4xx_hal_msp.c:341:6:HAL_TIM_MspPostInit	3
+../Core/Src/stm32f4xx_hal_msp.c:404:6:HAL_TIM_IC_MspDeInit	2
+../Core/Src/stm32f4xx_hal_msp.c:435:6:HAL_TIM_PWM_MspDeInit	3
+../Core/Src/stm32f4xx_hal_msp.c:468:6:HAL_TIM_Base_MspDeInit	2
+../Core/Src/stm32f4xx_hal_msp.c:490:6:HAL_UART_MspInit	4
+../Core/Src/stm32f4xx_hal_msp.c:591:6:HAL_UART_MspDeInit	4
