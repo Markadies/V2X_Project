@@ -5,4 +5,13 @@
  *      Author: dell
  */
 
+void LCD_HighLightIntensity_Danger (void)
+{
+
+
+
+
+
+
+}
 

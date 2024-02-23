@@ -8,6 +8,12 @@
 #ifndef INC_HELPER_FUNCTIONS_H_
 #define INC_HELPER_FUNCTIONS_H_
 
+  /***************************************Library Functions**********************************************/
+void LCD_HighLightIntensity_Danger (void);
+
+
+
+
 
 
 #endif /* INC_HELPER_FUNCTIONS_H_ */
