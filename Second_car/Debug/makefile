@@ -64,8 +64,8 @@ all: main-build
 main-build: Second_car.elf secondary-outputs
 
 # Tool invocations
-Second_car.elf Second_car.map: $(OBJS) $(USER_OBJS) D:\GP\WS\Second_car\STM32F446RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Second_car.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\GP\WS\Second_car\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Second_car.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Second_car.elf Second_car.map: $(OBJS) $(USER_OBJS) D:\GP\WS\V2X_Project\Second_car\STM32F446RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Second_car.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\GP\WS\V2X_Project\Second_car\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Second_car.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

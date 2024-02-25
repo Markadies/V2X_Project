@@ -160,8 +160,10 @@ void LCD_voidDrawSpecialCharachter(uint8_t*Copy_puint8Pattern,uint8_t Copy_uint8
 	/*Accessing the CGRAM address*/
 	uint8_t Local_uint8CGRAMAddress,Local_uint8Counter;
 	Local_uint8CGRAMAddress=Copy_uint8LocationNum*8;
+
 	/*Accessing CGRAM of lcd by command 0b01xxxxxx*/
 	LCD_voidSendCommand(Local_uint8CGRAMAddress+64);
+
 	/*Write the pattern on CGRAM*/
 	/*zy makont ba3mel fel string ha3mel hena , bas al fekra ane hawa2f al loop 3nd (((8))) ale howa max bytes
 	 * in a location in the CGRAM fal user masaln e5tar location 0 fa2a5ro feh 8 charachters ale homa 8 bytes*/
@@ -169,6 +171,7 @@ void LCD_voidDrawSpecialCharachter(uint8_t*Copy_puint8Pattern,uint8_t Copy_uint8
 	{
 		LCD_voidSendCharachter(Copy_puint8Pattern[Local_uint8Counter]);
 	}
+
 	/*Keda e7na 7atena al pattern fe location mo3yn fel CGRAM, fa na2esna bas neb3at al pattern lel DDRAM 34an n7oto fel LCD */
 	/*kona fo2 3malna command 34an ne access al CGRAM 34an ne access al DDRAM lazem command tany
 	 * wel set position feha asln al command dah*/

@@ -9,7 +9,10 @@
 #define INC_HELPER_FUNCTIONS_H_
 
   /***************************************Library Functions**********************************************/
-void LCD_HighLightIntensity_Danger (void);
+void LCD_HighLightIntensity_Warning(void);
+void LCD_AvoidOvertaking_Warning(void);
+void LCD_BeingOvertaken_Warning(void);
+
 
 
 

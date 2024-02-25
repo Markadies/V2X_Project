@@ -18,4 +18,12 @@ void TASK_LCDBuzzer (void *parameters);
 #define Priority_TASK_LCDBuzzer             2
 
 
+
+  /***************************************Private Macros*************************************************/
+
+#define Notify_TASK_LCDBuzzer_Light            1
+#define Notify_TASK_LCDBuzzer_Break            2
+#define Notify_TASK_LCDBuzzer_AvoidOvertake    3
+#define Notify_TASK_LCDBuzzer_BeingOvertaken   4
+
 #endif /* INC_TASKS_H_ */

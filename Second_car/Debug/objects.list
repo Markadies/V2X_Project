@@ -1,6 +1,7 @@
 "./Core/Src/Buzzer.o"
 "./Core/Src/Car_Control.o"
 "./Core/Src/GPS.o"
+"./Core/Src/Helper_Functions.o"
 "./Core/Src/LCD_I2C.o"
 "./Core/Src/LightSensor.o"
 "./Core/Src/NMEA.o"
