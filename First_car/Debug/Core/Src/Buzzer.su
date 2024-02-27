@@ -1,4 +1,4 @@
-../Core/Src/Buzzer.c:6:6:Buzzer_voidLowSound	8	static
-../Core/Src/Buzzer.c:93:6:Buzzer_voidMidSound	8	static
-../Core/Src/Buzzer.c:186:6:Buzzer_voidHighSound	8	static
-../Core/Src/Buzzer.c:280:6:Buzzer_voidStop	8	static
+Buzzer.c:6:6:Buzzer_voidLowSound	8	static
+Buzzer.c:93:6:Buzzer_voidMidSound	8	static
+Buzzer.c:186:6:Buzzer_voidHighSound	8	static
+Buzzer.c:280:6:Buzzer_voidStop	8	static

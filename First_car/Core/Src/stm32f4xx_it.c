@@ -44,7 +44,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
 extern uint16_t timeout;
-
+extern TIM_HandleTypeDef htim2;
 extern uint32_t edges_counter;
 extern uint16_t Global_Speed;
 /* USER CODE END PV */
@@ -165,13 +165,13 @@ void UsageFault_Handler(void)
 void TIM2_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM2_IRQn 0 */
-	float Local_fSpeed_In_Decimals;
-	is_two_readings++;
-	if(is_two_readings == 2){
+
+	 if (__HAL_TIM_GET_FLAG(&htim2, TIM_FLAG_CC1) != RESET)
+	  {
+		float Local_fSpeed_In_Decimals;
 		Local_fSpeed_In_Decimals=Calculate_Car_Speed();
-         Global_Speed=round(Local_fSpeed_In_Decimals);
-		is_two_readings = 0;
-	}
+		Global_Speed=round(Local_fSpeed_In_Decimals);
+	  }
   /* USER CODE END TIM2_IRQn 0 */
   HAL_TIM_IRQHandler(&htim2);
   /* USER CODE BEGIN TIM2_IRQn 1 */

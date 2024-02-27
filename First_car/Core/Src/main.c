@@ -24,9 +24,11 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "LCD_I2C.h"
+#include "LightSensor.h"
 #include "Help_Functions.h"
 #include "calculateSpeed.h"
-#include "Tasks.h"
+//#include "Tasks.h"
+#include "bluetooth.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -138,28 +140,39 @@ int main(void)
 	MX_TIM6_Init();
 	MX_TIM12_Init();
 	/* USER CODE BEGIN 2 */
+	HAL_UART_Receive_IT(&huart3,&received_char , 1);
+	__HAL_TIM_ENABLE_IT(&htim2,TIM_IT_UPDATE);
+	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);
 	LCD_voidInit();
-
-	//Enable the CYCCN counter (For SEGGER)
-	DWT_CTRL |= (1<<0);
-
-	SEGGER_SYSVIEW_Conf();
-
-	SEGGER_SYSVIEW_Start();
-
-	Task1_Status=xTaskCreate(TASK_LCDBuzzer, "LED1", 200, NULL, 2, &Task1_Handle);
-	xTaskCreate(UART_Task, "CarControl", configMINIMAL_STACK_SIZE, NULL, Priority_TASK_CarControl, NULL);
-	configASSERT(Task1_Status==pdPASS);
-
-	vTaskStartScheduler();
+	LightSensor_voidInit();
+//
+//	//Enable the CYCCN counter (For SEGGER)
+//	DWT_CTRL |= (1<<0);
+//
+//	SEGGER_SYSVIEW_Conf();
+//
+//	SEGGER_SYSVIEW_Start();
+//
+//	Task1_Status=xTaskCreate(TASK_LCDBuzzer, "LED1", 200, NULL, 2, &Task1_Handle);
+//	xTaskCreate(UART_Task, "CarControl", configMINIMAL_STACK_SIZE, NULL, Priority_TASK_CarControl, NULL);
+//	configASSERT(Task1_Status==pdPASS);
+//
+//	vTaskStartScheduler();
 
 	/* USER CODE END 2 */
-
+uint16_t Dataaaa;
+uint16_t Garbage1;
+uint16_t Garbage2;
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 	while (1)
 	{
 		/* USER CODE END WHILE */
+//        LightSensor_uint8ReadIntensity(&Dataaaa,&Garbage1,&Garbage2);
+
+//        LCD_voidWriteNum(Dataaaa);
+//        HAL_Delay(1000);
+//        LCD_voidClearDisplay();
 
 		/* USER CODE BEGIN 3 */
 
@@ -661,6 +674,18 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 		edges_counter++;
 	}
 }
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	if(huart->Instance==USART3)
+	{
+		HAL_UART_Receive_IT(&huart3, &received_char, 1);
+
+		/*Give the semaphore*/
+
+	}
+}
+
+
 /* USER CODE END 4 */
 
 /**
