@@ -145,6 +145,7 @@ int main(void)
 	HAL_TIM_OC_Start_IT(&htim2, TIM_CHANNEL_1);
 	LCD_voidInit();
 	LightSensor_voidInit();
+
 //
 //	//Enable the CYCCN counter (For SEGGER)
 //	DWT_CTRL |= (1<<0);
