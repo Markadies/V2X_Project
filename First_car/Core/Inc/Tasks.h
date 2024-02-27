@@ -16,6 +16,7 @@ void TASK_LCDBuzzer (void *parameters);
 
 //Tasks Priority
 #define Priority_TASK_LCDBuzzer             2
+#define Priority_TASK_CarControl            2
 
 
 

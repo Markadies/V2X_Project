@@ -84,6 +84,7 @@ static void MX_TIM12_Init(void);
 uint8_t is_two_readings = 0;
 uint32_t edges_counter = 0;
 uint16_t Global_Speed;
+uint8_t received_char;
 /* USER CODE END 0 */
 
 /**
@@ -147,7 +148,7 @@ int main(void)
 	SEGGER_SYSVIEW_Start();
 
 	Task1_Status=xTaskCreate(TASK_LCDBuzzer, "LED1", 200, NULL, 2, &Task1_Handle);
-
+	xTaskCreate(UART_Task, "CarControl", configMINIMAL_STACK_SIZE, NULL, Priority_TASK_CarControl, NULL);
 	configASSERT(Task1_Status==pdPASS);
 
 	vTaskStartScheduler();
