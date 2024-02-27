@@ -1,4 +1,0 @@
-../Core/Src/Helper_Functions.c:11:6:LCD_HighLightIntensity_Warning	8	static
-../Core/Src/Helper_Functions.c:25:6:LCD_AvoidOvertaking_Warning	8	static
-../Core/Src/Helper_Functions.c:41:6:LCD_BeingOvertaken_Warning	8	static
-../Core/Src/Helper_Functions.c:53:13:LCD_Print_WarningSign	96	static
