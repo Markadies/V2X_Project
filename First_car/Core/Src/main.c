@@ -23,6 +23,7 @@
 /* USER CODE BEGIN Includes */
 #include "FreeRTOS.h"
 #include "task.h"
+#include "Buzzer.h"
 #include "LCD_I2C.h"
 #include "LightSensor.h"
 #include "Help_Functions.h"
@@ -146,6 +147,7 @@ int main(void)
 	LCD_voidInit();
 	LightSensor_voidInit();
 
+<<<<<<< Updated upstream
 //
 //	//Enable the CYCCN counter (For SEGGER)
 //	DWT_CTRL |= (1<<0);
@@ -159,16 +161,42 @@ int main(void)
 //	configASSERT(Task1_Status==pdPASS);
 //
 //	vTaskStartScheduler();
+=======
+	//Enable the CYCCN counter (For SEGGER)
+	/*
+	DWT_CTRL |= (1<<0);
+>>>>>>> Stashed changes
 
   /* USER CODE END 2 */
 
+<<<<<<< Updated upstream
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+=======
+	SEGGER_SYSVIEW_Start();
+
+	Task1_Status=xTaskCreate(TASK_LCDBuzzer, "LED1", 200, NULL, 2, &Task1_Handle);
+
+	configASSERT(Task1_Status==pdPASS);
+
+	vTaskStartScheduler();
+	*/
+
+	/* USER CODE END 2 */
+
+	/* Infinite loop */
+	/* USER CODE BEGIN WHILE */
+>>>>>>> Stashed changes
 	while (1)
 	{
     /* USER CODE END WHILE */
 
+<<<<<<< Updated upstream
     /* USER CODE BEGIN 3 */
+=======
+		Buzzer_voidHighSound();
+		/* USER CODE BEGIN 3 */
+>>>>>>> Stashed changes
 
 	}
   /* USER CODE END 3 */
