@@ -134,7 +134,8 @@ int main(void)
   MX_TIM12_Init();
   /* USER CODE BEGIN 2 */
 	LCD_voidInit();
-  	
+  
+  // enable interrupt
 	__HAL_TIM_ENABLE_IT(&htim2, TIM_IT_UPDATE);
 	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);
 
