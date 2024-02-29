@@ -165,13 +165,14 @@ void UsageFault_Handler(void)
 void TIM2_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM2_IRQn 0 */
-	float Local_fSpeed_In_Decimals;
-	is_two_readings++;
-	if(is_two_readings == 2){
-		Local_fSpeed_In_Decimals=Calculate_Car_Speed();
-         Global_Speed=round(Local_fSpeed_In_Decimals);
-		is_two_readings = 0;
+	if (__HAL_TIM_GET_IT_SOURCE(&htim2, TIM_IT_UPDATE) != RESET) {
+		// Timer overflow interrupt
+		Global_Speed = round(Calculate_Car_Speed());
+	}else {
+		edges_counter++;
 	}
+
+
   /* USER CODE END TIM2_IRQn 0 */
   HAL_TIM_IRQHandler(&htim2);
   /* USER CODE BEGIN TIM2_IRQn 1 */

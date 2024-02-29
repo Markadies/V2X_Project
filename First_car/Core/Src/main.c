@@ -81,7 +81,6 @@ static void MX_TIM12_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint8_t is_two_readings = 0;
 uint32_t edges_counter = 0;
 uint16_t Global_Speed;
 uint8_t received_char;
@@ -139,7 +138,9 @@ int main(void)
 	MX_TIM12_Init();
 	/* USER CODE BEGIN 2 */
 	LCD_voidInit();
-
+	
+	__HAL_TIM_ENABLE_IT(&htim2, TIM_IT_UPDATE);
+	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);
 	//Enable the CYCCN counter (For SEGGER)
 	DWT_CTRL |= (1<<0);
 
