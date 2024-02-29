@@ -1,4 +1,0 @@
-../Core/Src/NMEA.c:25:5:decodeGGA	24
-../Core/Src/NMEA.c:296:8:StrDeg_To_FloatDec	9
-../Core/Src/NMEA.c:339:8:Deg_To_Rad	1
-../Core/Src/NMEA.c:343:8:Distance_Calc	1

@@ -44,7 +44,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
 extern uint16_t timeout;
-
+extern TIM_HandleTypeDef htim2;
 extern uint32_t edges_counter;
 extern uint16_t Global_Speed;
 /* USER CODE END PV */
@@ -165,13 +165,13 @@ void UsageFault_Handler(void)
 void TIM2_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM2_IRQn 0 */
+
 	if (__HAL_TIM_GET_IT_SOURCE(&htim2, TIM_IT_UPDATE) != RESET) {
 		// Timer overflow interrupt
 		Global_Speed = round(Calculate_Car_Speed());
 	}else {
 		edges_counter++;
 	}
-
 
   /* USER CODE END TIM2_IRQn 0 */
   HAL_TIM_IRQHandler(&htim2);
