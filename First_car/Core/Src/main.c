@@ -145,8 +145,8 @@ int main(void)
 
 	__HAL_TIM_ENABLE_IT(&htim2, TIM_IT_UPDATE);
 	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);
-	LightSensor_voidInit();
-
+//	LightSensor_voidInit();
+LCD_HighLightIntensity_Warning();
 
 //
 //	//Enable the CYCCN counter (For SEGGER)
