@@ -1,1 +1,2 @@
-../Core/Src/Tasks.c:21:6:TASK_LCDBuzzer	24	static
+../Core/Src/Tasks.c:22:6:TASK_LCDBuzzer	32	static
+../Core/Src/Tasks.c:55:6:TASK_CarControl	16	static

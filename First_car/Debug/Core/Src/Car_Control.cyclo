@@ -1,0 +1,17 @@
+../Core/Src/Car_Control.c:28:6:Car_Move_Forward_High_Speed	1
+../Core/Src/Car_Control.c:53:6:Car_Move_Forward_Low_Speed	1
+../Core/Src/Car_Control.c:77:6:Car_Move_Backward	1
+../Core/Src/Car_Control.c:102:6:Car_Rotate_Right	1
+../Core/Src/Car_Control.c:126:6:Car_Rotate_Left	1
+../Core/Src/Car_Control.c:151:6:Car_Rotate_RightForward	1
+../Core/Src/Car_Control.c:181:6:Car_Rotate_LeftForward	1
+../Core/Src/Car_Control.c:213:6:Car_Stop	1
+../Core/Src/Car_Control.c:224:13:Motors_Disabling	1
+../Core/Src/Car_Control.c:235:7:Motor1_Rotate_CW	1
+../Core/Src/Car_Control.c:241:7:Motor1_Rotate_CCW	1
+../Core/Src/Car_Control.c:246:6:Motor2_Rotate_CW	1
+../Core/Src/Car_Control.c:252:6:Motor2_Rotate_CCW	1
+../Core/Src/Car_Control.c:261:7:Motor3_Rotate_CW	1
+../Core/Src/Car_Control.c:267:7:Motor3_Rotate_CCW	1
+../Core/Src/Car_Control.c:275:7:Motor4_Rotate_CW	1
+../Core/Src/Car_Control.c:281:7:Motor4_Rotate_CCW	1

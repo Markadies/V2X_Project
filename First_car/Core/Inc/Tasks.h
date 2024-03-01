@@ -9,8 +9,8 @@
 #define INC_TASKS_H_
 
   /***************************************Library Functions**********************************************/
-void TASK_LCDBuzzer (void *parameters);
-
+void TASK_LCDBuzzer  (void *parameters);
+void TASK_CarControl (void *pvParameters);
 
   /*************************************Configurations Macros********************************************/
 

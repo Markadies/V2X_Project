@@ -1,0 +1,3 @@
+../Core/Src/Call_Back_functions.c:20:6:HAL_TIM_IC_CaptureCallback	16	static
+../Core/Src/Call_Back_functions.c:28:6:HAL_UART_RxCpltCallback	16	static
+../Core/Src/Call_Back_functions.c:43:6:vApplicationIdleHook	8	static

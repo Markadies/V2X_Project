@@ -41,34 +41,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := First_car
+BUILD_ARTIFACT_NAME := Sec_car
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-First_car.elf \
+Sec_car.elf \
 
 MAP_FILES += \
-First_car.map \
+Sec_car.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-First_car.list \
+Sec_car.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: First_car.elf secondary-outputs
+main-build: Sec_car.elf secondary-outputs
 
 # Tool invocations
-First_car.elf First_car.map: $(OBJS) $(USER_OBJS) D:\GP\WS\V2X_Project\First_car\STM32F446RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "First_car.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\GP\WS\V2X_Project\First_car\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="First_car.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Sec_car.elf Sec_car.map: $(OBJS) $(USER_OBJS) D:\GP\WS\V2X_Project\Sec_car\STM32F446RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Sec_car.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\GP\WS\V2X_Project\Sec_car\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Sec_car.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -77,14 +77,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-First_car.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "First_car.list"
+Sec_car.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "Sec_car.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) First_car.elf First_car.list First_car.map default.size.stdout
+	-$(RM) Sec_car.elf Sec_car.list Sec_car.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)

@@ -81,7 +81,7 @@ static void MX_USART6_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint32_t edges_counter = 0;
+uint8_t received_char;
 uint16_t Global_Speed;
 /* USER CODE END 0 */
 
@@ -97,7 +97,7 @@ int main(void)
 	TaskHandle_t Task2_Handle;
 	TaskHandle_t Task3_Handle;
 
-	/*Creating a variable to save the return of the xcreateTask func  (pdPass or pdFail) */
+	/*Creating a variable to save the return of the xcreateTask function  (pdPass or pdFail) */
 	BaseType_t Task1_Status;
 	//TimerHandle_t Timer_LCDBuzzer_Handle;
 
@@ -665,13 +665,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
-{
-	if (htim->Instance == TIM2 && (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1 || htim->Channel == HAL_TIM_ACTIVE_CHANNEL_2))
-	{
-		edges_counter++;
-	}
-}
+
 /* USER CODE END 4 */
 
 /**

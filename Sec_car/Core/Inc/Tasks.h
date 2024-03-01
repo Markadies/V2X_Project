@@ -10,13 +10,13 @@
 
   /***************************************Library Functions**********************************************/
 void TASK_LCDBuzzer (void *parameters);
-
+void TASK_CarControl (void *pvParameters);
 
   /*************************************Configurations Macros********************************************/
 
 //Tasks Priority
 #define Priority_TASK_LCDBuzzer             2
-
+#define Priority_TASK_CarControl            2
 
 
   /***************************************Private Macros*************************************************/

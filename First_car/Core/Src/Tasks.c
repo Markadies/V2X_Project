@@ -8,15 +8,18 @@
 #include "main.h"
 #include "stm32f4xx_hal.h"
 
-
+#include "FreeRTOS.h"
+#include "task.h"
 
 #include "Tasks.h"
+#include "Car_Control.h"
 #include "Help_Functions.h"
 #include "Buzzer.h"
 #include "LCD_I2C.h"
 #include "GPS.h"
 #include "bluetooth.h"
 #include "Car_Control.h"
+#include "Build_msg.h"
 #include <stdint.h>
 
 extern uint8_t received_char;
@@ -27,25 +30,22 @@ void TASK_LCDBuzzer (void *parameters)
 
 	while(1)
 	{
-      //xTaskNotifyWait((uint32_t)NULL,0xFFFFFFFF,&Local_uint8NotificationValue, portMAX_DELAY);
+     xTaskNotifyWait((uint32_t)NULL,0xFFFFFFFF,&Local_uint8NotificationValue, portMAX_DELAY);
 
 	 switch(Local_uint8NotificationValue)
-	 {
+	  {
 	 case Notify_TASK_LCDBuzzer_Break:
 
          Buzzer_voidHighSound();
          LCD_HighLightIntensity_Warning();
-
-
-
-		 break;
+         break;
 
 	 default:
 		 /*Do Nothing*/
 		 break;
 
 
-	 }
+	  }
 
 
 	}
@@ -53,7 +53,8 @@ void TASK_LCDBuzzer (void *parameters)
 
 }
 
-void UART_Task(void *pvParameters) {
+void TASK_CarControl(void *pvParameters)
+{
     for (;;) {
         // Read data from UART
        switch (received_char){

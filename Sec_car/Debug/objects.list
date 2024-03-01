@@ -1,4 +1,6 @@
+"./Core/Src/Build_msg.o"
 "./Core/Src/Buzzer.o"
+"./Core/Src/Call_Back_functions.o"
 "./Core/Src/Car_Control.o"
 "./Core/Src/GPS.o"
 "./Core/Src/Help_Functions.o"
