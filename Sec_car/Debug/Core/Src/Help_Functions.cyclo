@@ -1,4 +1,5 @@
-../Core/Src/Help_Functions.c:26:6:LCD_HighLightIntensity_Warning	1
-../Core/Src/Help_Functions.c:40:6:LCD_AvoidOvertaking_Warning	1
-../Core/Src/Help_Functions.c:56:6:LCD_BeingOvertaken_Warning	1
-../Core/Src/Help_Functions.c:68:13:LCD_Print_WarningSign	1
+../Core/Src/Help_Functions.c:16:6:LCD_HighLightIntensity_Warning	1
+../Core/Src/Help_Functions.c:31:6:LCD_AvoidHardBraking	1
+../Core/Src/Help_Functions.c:46:6:LCD_AvoidOvertaking_Warning	1
+../Core/Src/Help_Functions.c:62:6:LCD_BeingOvertaken_Warning	1
+../Core/Src/Help_Functions.c:74:13:LCD_Print_WarningSign	1

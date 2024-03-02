@@ -1,2 +1,5 @@
-../Core/Src/Tasks.c:27:6:TASK_LCDBuzzer	2
-../Core/Src/Tasks.c:56:6:TASK_CarControl	7
+../Core/Src/Tasks.c:29:6:TASK_GPS	4
+../Core/Src/Tasks.c:72:6:TASK_LCDBuzzer	2
+../Core/Src/Tasks.c:101:6:TASK_CarControl	7
+../Core/Src/Tasks.c:143:6:TASK_ESPSend_PeriodicData	1
+../Core/Src/Tasks.c:155:6:TASK_LightSensor	2

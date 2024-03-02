@@ -10,7 +10,7 @@
 
 /*Library functions*/
 void LightSensor_voidInit(void);
-void LightSensor_uint8ReadIntensity(uint16_t *Copy_puint16LuxValue,uint16_t *Copy_puint16Channel0Value,uint16_t *Copy_puint16Channel1Value);
+void LightSensor_uint8ReadIntensity(uint16_t *Copy_puint16LuxValue);
 void LightSensor_voidCallBackFunction(uint16_t Copy_uint16LowerThreshold,uint16_t Copy_uint16UpperThreshold);
 void LightSensor_voidSetInterruptTest(void);
 void LightSensor_voidClearInterrupt(void);

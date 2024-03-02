@@ -140,7 +140,18 @@ void TASK_CarControl(void *pvParameters)
        }
     }
 }
+void TASK_ESPSend_PeriodicData (void *pvParameters)
+{
 
+   while(1)
+   {
+
+
+
+   }
+
+
+}
 
 
 

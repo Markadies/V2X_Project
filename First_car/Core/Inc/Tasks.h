@@ -13,6 +13,7 @@ void TASK_LCDBuzzer  (void *pvParameters);
 void TASK_CarControl (void *pvParameters);
 void TASK_GPS        (void *pvParameters);
 void TASK_ESPSend_PeriodicData (void *pvParameters);
+void TASK_LightSensor(void *pvParameters);
 
   /*************************************Configurations Macros********************************************/
 
@@ -20,6 +21,10 @@ void TASK_ESPSend_PeriodicData (void *pvParameters);
 #define Priority_TASK_LCDBuzzer             2
 #define Priority_TASK_CarControl            2
 
+
+//For light sensor task
+  /*Configure the Max flux intensity that consider a problem*/
+#define MAX_LightIntensity           100
 
 
   /***************************************Private Macros*************************************************/

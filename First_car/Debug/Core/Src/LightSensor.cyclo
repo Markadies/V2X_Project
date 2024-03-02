@@ -1,9 +1,9 @@
 ../Core/Src/LightSensor.c:27:6:LightSensor_voidInit	1
 ../Core/Src/LightSensor.c:46:6:LightSensor_uint8ReadIntensity	5
-../Core/Src/LightSensor.c:107:6:LightSensor_voidCallBackFunction	1
-../Core/Src/LightSensor.c:147:6:LightSensor_voidSetInterruptTest	1
-../Core/Src/LightSensor.c:153:6:LightSensor_voidClearInterrupt	1
-../Core/Src/LightSensor.c:159:13:TSL2561_GetChannelsReadings	1
-../Core/Src/LightSensor.c:178:13:TSL2561_Reset	1
-../Core/Src/LightSensor.c:191:13:TSL2561_WriteByte	1
-../Core/Src/LightSensor.c:196:13:TSL2561_ReadByte	1
+../Core/Src/LightSensor.c:106:6:LightSensor_voidCallBackFunction	1
+../Core/Src/LightSensor.c:146:6:LightSensor_voidSetInterruptTest	1
+../Core/Src/LightSensor.c:152:6:LightSensor_voidClearInterrupt	1
+../Core/Src/LightSensor.c:158:13:TSL2561_GetChannelsReadings	1
+../Core/Src/LightSensor.c:177:13:TSL2561_Reset	1
+../Core/Src/LightSensor.c:190:13:TSL2561_WriteByte	1
+../Core/Src/LightSensor.c:195:13:TSL2561_ReadByte	1

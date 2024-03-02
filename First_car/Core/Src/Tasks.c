@@ -24,6 +24,7 @@
 
 extern uint8_t received_char;
 uint8_t  Global_GPS_Speed_Completetion=0;
+uint8_t  Light_Sensor_Status=0;
 
 void TASK_GPS        (void *pvParameters)
 {
@@ -139,6 +140,48 @@ void TASK_CarControl(void *pvParameters)
 		}
 	}
 }
+void TASK_ESPSend_PeriodicData (void *pvParameters)
+{
+
+    while(1)
+    {
 
 
+    }
+
+
+
+}
+void TASK_LightSensor(void *pvParameters)
+{
+uint16_t Local_uint16LightSensor_Flux=0;
+  while(1)
+  {
+    /*Read the intensity*/
+    LightSensor_uint8ReadIntensity(&Local_uint16LightSensor_Flux);
+
+    if(Local_uint16LightSensor_Flux>MAX_LightIntensity)
+    {
+    	/*Update the status*/
+    	Light_Sensor_Status=1;
+
+    	//Notify the ESPSendStatus task with problem in light
+    	//xTaskNotifyGive();
+
+    	/*Delaying the task to free the processor*/
+    	vTaskDelay(pdMS_TO_TICKS(800));
+    }
+    else
+	{
+    	/*Delaying the task to free the processor*/
+    	vTaskDelay(pdMS_TO_TICKS(600));
+
+	}
+
+  }
+
+
+
+
+}
 

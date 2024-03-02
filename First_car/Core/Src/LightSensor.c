@@ -43,7 +43,7 @@ void LightSensor_voidInit(void)
 
 }
 
-void LightSensor_uint8ReadIntensity(uint16_t *Copy_puint16LuxValue,uint16_t *Copy_puint16Channel0Value,uint16_t *Copy_puint16Channel1Value)
+void LightSensor_uint8ReadIntensity(uint16_t *Copy_puint16LuxValue)
 {
 	//Variables for storing Data registers
 	uint16_t Local_uint16Channel0Val, Local_uint16Channel1Val,flux_integar=0;
@@ -90,8 +90,7 @@ void LightSensor_uint8ReadIntensity(uint16_t *Copy_puint16LuxValue,uint16_t *Cop
 
 	flux_integar=round(flux);
 
-	*Copy_puint16Channel0Value=Local_uint16Channel0Val;
-	*Copy_puint16Channel1Value=Local_uint16Channel1Val;
+	/*Update the user variable*/
 	*Copy_puint16LuxValue=flux_integar;
 
 	/*Reseting the chip if the Sensor produces high flux */
@@ -131,7 +130,7 @@ void LightSensor_voidCallBackFunction(uint16_t Copy_uint16LowerThreshold,uint16_
     TSL2561_WriteByte((TSL2561_COMMAND_NORMAL | TSL2561_REG_THRESHHIGHLOW), Local_uint8HighLowThreshold);
     TSL2561_WriteByte((TSL2561_COMMAND_NORMAL | TSL2561_REG_THRESHHIGHHIGH), Local_uint8HighHighThreshold);
 
-    /*1- first element is the command -> Address of interrupt register
+        /*1- first element is the command -> Address of interrupt register
     	 *2- Second element is the 0b00010101 which activates the level interrupt for the module
     	 *and make the interrupt when the intensity value exceeds the limits of the
     	 *threshold for 1 integration cycles (2sec)*/
