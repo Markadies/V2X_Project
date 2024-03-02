@@ -9,8 +9,10 @@
 #define INC_TASKS_H_
 
   /***************************************Library Functions**********************************************/
-void TASK_LCDBuzzer  (void *parameters);
+void TASK_LCDBuzzer  (void *pvParameters);
 void TASK_CarControl (void *pvParameters);
+void TASK_GPS        (void *pvParameters);
+void TASK_ESPSend_PeriodicData (void *pvParameters);
 
   /*************************************Configurations Macros********************************************/
 
@@ -26,5 +28,11 @@ void TASK_CarControl (void *pvParameters);
 #define Notify_TASK_LCDBuzzer_Break            2
 #define Notify_TASK_LCDBuzzer_AvoidOvertake    3
 #define Notify_TASK_LCDBuzzer_BeingOvertaken   4
+
+#define Nothing_Completed                      0
+#define Half_Completed_Speed                   1
+#define Half_Completed_GPS                     2
+
+
 
 #endif /* INC_TASKS_H_ */

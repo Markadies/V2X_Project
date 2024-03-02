@@ -22,7 +22,11 @@
 #include "stm32f4xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "FreeRTOS.h"
+#include "task.h"
+
 #include "calculateSpeed.h"
+#include "Tasks.h"
 #include <math.h>
 /* USER CODE END Includes */
 
@@ -47,6 +51,8 @@ extern uint16_t timeout;
 
 extern uint32_t edges_counter;
 extern uint16_t Global_Speed;
+
+extern uint8_t  Global_GPS_Speed_Completetion;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -168,6 +174,19 @@ void TIM2_IRQHandler(void)
   if (__HAL_TIM_GET_IT_SOURCE(&htim2, TIM_IT_UPDATE) != RESET) {
 		// Timer overflow interrupt
 		Global_Speed = round(Calculate_Car_Speed());
+        if(Global_GPS_Speed_Completetion==Nothing_Completed)
+        {
+        	Global_GPS_Speed_Completetion=Half_Completed_Speed;
+
+        }
+        else if(Global_GPS_Speed_Completetion==Half_Completed_GPS)
+        {
+        	Global_GPS_Speed_Completetion=Nothing_Completed;
+
+        	/*Notify the ESPPeriodicTask*/
+        	//xTaskNotifyFromISR();
+        }
+
 	}else {
 		edges_counter++;
 	}

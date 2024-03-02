@@ -20,7 +20,52 @@
 #include "Build_msg.h"
 
 extern uint8_t received_char;
-void TASK_LCDBuzzer (void *parameters)
+uint8_t  Global_GPS_Speed_Completetion=0;
+
+void TASK_GPS        (void *pvParameters)
+{
+     uint8_t Decode_Error_Code;
+	while(1)
+	{
+		/*Update the GPS Data*/
+		Decode_Error_Code = GPS_uint8DecodeGGAData();
+         if(Decode_Error_Code==Decode_Success)
+         {
+              /*Update the completetion flag to activate the sendESP_Periodic task*/
+              if(Global_GPS_Speed_Completetion==Nothing_Completed)
+              {
+            	  Global_GPS_Speed_Completetion==Half_Completed_GPS;
+
+              }
+              else if(Global_GPS_Speed_Completetion==Half_Completed_Speed)
+              {
+            	  /*Deactivating the interrupts to avoid the speed interrupt to preempt*/
+            	  taskENTER_CRITICAL();
+            	  Global_GPS_Speed_Completetion=Nothing_Completed;
+            	  taskEXIT_CRITICAL();
+
+            	  /*Activate the ESPTask*/
+            	  //xTaskNotify();
+              }
+        	  /*Stopping the task for 400ms to free the processor*/
+              vTaskDelay(pdMS_TO_TICKS(400));
+         }
+         else if(Decode_Error_Code==Decode_Failed)
+		 {
+
+
+		 }
+
+
+
+	}
+
+
+
+
+}
+
+void TASK_LCDBuzzer (void *pvParameters)
 {
     uint32_t Local_uint8NotificationValue;
 
@@ -30,9 +75,9 @@ void TASK_LCDBuzzer (void *parameters)
 
 	 switch(Local_uint8NotificationValue)
 	  {
-	 case Notify_TASK_LCDBuzzer_Break:
+	 case Notify_TASK_LCDBuzzer_Light:
 
-         Buzzer_voidHighSound();
+         Buzzer_voidMidSound();
          LCD_HighLightIntensity_Warning();
 
 

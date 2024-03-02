@@ -8,6 +8,10 @@
 #ifndef INC_GPS_H_
 #define INC_GPS_H_
 
+/****************************Macros***************************/
+#define  Decode_Success  1
+#define  Decode_Failed   2
+
 /*Waits till the gps gets right information and its done*/
 void GPS_voidInit(void);
 

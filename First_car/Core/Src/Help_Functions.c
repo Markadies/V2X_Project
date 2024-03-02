@@ -4,14 +4,6 @@
  *  Created on: Feb 25, 2024
  *      Author: dell
  */
- /***************************************Library Functions**********************************************/
-void LCD_HighLightIntensity_Warning(void);
-void LCD_AvoidOvertaking_Warning(void);
-void LCD_BeingOvertaken_Warning(void);
-
-
-
-
 
 #include "stm32f4xx_hal.h"
 #include "Help_Functions.h"
@@ -19,9 +11,6 @@ void LCD_BeingOvertaken_Warning(void);
 
 /***************************************Static Functions Definition***********************************************/
 static void LCD_Print_WarningSign(void);
-
-
-
 
 void LCD_HighLightIntensity_Warning()
 {
@@ -37,6 +26,23 @@ void LCD_HighLightIntensity_Warning()
 	LCD_voidSendString("Light ASAP!");
 
 }
+
+
+void LCD_AvoidHardBraking(void)
+{
+	/*Printing the warning sign*/
+	LCD_Print_WarningSign();
+
+	/*Printing the warning message to the driver*/
+	LCD_voidSetPositionXY(1,0);
+	LCD_voidSendString("Hit Brakes");
+
+	LCD_voidSetPositionXY(2,3);
+	LCD_voidSendString("ASAP!!!");
+
+}
+
+
 void LCD_AvoidOvertaking_Warning()
 {
 

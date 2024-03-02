@@ -17,8 +17,6 @@
 #define  Valid_Data      2
 #define  unValid_Data    1
 
-#define  Decode_Success  1
-#define  Decode_Failed   2
 
 /*This is the buffer which contains th undecoded GGA data*/
 uint8_t GGA[100];
