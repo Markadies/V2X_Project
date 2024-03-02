@@ -18,7 +18,11 @@ uint8_t Local_uint8LongitudeArr[11];
 uint8_t Local_uint8SpeedElements;
 
 uint8_t Local_uint8Counter=0;
-if(Copy_uint16Speed<100)
+if(Copy_uint16Speed<10)
+{
+	Local_uint8SpeedElements=1;
+}
+else if(Copy_uint16Speed<100)
 {
 	Local_uint8SpeedElements=2;
 }
