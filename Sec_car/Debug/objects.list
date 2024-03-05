@@ -5,7 +5,6 @@
 "./Core/Src/GPS.o"
 "./Core/Src/Help_Functions.o"
 "./Core/Src/LCD_I2C.o"
-"./Core/Src/LightSensor.o"
 "./Core/Src/NMEA.o"
 "./Core/Src/Tasks.o"
 "./Core/Src/UartRingbuffer.o"

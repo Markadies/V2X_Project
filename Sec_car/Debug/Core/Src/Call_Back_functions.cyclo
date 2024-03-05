@@ -1,3 +1,4 @@
-../Core/Src/Call_Back_functions.c:20:6:HAL_TIM_IC_CaptureCallback	4
-../Core/Src/Call_Back_functions.c:28:6:HAL_UART_RxCpltCallback	2
-../Core/Src/Call_Back_functions.c:43:6:vApplicationIdleHook	1
+../Core/Src/Call_Back_functions.c:32:6:HAL_TIM_IC_CaptureCallback	4
+../Core/Src/Call_Back_functions.c:40:6:HAL_UART_RxCpltCallback	2
+../Core/Src/Call_Back_functions.c:56:6:vApplicationIdleHook	1
+../Core/Src/Call_Back_functions.c:64:6:CallBack_TimerLCDBuzzer	1

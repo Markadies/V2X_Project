@@ -23,10 +23,15 @@
 /* USER CODE BEGIN Includes */
 #include "FreeRTOS.h"
 #include "task.h"
+#include "timers.h"
+#include "semphr.h"
+
 #include "LCD_I2C.h"
+#include "GPS.h"
 #include "Help_Functions.h"
 #include "calculateSpeed.h"
 #include "Tasks.h"
+#include "Call_Back_functions.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -92,17 +97,24 @@ uint16_t Global_Speed;
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	/*Creating task handlers*/
-	TaskHandle_t Task1_Handle;
-	TaskHandle_t Task2_Handle;
-	TaskHandle_t Task3_Handle;
 
-	/*Creating a variable to save the return of the xcreateTask function  (pdPass or pdFail) */
-	BaseType_t Task1_Status;
-	//TimerHandle_t Timer_LCDBuzzer_Handle;
+	/*Creating tasks handlers*/
+	extern TaskHandle_t Handle_LCDBuzzer;
+	extern TaskHandle_t Handle_CarControl;
+	extern TaskHandle_t Handle_GPS;
+	extern TaskHandle_t Handle_ESP_Periodic;
+	extern TaskHandle_t Handle_ESP_Status;
 
+	/*Creating a variable to save the return of the xcreateTask function (pdPass or pdFail)*/
+	BaseType_t Status_LCDBuzzer;
+	BaseType_t Status_CarControl;
+	BaseType_t Status_GPS;
+	BaseType_t Status_ESP_Periodic;
+	BaseType_t Status_ESP_Status;
 
-
+	/*Creating SW Timers handle and id*/
+	TimerHandle_t Handle_Timer_LCDBuzzer;
+	uint8_t ID_TImer_LCDBuzzer = 3;
 
 
   /* USER CODE END 1 */
@@ -136,23 +148,47 @@ int main(void)
   MX_TIM12_Init();
   MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
-	LCD_voidInit();
-  
-  // enable interrupt
+	/********************************Hardware_Initializing*********************************************/
+	GPS_voidInit(); // Note that LCD_Init is included in this API
+
+	/********************************Interrupts_Starting***********************************************/
+	HAL_UART_Receive_IT(&huart3,&received_char , 1);
 	__HAL_TIM_ENABLE_IT(&htim2, TIM_IT_UPDATE);
 	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);
 
+	/********************************SEGGER_Starting***************************************************/
 	//Enable the CYCCN counter (For SEGGER)
-	DWT_CTRL |= (1<<0);
+//	DWT_CTRL |= (1<<0);
+//
+//	SEGGER_SYSVIEW_Conf();
+//
+//	SEGGER_SYSVIEW_Start();
 
-	SEGGER_SYSVIEW_Conf();
+	/************************************SW_Timers-Creation********************************************/
+	Handle_Timer_LCDBuzzer= xTimerCreate("Timer_LCDBuzzer", pdMS_TO_TICKS(5000), pdFALSE, &ID_TImer_LCDBuzzer, CallBack_TimerLCDBuzzer);
 
-	SEGGER_SYSVIEW_Start();
+	/************************************TASKS_Creation************************************************/
+	Status_GPS = xTaskCreate(TASK_GPS, "GPS", 150, NULL, Priority_TASK_GPS, &Handle_GPS);
 
-	Task1_Status=xTaskCreate(TASK_LCDBuzzer, "LED1", 200, NULL, 2, &Task1_Handle);
+	configASSERT(Status_GPS==pdPASS);
 
-	configASSERT(Task1_Status==pdPASS);
+	Status_LCDBuzzer = xTaskCreate(TASK_LCDBuzzer, "LCDBuzzer", 200, NULL, Priority_TASK_LCDBuzzer, &Handle_LCDBuzzer);
 
+	configASSERT(Status_LCDBuzzer==pdPASS);
+
+	Status_CarControl = xTaskCreate(TASK_CarControl, "CarControl", 200, NULL, Priority_TASK_CarControl, &Handle_CarControl);
+
+	configASSERT(Status_CarControl==pdPASS);
+
+	Status_ESP_Periodic = xTaskCreate(TASK_ESPSend_PeriodicData, "ESP_Periodic", 200, NULL, Priority_TASK_ESP_Periodic, &Handle_ESP_Periodic);
+
+	configASSERT(Status_ESP_Periodic==pdPASS);
+
+	Status_ESP_Status = xTaskCreate(TASK_ESP_SendStatus, "ESP_Status", 200, NULL, Priority_TASK_ESP_Status, &Handle_ESP_Status);
+
+	configASSERT(Status_ESP_Status==pdPASS);
+
+	/**********************************Schedular_Starting********************************************/
 	vTaskStartScheduler();
 
   /* USER CODE END 2 */

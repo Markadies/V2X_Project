@@ -13,12 +13,16 @@ void TASK_LCDBuzzer  (void *pvParameters);
 void TASK_CarControl (void *pvParameters);
 void TASK_GPS        (void *pvParameters);
 void TASK_ESPSend_PeriodicData (void *pvParameters);
+void TASK_ESP_SendStatus (void *pvParameters);
 
   /*************************************Configurations Macros********************************************/
 
 //Tasks Priority
 #define Priority_TASK_LCDBuzzer             2
 #define Priority_TASK_CarControl            2
+#define Priority_TASK_GPS                   2
+#define Priority_TASK_ESP_Periodic          2
+#define Priority_TASK_ESP_Status            1
 
 
   /***************************************Private Macros*************************************************/

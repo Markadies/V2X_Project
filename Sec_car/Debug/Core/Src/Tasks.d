@@ -45,6 +45,10 @@ Core/Src/Tasks.o: ../Core/Src/Tasks.c ../Core/Inc/main.h \
  D:/GP/WS/V2X_Project/Sec_car/ThirdParty/FreeRTOS/include/mpu_wrappers.h \
  D:/GP/WS/V2X_Project/Sec_car/ThirdParty/FreeRTOS/include/task.h \
  D:/GP/WS/V2X_Project/Sec_car/ThirdParty/FreeRTOS/include/list.h \
+ D:/GP/WS/V2X_Project/Sec_car/ThirdParty/FreeRTOS/include/timers.h \
+ D:/GP/WS/V2X_Project/Sec_car/ThirdParty/FreeRTOS/include/task.h \
+ D:/GP/WS/V2X_Project/Sec_car/ThirdParty/FreeRTOS/include/semphr.h \
+ D:/GP/WS/V2X_Project/Sec_car/ThirdParty/FreeRTOS/include/queue.h \
  ../Core/Inc/Tasks.h ../Core/Inc/Car_Control.h \
  ../Core/Inc/Help_Functions.h ../Core/Inc/Buzzer.h ../Core/Inc/LCD_I2C.h \
  ../Core/Inc/GPS.h ../Core/Inc/bluetooth.h ../Core/Inc/Build_msg.h
@@ -95,6 +99,10 @@ D:/GP/WS/V2X_Project/Sec_car/ThirdParty/FreeRTOS/portable/GCC/ARM_CM4F/portmacro
 D:/GP/WS/V2X_Project/Sec_car/ThirdParty/FreeRTOS/include/mpu_wrappers.h:
 D:/GP/WS/V2X_Project/Sec_car/ThirdParty/FreeRTOS/include/task.h:
 D:/GP/WS/V2X_Project/Sec_car/ThirdParty/FreeRTOS/include/list.h:
+D:/GP/WS/V2X_Project/Sec_car/ThirdParty/FreeRTOS/include/timers.h:
+D:/GP/WS/V2X_Project/Sec_car/ThirdParty/FreeRTOS/include/task.h:
+D:/GP/WS/V2X_Project/Sec_car/ThirdParty/FreeRTOS/include/semphr.h:
+D:/GP/WS/V2X_Project/Sec_car/ThirdParty/FreeRTOS/include/queue.h:
 ../Core/Inc/Tasks.h:
 ../Core/Inc/Car_Control.h:
 ../Core/Inc/Help_Functions.h:

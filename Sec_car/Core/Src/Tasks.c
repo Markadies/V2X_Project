@@ -10,6 +10,9 @@
 
 #include "FreeRTOS.h"
 #include "task.h"
+#include "timers.h"
+#include "semphr.h"
+
 #include "Tasks.h"
 #include "Car_Control.h"
 #include "Help_Functions.h"
@@ -34,14 +37,14 @@ void TASK_GPS        (void *pvParameters)
               /*Update the completetion flag to activate the sendESP_Periodic task*/
               if(Global_GPS_Speed_Completetion==Nothing_Completed)
               {
-            	  Global_GPS_Speed_Completetion==Half_Completed_GPS;
+            	  Global_GPS_Speed_Completetion = Half_Completed_GPS;
 
               }
               else if(Global_GPS_Speed_Completetion==Half_Completed_Speed)
               {
             	  /*Deactivating the interrupts to avoid the speed interrupt to preempt*/
             	  taskENTER_CRITICAL();
-            	  Global_GPS_Speed_Completetion=Nothing_Completed;
+            	  Global_GPS_Speed_Completetion = Nothing_Completed;
             	  taskEXIT_CRITICAL();
 
             	  /*Activate the ESPTask*/
@@ -97,48 +100,46 @@ void TASK_LCDBuzzer (void *pvParameters)
 
 }
 
-
 void TASK_CarControl(void *pvParameters)
 {
-    for (;;) {
-        // Read data from UART
-       switch (received_char){
-       case '1':
+	uint32_t Local_Notification_Value;
+	for (;;) {
+		/*Waiting to be notified from the BT ISR */
+		xTaskNotifyWait((uint32_t)NULL,(uint32_t)NULL,&Local_Notification_Value,portMAX_DELAY);
 
-    	   break;
-       case '2':
-    	   Car_Move_Forward_High_Speed();
-    	   break;
-       case '3':
-    	   break;
-       case '4':
-    	   Car_Rotate_Right();
-    	   break;
-       case '5':
-    	   Car_Stop();
-    	   break;
-       case '6':
-    	   Car_Rotate_Left();
-    	   break;
-       case '7':
-    	   break;
-       case '8':
-    	   Car_Move_Backward();
-    	   break;
-       case '9':
-    	   break;
-       case 'b':
-    	   Car_Stop();
-    	   break;
-       case 'l':
-    	   // light on
-    	   break;
-       case 'f':
-           // light off
-           break;
+		// Read data from UART
+		switch (received_char){
+		case '1':
+            Car_Rotate_LeftForward();
+			break;
+		case '2':
+			Car_Rotate_Left();
+			break;
+		case '4':
+			Car_Move_Forward_High_Speed();
+			break;
+		case '5':
+			//Notify the sendEspStatus task
+			Car_Stop();
+			break;
+		case '6':
+			Car_Move_Backward();
+			break;
+		case '7':
+			Car_Rotate_RightForward();
+			break;
+		case '8':
+			Car_Rotate_Right();
+			break;
+		case 'l':
+			// light on
+			break;
+		case 'f':
+			// light off
+			break;
 
-       }
-    }
+		}
+	}
 }
 void TASK_ESPSend_PeriodicData (void *pvParameters)
 {
@@ -153,6 +154,20 @@ void TASK_ESPSend_PeriodicData (void *pvParameters)
 
 }
 
+void TASK_ESP_SendStatus (void *pvParameters)
+{
+
+	 while(1)
+	 {
+
+
+
+
+	 }
+
+
+
+}
 
 
 

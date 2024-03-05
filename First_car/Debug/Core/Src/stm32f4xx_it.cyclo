@@ -4,7 +4,7 @@
 ../Core/Src/stm32f4xx_it.c:134:6:BusFault_Handler	1
 ../Core/Src/stm32f4xx_it.c:149:6:UsageFault_Handler	1
 ../Core/Src/stm32f4xx_it.c:171:6:TIM2_IRQHandler	4
-../Core/Src/stm32f4xx_it.c:205:6:USART1_IRQHandler	1
-../Core/Src/stm32f4xx_it.c:219:6:USART3_IRQHandler	1
-../Core/Src/stm32f4xx_it.c:233:6:UART5_IRQHandler	1
-../Core/Src/stm32f4xx_it.c:247:6:TIM7_IRQHandler	1
+../Core/Src/stm32f4xx_it.c:206:6:USART1_IRQHandler	1
+../Core/Src/stm32f4xx_it.c:220:6:USART3_IRQHandler	1
+../Core/Src/stm32f4xx_it.c:234:6:UART5_IRQHandler	1
+../Core/Src/stm32f4xx_it.c:248:6:TIM7_IRQHandler	1

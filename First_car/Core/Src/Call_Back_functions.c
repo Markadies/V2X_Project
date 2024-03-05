@@ -5,15 +5,28 @@
  *      Author: dell
  */
 #include "stm32f4xx_hal.h"
-#include "Call_Back_functions.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "timers.h"
 
+#include "Call_Back_functions.h"
+#include "Tasks.h"
+#include "Buzzer.h"
+#include "LCD_I2C.h"
 
 extern UART_HandleTypeDef huart5;
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart3;
 extern UART_HandleTypeDef huart6;
 
-       /***********Global_Variables_Definition***********/
+TaskHandle_t Handle_LCDBuzzer;
+TaskHandle_t Handle_CarControl;
+TaskHandle_t Handle_GPS;
+TaskHandle_t Handle_ESP_Periodic;
+TaskHandle_t Handle_ESP_Status;
+TaskHandle_t Handle_LightSensor;
+
+/********************************Global_Variables_Definition******************************/
 extern uint8_t received_char;
 uint32_t edges_counter = 0;
 
@@ -34,7 +47,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	{
 		HAL_UART_Receive_IT(&huart3, &received_char, 1);
 
-		/*Give the semaphore*/
+		/*Give the Notification to the CarControl task*/
+		xTaskNotifyFromISR(Handle_CarControl,NULL,eNoAction,NULL);
 
 	}
 }
@@ -42,7 +56,19 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 /*********************************************Application_Hook*************************************************************/
 void vApplicationIdleHook(void)
 {
-	/*The processer will go to sleep in the IDLE Task*/
+	/*The processor will go to sleep in the IDLE Task*/
 	HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
 
+}
+
+/*********************************************SW_Timers_CallBacks*********************************************************/
+void CallBack_TimerLCDBuzzer(TimerHandle_t xTimer)
+{
+	/*When the LCDBuzzer task starts the timer it should turn off the buzzer and clear the LCD*/
+
+	/*Stopping the buzzer*/
+	Buzzer_voidStop();
+
+	/*Clearing the LCD*/
+	LCD_voidClearDisplay();
 }

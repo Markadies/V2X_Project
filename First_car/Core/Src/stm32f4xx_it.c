@@ -175,6 +175,7 @@ void TIM2_IRQHandler(void)
 	if (__HAL_TIM_GET_IT_SOURCE(&htim2, TIM_IT_UPDATE) != RESET) {
 		// Timer overflow interrupt
 		Global_Speed = round(Calculate_Car_Speed());
+
         if(Global_GPS_Speed_Completetion==Nothing_Completed)
         {
         	Global_GPS_Speed_Completetion=Half_Completed_Speed;

@@ -13,7 +13,6 @@
 #include <math.h>
 
 
-
 #define  Valid_Data      2
 #define  unValid_Data    1
 
@@ -73,9 +72,13 @@ void GPS_voidInit(void)
 	LCD_voidSendString("GPS is done");
 	LCD_voidSetPositionXY(1,4);
 	LCD_voidSendString("good 2 go");
-	flagGGA=0;
-    HAL_Delay(2000);
+
 	/*Clearing the flag*/
+	flagGGA=0;
+	HAL_Delay(1000);
+
+	/*Clearing the LCD*/
+	LCD_voidClearDisplay();
 
 }
 
@@ -94,24 +97,24 @@ uint8_t GPS_uint8DecodeGGAData()
 		else flagGGA = unValid_Data;  // 1 indicates the data is invalid
 	}
 
-	  if(flagGGA==Valid_Data)
-	   {
+	if(flagGGA==Valid_Data)
+	{
 		Local_uint8ErrorCode=Decode_Success;
-		GPS_Data.Latitude=(round((GPS_NMEA_DATA.ggastruct.lcation.latitude)*100))/100;
-		GPS_Data.Longitude=(round((GPS_NMEA_DATA.ggastruct.lcation.longitude)*100))/100;
+		GPS_Data.Latitude  = GPS_NMEA_DATA.ggastruct.lcation.latitude;
+		GPS_Data.Longitude = GPS_NMEA_DATA.ggastruct.lcation.longitude;
 
-		GPS_Data.East_West=GPS_NMEA_DATA.ggastruct.lcation.EW;
-		GPS_Data.North_South=GPS_NMEA_DATA.ggastruct.lcation.NS;
-	   }
-	 else
-	  {
+		GPS_Data.East_West = GPS_NMEA_DATA.ggastruct.lcation.EW;
+		GPS_Data.North_South = GPS_NMEA_DATA.ggastruct.lcation.NS;
+	}
+	else
+	{
 		Local_uint8ErrorCode=Decode_Failed;
 		/*When the decoding is unsuccessful, you shouldnot print on the LCD,
 		 * you will know when the flag is = 2*/
 		LCD_voidClearDisplay();
 		LCD_voidSetPositionXY(2,2);
 		LCD_voidSendString("GPS decode fail");
-	  }
+	}
 
 
 	return Local_uint8ErrorCode;
@@ -123,31 +126,31 @@ void GPS_voidLCD_Data_Display(void)
 	/*Clearing the lcd to send the needed data*/
 	LCD_voidClearDisplay();
 
-    /*Sending the data in this pattern:  */
+	/*Sending the data in this pattern:  */
 
 	//Latitude sending
-     LCD_voidSetPositionXY(0,0);
-     LCD_voidSendString("Lat: ");
-     LCD_voidSetPositionXY(0,6);
-     LCD_voidWriteNum(GPS_Data.Latitude);
+	LCD_voidSetPositionXY(0,0);
+	LCD_voidSendString("Lat: ");
+	LCD_voidSetPositionXY(0,6);
+	LCD_voidWriteNum(GPS_Data.Latitude);
 
-    //longitude sending
-     LCD_voidSetPositionXY(1,0);
-     LCD_voidSendString("Long: ");
-     LCD_voidSetPositionXY(1,6);
-     LCD_voidWriteNum(GPS_Data.Longitude);
+	//longitude sending
+	LCD_voidSetPositionXY(1,0);
+	LCD_voidSendString("Long: ");
+	LCD_voidSetPositionXY(1,6);
+	LCD_voidWriteNum(GPS_Data.Longitude);
 
-    // E/W sending
-     LCD_voidSetPositionXY(2,0);
-     LCD_voidSendString("E/W: ");
-     LCD_voidSetPositionXY(2,6);
-     LCD_voidSendCharachter(GPS_Data.East_West);
+	// E/W sending
+	LCD_voidSetPositionXY(2,0);
+	LCD_voidSendString("E/W: ");
+	LCD_voidSetPositionXY(2,6);
+	LCD_voidSendCharachter(GPS_Data.East_West);
 
-     // N/S Sending
-     LCD_voidSetPositionXY(2,10);
-     LCD_voidSendString("N/S: ");
-     LCD_voidSetPositionXY(2,16);
-     LCD_voidSendCharachter(GPS_Data.North_South);
+	// N/S Sending
+	LCD_voidSetPositionXY(2,10);
+	LCD_voidSendString("N/S: ");
+	LCD_voidSetPositionXY(2,16);
+	LCD_voidSendCharachter(GPS_Data.North_South);
 
 
 }

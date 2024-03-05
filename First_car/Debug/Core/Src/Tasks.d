@@ -45,9 +45,14 @@ Core/Src/Tasks.o: ../Core/Src/Tasks.c ../Core/Inc/main.h \
  D:/GP/WS/V2X_Project/First_car/ThirdParty/FreeRTOS/include/mpu_wrappers.h \
  D:/GP/WS/V2X_Project/First_car/ThirdParty/FreeRTOS/include/task.h \
  D:/GP/WS/V2X_Project/First_car/ThirdParty/FreeRTOS/include/list.h \
+ D:/GP/WS/V2X_Project/First_car/ThirdParty/FreeRTOS/include/timers.h \
+ D:/GP/WS/V2X_Project/First_car/ThirdParty/FreeRTOS/include/task.h \
+ D:/GP/WS/V2X_Project/First_car/ThirdParty/FreeRTOS/include/semphr.h \
+ D:/GP/WS/V2X_Project/First_car/ThirdParty/FreeRTOS/include/queue.h \
  ../Core/Inc/Tasks.h ../Core/Inc/Car_Control.h \
  ../Core/Inc/Help_Functions.h ../Core/Inc/Buzzer.h ../Core/Inc/LCD_I2C.h \
- ../Core/Inc/GPS.h ../Core/Inc/bluetooth.h ../Core/Inc/Build_msg.h
+ ../Core/Inc/GPS.h ../Core/Inc/bluetooth.h ../Core/Inc/Build_msg.h \
+ ../Core/Inc/LightSensor.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -95,6 +100,10 @@ D:/GP/WS/V2X_Project/First_car/ThirdParty/FreeRTOS/portable/GCC/ARM_CM4F/portmac
 D:/GP/WS/V2X_Project/First_car/ThirdParty/FreeRTOS/include/mpu_wrappers.h:
 D:/GP/WS/V2X_Project/First_car/ThirdParty/FreeRTOS/include/task.h:
 D:/GP/WS/V2X_Project/First_car/ThirdParty/FreeRTOS/include/list.h:
+D:/GP/WS/V2X_Project/First_car/ThirdParty/FreeRTOS/include/timers.h:
+D:/GP/WS/V2X_Project/First_car/ThirdParty/FreeRTOS/include/task.h:
+D:/GP/WS/V2X_Project/First_car/ThirdParty/FreeRTOS/include/semphr.h:
+D:/GP/WS/V2X_Project/First_car/ThirdParty/FreeRTOS/include/queue.h:
 ../Core/Inc/Tasks.h:
 ../Core/Inc/Car_Control.h:
 ../Core/Inc/Help_Functions.h:
@@ -103,3 +112,4 @@ D:/GP/WS/V2X_Project/First_car/ThirdParty/FreeRTOS/include/list.h:
 ../Core/Inc/GPS.h:
 ../Core/Inc/bluetooth.h:
 ../Core/Inc/Build_msg.h:
+../Core/Inc/LightSensor.h:

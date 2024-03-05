@@ -10,6 +10,8 @@
 
 #include "FreeRTOS.h"
 #include "task.h"
+#include "timers.h"
+#include "semphr.h"
 
 #include "Tasks.h"
 #include "Car_Control.h"
@@ -20,6 +22,8 @@
 #include "bluetooth.h"
 #include "Car_Control.h"
 #include "Build_msg.h"
+#include "LightSensor.h"
+
 #include <stdint.h>
 
 extern uint8_t received_char;
@@ -28,17 +32,17 @@ uint8_t  Light_Sensor_Status=0;
 
 void TASK_GPS        (void *pvParameters)
 {
-     uint8_t Decode_Error_Code;
+    uint8_t Decode_Error_Code;
 	while(1)
 	{
 		/*Update the GPS Data*/
-		Decode_Error_Code = GPS_uint8DecodeGGAData();
+		 Decode_Error_Code = GPS_uint8DecodeGGAData();
          if(Decode_Error_Code==Decode_Success)
          {
               /*Update the completetion flag to activate the sendESP_Periodic task*/
               if(Global_GPS_Speed_Completetion==Nothing_Completed)
               {
-            	  Global_GPS_Speed_Completetion==Half_Completed_GPS;
+            	  Global_GPS_Speed_Completetion=Half_Completed_GPS;
 
               }
               else if(Global_GPS_Speed_Completetion==Half_Completed_Speed)
@@ -100,35 +104,34 @@ void TASK_LCDBuzzer (void *pvParameters)
 
 void TASK_CarControl(void *pvParameters)
 {
+	uint32_t Local_Notification_Value;
 	for (;;) {
+
+		/*Waiting to be notified from the BT ISR */
+		xTaskNotifyWait((uint32_t)NULL,(uint32_t)NULL,&Local_Notification_Value,portMAX_DELAY);
+
 		// Read data from UART
 		switch (received_char){
 		case '1':
-
+            Car_Rotate_LeftForward();
 			break;
 		case '2':
-			Car_Move_Forward_High_Speed();
-			break;
-		case '3':
+			Car_Rotate_Left();
 			break;
 		case '4':
-			Car_Rotate_Right();
+			Car_Move_Forward_High_Speed();
 			break;
 		case '5':
 			Car_Stop();
 			break;
 		case '6':
-			Car_Rotate_Left();
-			break;
-		case '7':
-			break;
-		case '8':
 			Car_Move_Backward();
 			break;
-		case '9':
+		case '7':
+			Car_Rotate_RightForward();
 			break;
-		case 'b':
-			Car_Stop();
+		case '8':
+			Car_Rotate_Right();
 			break;
 		case 'l':
 			// light on
@@ -140,18 +143,7 @@ void TASK_CarControl(void *pvParameters)
 		}
 	}
 }
-void TASK_ESPSend_PeriodicData (void *pvParameters)
-{
 
-    while(1)
-    {
-
-
-    }
-
-
-
-}
 void TASK_LightSensor(void *pvParameters)
 {
 uint16_t Local_uint16LightSensor_Flux=0;
@@ -181,7 +173,31 @@ uint16_t Local_uint16LightSensor_Flux=0;
   }
 
 
+}
+
+void TASK_ESPSend_PeriodicData (void *pvParameters)
+{
+
+    while(1)
+    {
+
+
+    }
+
 
 
 }
+void TASK_ESP_SendStatus (void *pvParameters)
+{
 
+	 while(1)
+	 {
+
+
+
+
+	 }
+
+
+
+}
