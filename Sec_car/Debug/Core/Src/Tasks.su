@@ -1,5 +1,5 @@
-../Core/Src/Tasks.c:28:6:TASK_GPS	24	static
-../Core/Src/Tasks.c:71:6:TASK_LCDBuzzer	32	static
-../Core/Src/Tasks.c:103:6:TASK_CarControl	32	static
-../Core/Src/Tasks.c:144:6:TASK_ESPSend_PeriodicData	16	static
-../Core/Src/Tasks.c:157:6:TASK_ESP_SendStatus	16	static
+../Core/Src/Tasks.c:38:6:TASK_GPS	32	static
+../Core/Src/Tasks.c:80:6:TASK_LCDBuzzer	32	static
+../Core/Src/Tasks.c:112:6:TASK_CarControl	32	static
+../Core/Src/Tasks.c:153:6:TASK_ESPSend_PeriodicData	16	static
+../Core/Src/Tasks.c:166:6:TASK_ESP_SendStatus	32	static

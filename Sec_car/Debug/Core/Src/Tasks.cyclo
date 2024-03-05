@@ -1,5 +1,5 @@
-../Core/Src/Tasks.c:28:6:TASK_GPS	4
-../Core/Src/Tasks.c:71:6:TASK_LCDBuzzer	2
-../Core/Src/Tasks.c:103:6:TASK_CarControl	8
-../Core/Src/Tasks.c:144:6:TASK_ESPSend_PeriodicData	1
-../Core/Src/Tasks.c:157:6:TASK_ESP_SendStatus	1
+../Core/Src/Tasks.c:38:6:TASK_GPS	4
+../Core/Src/Tasks.c:80:6:TASK_LCDBuzzer	2
+../Core/Src/Tasks.c:112:6:TASK_CarControl	8
+../Core/Src/Tasks.c:153:6:TASK_ESPSend_PeriodicData	1
+../Core/Src/Tasks.c:166:6:TASK_ESP_SendStatus	1

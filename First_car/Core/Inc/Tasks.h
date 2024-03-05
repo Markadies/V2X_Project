@@ -27,6 +27,8 @@ void TASK_LightSensor(void *pvParameters);
 #define Priority_TASK_LightSensor           2
 
 
+
+
 //For light sensor task
   /*Configure the Max flux intensity that consider a problem*/
 #define MAX_LightIntensity           100
@@ -38,6 +40,8 @@ void TASK_LightSensor(void *pvParameters);
 #define Notify_TASK_LCDBuzzer_Break            2
 #define Notify_TASK_LCDBuzzer_AvoidOvertake    3
 #define Notify_TASK_LCDBuzzer_BeingOvertaken   4
+
+#define Notify_TASK_ESPSend_HighLight		   5
 
 #define Nothing_Completed                      0
 #define Half_Completed_Speed                   1

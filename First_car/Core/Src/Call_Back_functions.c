@@ -42,7 +42,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 }
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-	/*BT interrupt*/
+	/* Bluetooth interrupt*/
 	if(huart->Instance==USART3)
 	{
 		HAL_UART_Receive_IT(&huart3, &received_char, 1);

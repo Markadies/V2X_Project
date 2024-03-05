@@ -76,7 +76,8 @@ extern TIM_HandleTypeDef htim7;
 extern TIM_HandleTypeDef htim2;
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart3;
-extern uint8_t is_two_readings;
+
+extern TaskHandle_t Handle_ESP_Periodic;
 
 /* USER CODE END EV */
 
@@ -186,7 +187,7 @@ void TIM2_IRQHandler(void)
         	Global_GPS_Speed_Completetion=Nothing_Completed;
 
         	/*Notify the ESPPeriodicTask*/
-        	//xTaskNotifyFromISR();
+        	xTaskNotifyFromISR(Handle_ESP_Periodic,0,eNoAction,NULL);
         }
 
 	}else {
