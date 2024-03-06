@@ -91,7 +91,6 @@ static void MX_USART6_UART_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 uint8_t received_char;
-uint16_t Global_Speed;
 /* USER CODE END 0 */
 
 /**

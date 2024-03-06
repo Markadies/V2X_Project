@@ -14,6 +14,7 @@ void TASK_CarControl (void *pvParameters);
 void TASK_GPS        (void *pvParameters);
 void TASK_ESPSend_PeriodicData (void *pvParameters);
 void TASK_ESP_SendStatus (void *pvParameters);
+void TASK_ESP_Receive (void *pvParameters);
 
   /*************************************Configurations Macros********************************************/
 
@@ -23,7 +24,7 @@ void TASK_ESP_SendStatus (void *pvParameters);
 #define Priority_TASK_GPS                   2
 #define Priority_TASK_ESP_Periodic          2
 #define Priority_TASK_ESP_Status            1
-
+#define Priority_TASK_ESP_Receive           1
 
   /***************************************Private Macros*************************************************/
 
@@ -31,6 +32,8 @@ void TASK_ESP_SendStatus (void *pvParameters);
 #define Notify_TASK_LCDBuzzer_Break            2
 #define Notify_TASK_LCDBuzzer_AvoidOvertake    3
 #define Notify_TASK_LCDBuzzer_BeingOvertaken   4
+
+#define Notify_TASK_ESPStatus_HardBreaking	   5
 
 #define Nothing_Completed                      0
 #define Half_Completed_Speed                   1

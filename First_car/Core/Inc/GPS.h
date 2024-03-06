@@ -8,6 +8,15 @@
 #ifndef INC_GPS_H_
 #define INC_GPS_H_
 
+
+typedef struct
+{
+	float Latitude;
+	float Longitude;
+	uint8_t East_West;
+	uint8_t North_South;
+}GPS_Data_t;
+
  /****************************Macros***************************/
 #define  Decode_Success  1
 #define  Decode_Failed   2

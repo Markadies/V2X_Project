@@ -7,6 +7,7 @@
 
 #include "main.h"
 #include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal_uart.h"
 
 #include "FreeRTOS.h"
 #include "task.h"
@@ -28,11 +29,12 @@
 
 extern uint8_t received_char;
 uint8_t  Global_GPS_Speed_Completetion=0;
-uint8_t  Light_Sensor_Status=0;
 uint8_t  ESP_TX_Buffer_Status[4];
 uint8_t  ESP_RX_Buffer_Status[4];
 uint8_t  ESP_TX_Buffer_Periodic[27];
 
+uint16_t Global_Speed;
+extern GPS_Data_t GPS_Data;
 
 extern TaskHandle_t Handle_LCDBuzzer;
 extern TaskHandle_t Handle_CarControl;
@@ -40,6 +42,13 @@ extern TaskHandle_t Handle_GPS;
 extern TaskHandle_t Handle_ESP_Periodic;
 extern TaskHandle_t Handle_ESP_Status;
 extern TaskHandle_t Handle_LightSensor;
+
+extern TimerHandle_t Handle_Timer_LCDBuzzer;
+
+extern UART_HandleTypeDef huart5;
+extern UART_HandleTypeDef huart1;
+extern UART_HandleTypeDef huart3;
+extern UART_HandleTypeDef huart6;
 
 void TASK_GPS(void *pvParameters)
 {
@@ -95,8 +104,13 @@ void TASK_LCDBuzzer (void *pvParameters)
 		{
 		case Notify_TASK_LCDBuzzer_Break:
 
+			/*Activating the warning message and the buzzer to alert the driver*/
 			Buzzer_voidHighSound();
 			LCD_AvoidHardBraking();
+
+			/*Start the timer to stop the buzzer and clear LCD after period of specified time*/
+			xTimerStart(Handle_Timer_LCDBuzzer,1000);
+
 			break;
 
 		default:
@@ -165,9 +179,6 @@ void TASK_LightSensor(void *pvParameters)
 
 		if(Local_uint16LightSensor_Flux>MAX_LightIntensity)
 		{
-			/*Update the status*/
-			Light_Sensor_Status=1;
-
 			//Notify the ESPSendStatus task with problem in light
 			xTaskNotify(Handle_ESP_Status,Notify_TASK_ESPSend_HighLight,eSetValueWithOverwrite);
 
@@ -176,8 +187,9 @@ void TASK_LightSensor(void *pvParameters)
 		}
 		else
 		{
+			ESP_TX_Buffer_Status[1]='0';
 			/*Delaying the task to free the processor*/
-			vTaskDelay(pdMS_TO_TICKS(600));
+			vTaskDelay(pdMS_TO_TICKS(200));
 		}
 	}
 }
@@ -193,10 +205,18 @@ void TASK_ESPSend_PeriodicData(void *pvParameters)
 		Notify_Status = xTaskNotifyWait((uint32_t)NULL,0xFFFFFFFF,&Local_uint32NotificationValue, portMAX_DELAY);
 		if(Notify_Status == pdTRUE)
 		{
-			GPSSPEED_voidBuildMsg(ESP_TX_Buffer_Periodic, Copy_doubleGPS_Longitude, Copy_doubleGPS_Latitude, Copy_uint16Speed);
+			/*Updating the transmission buffer*/
+			GPSSPEED_voidBuildMsg(ESP_TX_Buffer_Periodic, GPS_Data.Longitude,GPS_Data.Latitude , Global_Speed);
+
+			/*Transmitting the GPS, SPEED elements */
+			HAL_UART_Transmit(&huart5,ESP_TX_Buffer_Periodic, sizeof(ESP_TX_Buffer_Periodic), 300);
+		}
+		else
+		{
+
+
 		}
 	}
-
 
 
 }
@@ -212,7 +232,7 @@ void TASK_ESP_SendStatus (void *pvParameters)
 
 		/*Waiting to be notified from the TASK_LightSensor */
 		Notify_Status = xTaskNotifyWait((uint32_t)NULL,0xffffffff,&Local_Notification_Value,portMAX_DELAY);
-		if(Notify_Status == pdTRUE  )
+		if(Notify_Status == pdTRUE)
 		{
 
 			/* Read data from Light_Sensor_Task */
@@ -220,10 +240,29 @@ void TASK_ESP_SendStatus (void *pvParameters)
 			{
 			case Notify_TASK_ESPSend_HighLight:
 
-				ESP_TX_Buffer_Status[1] = Light_Sensor_Status;
+				/*Updating the TX buffer with the problem of the high Light intensity*/
+				ESP_TX_Buffer_Status[1] = '1';
 
+				/*Transmitting the Car status to the Esp */
+				HAL_UART_Transmit(&huart5,ESP_TX_Buffer_Status, sizeof(ESP_TX_Buffer_Status), 300);
 				break;
 			}
 		}
 	}
 }
+
+void TASK_ESP_Receive (void *pvParameters)
+{
+
+
+	while(1)
+	{
+
+
+
+
+	}
+
+
+}
+

@@ -30,14 +30,6 @@ uint8_t flagGGA=0;
 uint8_t  flag_GPS;
 extern UART_HandleTypeDef huart1;
 
-typedef struct
-{
-	float Latitude;
-	float Longitude;
-	uint8_t East_West;
-	uint8_t North_South;
-}GPS_Data_t;
-
 /*This is the object of our struct*/
 GPS_Data_t GPS_Data;
 
