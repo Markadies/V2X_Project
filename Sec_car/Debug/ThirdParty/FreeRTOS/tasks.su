@@ -48,7 +48,7 @@
 ../ThirdParty/FreeRTOS/tasks.c:4036:18:xTaskGetCurrentTaskHandle	16	static
 ../ThirdParty/FreeRTOS/tasks.c:4053:16:xTaskGetSchedulerState	16	static
 ../ThirdParty/FreeRTOS/tasks.c:4081:16:xTaskPriorityInherit	24	static
-../ThirdParty/FreeRTOS/tasks.c:4171:16:xTaskPriorityDisinherit	32	static,ignoring_inline_asm
+../ThirdParty/FreeRTOS/tasks.c:4171:16:xTaskPriorityDisinherit	40	static,ignoring_inline_asm
 ../ThirdParty/FreeRTOS/tasks.c:4251:10:vTaskPriorityDisinheritAfterTimeout	48	static,ignoring_inline_asm
 ../ThirdParty/FreeRTOS/tasks.c:4672:12:uxTaskResetEventItemValue	16	static
 ../ThirdParty/FreeRTOS/tasks.c:4688:18:pvTaskIncrementMutexHeldCount	4	static
