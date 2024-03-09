@@ -214,7 +214,7 @@ void TASK_ESPSend_PeriodicData(void *pvParameters)
 		else
 		{
 
-
+        /*Do nothing*/
 		}
 	}
 
