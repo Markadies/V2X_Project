@@ -90,7 +90,29 @@ static void MX_USART6_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+/*Creating Global received variable for BT*/
 uint8_t received_char;
+
+/*Creating tasks handlers*/
+TaskHandle_t Handle_LCDBuzzer;
+TaskHandle_t Handle_CarControl;
+TaskHandle_t Handle_GPS;
+TaskHandle_t Handle_ESP_Periodic;
+TaskHandle_t Handle_ESP_Status;
+TaskHandle_t Handle_LightSensor;
+
+/*Creating a variable to save the return of the xcreateTask function (pdPass or pdFail) */
+BaseType_t Status_LCDBuzzer;
+BaseType_t Status_CarControl;
+BaseType_t Status_GPS;
+BaseType_t Status_ESP_Periodic;
+BaseType_t Status_ESP_Status;
+BaseType_t Status_LightSensor;
+
+/*Creating SW Timers handle and id*/
+TimerHandle_t Handle_Timer_LCDBuzzer;
+uint8_t ID_TImer_LCDBuzzer = 3;
+
 /* USER CODE END 0 */
 
 /**
@@ -100,26 +122,6 @@ uint8_t received_char;
 int main(void)
 {
 	/* USER CODE BEGIN 1 */
-
-	/*Creating tasks handlers*/
-	extern TaskHandle_t Handle_LCDBuzzer;
-	extern TaskHandle_t Handle_CarControl;
-	extern TaskHandle_t Handle_GPS;
-	extern TaskHandle_t Handle_ESP_Periodic;
-	extern TaskHandle_t Handle_ESP_Status;
-	extern TaskHandle_t Handle_LightSensor;
-
-	/*Creating a variable to save the return of the xcreateTask function (pdPass or pdFail) */
-	BaseType_t Status_LCDBuzzer;
-	BaseType_t Status_CarControl;
-	BaseType_t Status_GPS;
-	BaseType_t Status_ESP_Periodic;
-	BaseType_t Status_ESP_Status;
-	BaseType_t Status_LightSensor;
-
-	/*Creating SW Timers handle and id*/
-	TimerHandle_t Handle_Timer_LCDBuzzer;
-	uint8_t ID_TImer_LCDBuzzer = 3;
 
 
 	/* USER CODE END 1 */

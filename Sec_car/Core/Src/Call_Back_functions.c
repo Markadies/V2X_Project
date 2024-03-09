@@ -20,11 +20,11 @@ extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart3;
 extern UART_HandleTypeDef huart6;
 
-TaskHandle_t Handle_LCDBuzzer;
-TaskHandle_t Handle_CarControl;
-TaskHandle_t Handle_GPS;
-TaskHandle_t Handle_ESP_Periodic;
-TaskHandle_t Handle_ESP_Status;
+extern TaskHandle_t Handle_LCDBuzzer;
+extern TaskHandle_t Handle_CarControl;
+extern TaskHandle_t Handle_GPS;
+extern TaskHandle_t Handle_ESP_Periodic;
+extern TaskHandle_t Handle_ESP_Status;
 
 /********************************Global_Variables_Definition******************************/
 extern uint8_t received_char;
@@ -51,7 +51,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		xTaskNotifyFromISR(Handle_CarControl,NULL,eNoAction,NULL);
 
 	}
-	else if(huart->Instance==USART5)
+	else if(huart->Instance==UART5)
 	{
 
 
