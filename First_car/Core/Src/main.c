@@ -158,7 +158,7 @@ int main(void)
 	/* USER CODE BEGIN 2 */
 
 	/********************************Hardware_Initializing*********************************************/
-	GPS_voidInit(); //Note that LCD Init is included in this API
+	//GPS_voidInit(); //Note that LCD Init is included in this API
 	LightSensor_voidInit();
 
 	/********************************Interrupts_Starting***********************************************/
@@ -177,40 +177,40 @@ int main(void)
 	//>>>>>>> Stashed change
 
 	/************************************SW_Timers-Creation********************************************/
-	Handle_Timer_LCDBuzzer= xTimerCreate("Timer_LCDBuzzer", pdMS_TO_TICKS(5000), pdFALSE, &ID_TImer_LCDBuzzer, CallBack_TimerLCDBuzzer);
-
-	/************************************TASKS_Creation************************************************/
-	Status_GPS = xTaskCreate(TASK_GPS, "GPS", 150, NULL, Priority_TASK_GPS, &Handle_GPS);
-
-	configASSERT(Status_GPS==pdPASS);
-
-	Status_LCDBuzzer = xTaskCreate(TASK_LCDBuzzer, "LCDBuzzer", 200, NULL, Priority_TASK_LCDBuzzer, &Handle_LCDBuzzer);
-
-	configASSERT(Status_LCDBuzzer==pdPASS);
-
-	Status_CarControl = xTaskCreate(TASK_CarControl, "CarControl", 200, NULL, Priority_TASK_CarControl, &Handle_CarControl);
-
-	configASSERT(Status_CarControl==pdPASS);
-
-	Status_ESP_Periodic = xTaskCreate(TASK_ESPSend_PeriodicData, "ESP_Periodic", 200, NULL, Priority_TASK_ESP_Periodic, &Handle_ESP_Periodic);
-
-	configASSERT(Status_ESP_Periodic==pdPASS);
-
-	Status_ESP_Status = xTaskCreate(TASK_ESP_SendStatus, "ESP_Status", 200, NULL, Priority_TASK_ESP_Status, &Handle_ESP_Status);
-
-	configASSERT(Status_ESP_Status==pdPASS);
-
-	Status_LightSensor = xTaskCreate(TASK_LightSensor, "LightSensor", 200, NULL, Priority_TASK_LightSensor, &Handle_LightSensor);
-
-	configASSERT(Status_LightSensor==pdPASS);
-
-
-	/**********************************Schedular_Starting********************************************/
-	vTaskStartScheduler();
+//	Handle_Timer_LCDBuzzer= xTimerCreate("Timer_LCDBuzzer", pdMS_TO_TICKS(5000), pdFALSE, &ID_TImer_LCDBuzzer, CallBack_TimerLCDBuzzer);
+//
+//	/************************************TASKS_Creation************************************************/
+//	Status_GPS = xTaskCreate(TASK_GPS, "GPS", 150, NULL, Priority_TASK_GPS, &Handle_GPS);
+//
+//	configASSERT(Status_GPS==pdPASS);
+//
+//	Status_LCDBuzzer = xTaskCreate(TASK_LCDBuzzer, "LCDBuzzer", 200, NULL, Priority_TASK_LCDBuzzer, &Handle_LCDBuzzer);
+//
+//	configASSERT(Status_LCDBuzzer==pdPASS);
+//
+//	Status_CarControl = xTaskCreate(TASK_CarControl, "CarControl", 200, NULL, Priority_TASK_CarControl, &Handle_CarControl);
+//
+//	configASSERT(Status_CarControl==pdPASS);
+//
+//	Status_ESP_Periodic = xTaskCreate(TASK_ESPSend_PeriodicData, "ESP_Periodic", 200, NULL, Priority_TASK_ESP_Periodic, &Handle_ESP_Periodic);
+//
+//	configASSERT(Status_ESP_Periodic==pdPASS);
+//
+//	Status_ESP_Status = xTaskCreate(TASK_ESP_SendStatus, "ESP_Status", 200, NULL, Priority_TASK_ESP_Status, &Handle_ESP_Status);
+//
+//	configASSERT(Status_ESP_Status==pdPASS);
+//
+//	Status_LightSensor = xTaskCreate(TASK_LightSensor, "LightSensor", 200, NULL, Priority_TASK_LightSensor, &Handle_LightSensor);
+//
+//	configASSERT(Status_LightSensor==pdPASS);
+//
+//
+//	/**********************************Schedular_Starting********************************************/
+//	vTaskStartScheduler();
 
 
 	/* USER CODE END 2 */
-
+     uint16_t LUX;
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 	while (1)
@@ -218,8 +218,8 @@ int main(void)
 		/* USER CODE END WHILE */
 
 		/* USER CODE BEGIN 3 */
-
-		Buzzer_voidHighSound();
+          LightSensor_uint8ReadIntensity(&LUX);
+          HAL_Delay(1000);
 		/* USER CODE BEGIN 3 */
 
 
