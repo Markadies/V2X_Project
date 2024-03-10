@@ -9,7 +9,7 @@
 #define INC_TASKS_H_
 
   /***************************************Library Functions**********************************************/
-void TASK_LCDBuzzer  (void *pvParameters);
+
 void TASK_CarControl (void *pvParameters);
 void TASK_GPS        (void *pvParameters);
 void TASK_ESPSend_PeriodicData (void *pvParameters);
@@ -38,10 +38,10 @@ void TASK_LightSensor(void *pvParameters);
 
   /***************************************Private Macros*************************************************/
 
-#define Notify_TASK_LCDBuzzer_Light            1
-#define Notify_TASK_LCDBuzzer_Break            2
-#define Notify_TASK_LCDBuzzer_AvoidOvertake    3
-#define Notify_TASK_LCDBuzzer_BeingOvertaken   4
+#define Notify_TASK_ESPRecieve_Light            'g'
+#define Notify_TASK_ESPRecieve_Break            'b'
+#define Notify_TASK_ESPRecieve_AvoidOvertake    'o'
+#define Notify_TASK_ESPRecieve_BeingOvertaken   'v'
 
 #define Notify_TASK_ESPSend_HighLight		   5
 

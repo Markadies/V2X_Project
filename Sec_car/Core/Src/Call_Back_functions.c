@@ -28,6 +28,8 @@ extern TaskHandle_t Handle_ESP_Status;
 
 /********************************Global_Variables_Definition******************************/
 extern uint8_t received_char;
+extern uint8_t ESP_Recieved_Char;
+
 uint32_t edges_counter = 0;
 
 /***************************************Interrupts_Call_Backs********************************************************/
@@ -53,7 +55,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	}
 	else if(huart->Instance==UART5)
 	{
+		/*Reactivating the interrupt*/
+		HAL_UART_Receive_IT(&huart5,&ESP_Recieved_Char,1);
 
+		/*Give the Notification to the Receive esp task*/
+		xTaskNotifyFromISR(Handle_ESP_Status,NULL,eNoAction,NULL);
 
 	}
 

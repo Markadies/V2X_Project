@@ -30,6 +30,8 @@ extern TaskHandle_t Handle_LightSensor;
 
 /********************************Global_Variables_Definition******************************/
 extern uint8_t received_char;
+extern uint8_t  ESP_Recieved_Char;
+
 uint32_t edges_counter = 0;
 
 
@@ -44,7 +46,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 }
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-	/* Bluetooth interrupt*/
+	/*Bluetooth interrupt*/
 	if(huart->Instance==USART3)
 	{
 		HAL_UART_Receive_IT(&huart3, &received_char, 1);
@@ -53,9 +55,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		xTaskNotifyFromISR(Handle_CarControl,NULL,eNoAction,NULL);
 
 	}
+	/*ESP Interrupt*/
 	else if(huart->Instance==UART5)
 	{
+		HAL_UART_Receive_IT(&huart5,&ESP_Recieved_Char,1);
 
+		/*Give the Notification to the Recieve esp task*/
+		xTaskNotifyFromISR(Handle_ESP_Status,NULL,eNoAction,NULL);
 
 	}
 }

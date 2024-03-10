@@ -27,10 +27,11 @@
 
 #include <stdint.h>
 
-extern uint8_t received_char;
+extern uint8_t  received_char;
+extern uint8_t  ESP_Recieved_Char;
+
 uint8_t  Global_GPS_Speed_Completetion=0;
 uint8_t  ESP_TX_Buffer_Status[4];
-uint8_t  ESP_RX_Buffer_Status[4];
 uint8_t  ESP_TX_Buffer_Periodic[27];
 
 uint16_t Global_Speed;
@@ -43,7 +44,7 @@ extern TaskHandle_t Handle_ESP_Periodic;
 extern TaskHandle_t Handle_ESP_Status;
 extern TaskHandle_t Handle_LightSensor;
 
-extern TimerHandle_t Handle_Timer_LCDBuzzer;
+extern TimerHandle_t Handle_Timer_RecieveESP;
 
 extern UART_HandleTypeDef huart5;
 extern UART_HandleTypeDef huart1;
@@ -92,39 +93,39 @@ void TASK_GPS(void *pvParameters)
 
 }
 
-void TASK_LCDBuzzer (void *pvParameters)
-{
-	uint32_t Local_uint32NotificationValue;
-
-	while(1)
-	{
-		xTaskNotifyWait((uint32_t)NULL,0xFFFFFFFF,&Local_uint32NotificationValue, portMAX_DELAY);
-
-		switch(Local_uint32NotificationValue)
-		{
-		case Notify_TASK_LCDBuzzer_Break:
-
-			/*Activating the warning message and the buzzer to alert the driver*/
-			Buzzer_voidHighSound();
-			LCD_AvoidHardBraking();
-
-			/*Start the timer to stop the buzzer and clear LCD after period of specified time*/
-			xTimerStart(Handle_Timer_LCDBuzzer,1000);
-
-			break;
-
-		default:
-			/*Do Nothing*/
-			break;
-
-
-		}
-
-
-	}
-
-
-}
+//void TASK_LCDBuzzer (void *pvParameters)
+//{
+//	uint32_t Local_uint32NotificationValue;
+//
+//	while(1)
+//	{
+//		xTaskNotifyWait((uint32_t)NULL,0xFFFFFFFF,&Local_uint32NotificationValue, portMAX_DELAY);
+//
+//		switch(Local_uint32NotificationValue)
+//		{
+//		case Notify_TASK_LCDBuzzer_Break:
+//
+//			/*Activating the warning message and the buzzer to alert the driver*/
+//			Buzzer_voidHighSound();
+//			LCD_AvoidHardBraking();
+//
+//			/*Start the timer to stop the buzzer and clear LCD after period of specified time*/
+//			xTimerStart(Handle_Timer_LCDBuzzer,1000);
+//
+//			break;
+//
+//		default:
+//			/*Do Nothing*/
+//			break;
+//
+//
+//		}
+//
+//
+//	}
+//
+//
+//}
 
 void TASK_CarControl(void *pvParameters)
 {
@@ -214,7 +215,7 @@ void TASK_ESPSend_PeriodicData(void *pvParameters)
 		else
 		{
 
-        /*Do nothing*/
+			/*Do nothing*/
 		}
 	}
 
@@ -253,12 +254,46 @@ void TASK_ESP_SendStatus (void *pvParameters)
 
 void TASK_ESP_Receive (void *pvParameters)
 {
-
-
+	BaseType_t Notify_Status;
+	uint32_t Local_uint32NotificationValue;
 	while(1)
 	{
+		Notify_Status = xTaskNotifyWait((uint32_t)NULL,(uint32_t)NULL,&Local_uint32NotificationValue, portMAX_DELAY);
+		if(Notify_Status == pdTRUE)
+		{
+			switch(ESP_Recieved_Char)
+			{
+			case Notify_TASK_ESPRecieve_Break:
+
+				/*Stoping preemption of other tasks in this critical section*/
+				vTaskSuspendAll();
+
+				/*Taking the action of breaking*/
+				Car_Stop();
+
+				/*Presenting the warning to the driver in sort of buzzer sound & display warning*/
+				Buzzer_voidHighSound();
+				LCD_AvoidHardBraking();
+
+				xTaskResumeAll();
+
+				/*Start the timer to stop the buzzer and clear LCD after period of specified time*/
+				xTimerStart(Handle_Timer_RecieveESP,1000);
 
 
+				break;
+
+			default:
+				break;
+
+			}
+
+
+		}
+		else
+		{
+			/*Do nothing*/
+		}
 
 
 	}
