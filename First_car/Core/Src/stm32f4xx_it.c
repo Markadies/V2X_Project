@@ -25,6 +25,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
+#include "UartRingbuffer.h"
 #include "calculateSpeed.h"
 #include "Tasks.h"
 #include <math.h>
