@@ -103,11 +103,6 @@ uint8_t GPS_uint8DecodeGGAData()
 	else
 	{
 		Local_uint8ErrorCode=Decode_Failed;
-		/*When the decoding is unsuccessful, you shouldnot print on the LCD,
-		 * you will know when the flag is = 2*/
-		LCD_voidClearDisplay();
-		LCD_voidSetPositionXY(2,2);
-		LCD_voidSendString("GPS decode fail");
 	}
 
 

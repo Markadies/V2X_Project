@@ -163,7 +163,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
 	/********************************Hardware_Initializing*********************************************/
-	//GPS_voidInit(); //Note that LCD Init is included in this API
+	GPS_voidInit(); //Note that LCD Init is included in this API
 	LightSensor_voidInit();
 
 	/********************************Interrupts_Starting***********************************************/
