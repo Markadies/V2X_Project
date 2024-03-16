@@ -163,24 +163,25 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
 	/********************************Hardware_Initializing*********************************************/
-	GPS_voidInit(); //Note that LCD Init is included in this API
-	LightSensor_voidInit();
-
-	/********************************Interrupts_Starting***********************************************/
-	HAL_UART_Receive_IT(&huart5,&ESP_Recieved_Char ,1);              //ESP
-	HAL_UART_Receive_IT(&huart3,&received_char , 1);                 //Bluetooth
-	__HAL_TIM_ENABLE_IT(&htim2, TIM_IT_UPDATE);                      //Speed
-	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);                      //Speed
-
-	/********************************SEGGER_Starting***************************************************/
-
-	//	//Enable the CYCCN counter (For SEGGER)
-	//	DWT_CTRL |= (1<<0);
-	//
-	//	SEGGER_SYSVIEW_Conf();
-	//
-	//	SEGGER_SYSVIEW_Start();
-	//>>>>>>> Stashed change
+  LCD_voidInit();
+//	GPS_voidInit(); //Note that LCD Init is included in this API
+//	LightSensor_voidInit();
+//
+//	/********************************Interrupts_Starting***********************************************/
+//	HAL_UART_Receive_IT(&huart5,&ESP_Recieved_Char ,1);              //ESP
+//	HAL_UART_Receive_IT(&huart3,&received_char , 1);                 //Bluetooth
+//	__HAL_TIM_ENABLE_IT(&htim2, TIM_IT_UPDATE);                      //Speed
+//	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);                      //Speed
+//
+//	/********************************SEGGER_Starting***************************************************/
+//
+//	//	//Enable the CYCCN counter (For SEGGER)
+//	//	DWT_CTRL |= (1<<0);
+//	//
+//	//	SEGGER_SYSVIEW_Conf();
+//	//
+//	//	SEGGER_SYSVIEW_Start();
+//	//>>>>>>> Stashed change
 
 	/************************************SW_Timers-Creation********************************************/
 	Handle_Timer_RecieveESP= xTimerCreate("Timer_RecieveEsp", pdMS_TO_TICKS(5000), pdFALSE, &ID_TImer_RecieveESP, CallBack_TimerLCDBuzzer);
@@ -224,8 +225,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-         // LightSensor_uint8ReadIntensity(&LUX);
-         // HAL_Delay(1000);
+
 		/* USER CODE BEGIN 3 */
 
 

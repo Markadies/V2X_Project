@@ -2,4 +2,4 @@
 ../Core/Src/Help_Functions.c:31:6:LCD_AvoidHardBraking	8	static
 ../Core/Src/Help_Functions.c:46:6:LCD_AvoidOvertaking_Warning	8	static
 ../Core/Src/Help_Functions.c:62:6:LCD_BeingOvertaken_Warning	8	static
-../Core/Src/Help_Functions.c:74:13:LCD_Print_WarningSign	96	static
+../Core/Src/Help_Functions.c:74:13:LCD_Print_WarningSign	88	static

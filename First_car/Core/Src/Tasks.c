@@ -31,7 +31,7 @@ extern uint8_t  received_char;
 extern uint8_t  ESP_Recieved_Char;
 
 uint8_t  Global_GPS_Speed_Completetion=0;
-uint8_t  ESP_TX_Buffer_Status[4];
+uint8_t  ESP_TX_Buffer_Status[2];
 uint8_t  ESP_TX_Buffer_Periodic[27];
 
 uint16_t Global_Speed;
