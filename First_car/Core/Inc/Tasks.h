@@ -38,8 +38,8 @@ void TASK_LightSensor(void *pvParameters);
 
   /***************************************Private Macros*************************************************/
 
-#define Notify_TASK_ESPRecieve_Light            'g'
-#define Notify_TASK_ESPRecieve_Break            'b'
+#define Notify_TASK_ESPRecieve_Light            'L'
+#define Notify_TASK_ESPRecieve_Break            'B'
 #define Notify_TASK_ESPRecieve_AvoidOvertake    'o'
 #define Notify_TASK_ESPRecieve_BeingOvertaken   'v'
 

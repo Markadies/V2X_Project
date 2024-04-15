@@ -28,7 +28,7 @@ extern uint8_t ESP_Recieved_Char;
 
 uint8_t  Global_GPS_Speed_Completetion=0;
 
-uint8_t  ESP_TX_Buffer_Status[4];
+uint8_t  ESP_TX_Buffer_Status[3];
 uint8_t  ESP_TX_Buffer_Periodic[27];
 
 uint16_t Global_Speed;
@@ -91,49 +91,19 @@ void TASK_GPS        (void *pvParameters)
 
 }
 
-//void TASK_LCDBuzzer (void *pvParameters)
-//{
-//	uint32_t Local_uint32NotificationValue;
-//
-//	while(1)
-//	{
-//		xTaskNotifyWait((uint32_t)NULL,0xFFFFFFFF,&Local_uint32NotificationValue, portMAX_DELAY);
-//
-//		switch(Local_uint32NotificationValue)
-//		{
-//		case Notify_TASK_LCDBuzzer_Light:
-//
-//			/*Activating the warning message and the buzzer to alert the driver*/
-//			Buzzer_voidMidSound();
-//			LCD_HighLightIntensity_Warning();
-//
-//			/*Start the timer to stop the buzzer and clear LCD after period of specified time*/
-//			xTimerStart(Handle_Timer_LCDBuzzer,1000);
-//
-//			break;
-//
-//		default:
-//			/*Do Nothing*/
-//			break;
-//
-//
-//		}
-//
-//
-//	}
-//
-//
-//}
-
 void TASK_CarControl(void *pvParameters)
 {
 	uint32_t Local_Notification_Value;
+	BaseType_t Notify_Status;
 	for (;;) {
 		/*Waiting to be notified from the BT ISR */
-		xTaskNotifyWait((uint32_t)NULL,(uint32_t)NULL,&Local_Notification_Value,portMAX_DELAY);
+		Notify_Status = xTaskNotifyWait((uint32_t)NULL,(uint32_t)NULL,&Local_Notification_Value,portMAX_DELAY);
 
+		if(Notify_Status == pdTRUE)
+		{
 		// Read data from UART
-		switch (received_char){
+		switch (received_char)
+		  {
 		case '1':
 			Car_Rotate_LeftForward();
 			break;
@@ -166,8 +136,9 @@ void TASK_CarControl(void *pvParameters)
 			// light off
 			break;
 
-		}
+		 }
 	}
+  }
 }
 void TASK_ESPSend_PeriodicData (void *pvParameters)
 {
@@ -201,7 +172,7 @@ void TASK_ESP_SendStatus (void *pvParameters)
 
 	BaseType_t Notify_Status;
 	ESP_TX_Buffer_Status[0] = '%';
-	ESP_TX_Buffer_Status[3] = '$';
+	ESP_TX_Buffer_Status[2] = '!';
 	while(1)
 	{
 
@@ -216,7 +187,7 @@ void TASK_ESP_SendStatus (void *pvParameters)
 			case Notify_TASK_ESPStatus_HardBreaking:
 
 				/*Updating the TX buffer with the problem of the hard breaking*/
-				ESP_TX_Buffer_Status[1] = '1';
+				ESP_TX_Buffer_Status[1] = 'B';
 
 				/*Transmitting the Car status to the Esp */
 				HAL_UART_Transmit(&huart5,ESP_TX_Buffer_Status, sizeof(ESP_TX_Buffer_Status), 300);
@@ -250,6 +221,7 @@ void TASK_ESP_Receive (void *pvParameters)
 				Buzzer_voidMidSound();
 				LCD_HighLightIntensity_Warning();
 
+				/*Resuming the tasks*/
 				xTaskResumeAll();
 
 				/*Start the timer to stop the buzzer and clear LCD after period of specified time*/

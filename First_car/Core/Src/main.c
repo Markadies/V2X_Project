@@ -163,18 +163,18 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
 	/********************************Hardware_Initializing*********************************************/
-  LCD_voidInit();
-//	GPS_voidInit(); //Note that LCD Init is included in this API
-//	LightSensor_voidInit();
-//
-//	/********************************Interrupts_Starting***********************************************/
-//	HAL_UART_Receive_IT(&huart5,&ESP_Recieved_Char ,1);              //ESP
+  	  LCD_voidInit();
+
+  	  //GPS_voidInit(); //Note that LCD Init is included in this API
+  	  LightSensor_voidInit();
+
+	/********************************Interrupts_Starting***********************************************/
+	//HAL_UART_Receive_IT(&huart5,&ESP_Recieved_Char ,1);              //ESP
 //	HAL_UART_Receive_IT(&huart3,&received_char , 1);                 //Bluetooth
 //	__HAL_TIM_ENABLE_IT(&htim2, TIM_IT_UPDATE);                      //Speed
 //	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);                      //Speed
 //
-//	/********************************SEGGER_Starting***************************************************/
-//
+//	/********************************SEGGER_Starting********************************************
 //	//	//Enable the CYCCN counter (For SEGGER)
 //	//	DWT_CTRL |= (1<<0);
 //	//
@@ -182,49 +182,53 @@ int main(void)
 //	//
 //	//	SEGGER_SYSVIEW_Start();
 //	//>>>>>>> Stashed change
-
-	/************************************SW_Timers-Creation********************************************/
-	Handle_Timer_RecieveESP= xTimerCreate("Timer_RecieveEsp", pdMS_TO_TICKS(5000), pdFALSE, &ID_TImer_RecieveESP, CallBack_TimerLCDBuzzer);
-
-	/************************************TASKS_Creation************************************************/
-	Status_GPS = xTaskCreate(TASK_GPS, "GPS", 150, NULL, Priority_TASK_GPS, &Handle_GPS);
-
-	configASSERT(Status_GPS==pdPASS);
-
-	Status_CarControl = xTaskCreate(TASK_CarControl, "CarControl", 200, NULL, Priority_TASK_CarControl, &Handle_CarControl);
-
-	configASSERT(Status_CarControl==pdPASS);
-
-	Status_ESP_Periodic = xTaskCreate(TASK_ESPSend_PeriodicData, "ESP_Periodic", 200, NULL, Priority_TASK_ESP_Periodic, &Handle_ESP_Periodic);
-
-	configASSERT(Status_ESP_Periodic==pdPASS);
-
-	Status_ESP_Status = xTaskCreate(TASK_ESP_SendStatus, "ESP_Status", 200, NULL, Priority_TASK_ESP_Status, &Handle_ESP_Status);
-
-	configASSERT(Status_ESP_Status==pdPASS);
-
-	Status_ESP_Receive = xTaskCreate(TASK_ESP_Receive, "ESP_Receive", 200, NULL, Priority_TASK_ESP_Receive, &Handle_ESP_Receive);
-
-	configASSERT(Status_ESP_Receive==pdPASS);
-
-	Status_LightSensor = xTaskCreate(TASK_LightSensor, "LightSensor", 200, NULL, Priority_TASK_LightSensor, &Handle_LightSensor);
-
-	configASSERT(Status_LightSensor==pdPASS);
-
-
-	/**********************************Schedular_Starting********************************************/
-	vTaskStartScheduler();
+//
+//	/************************************SW_Timers-Creation********************************************/
+//
+//	Handle_Timer_RecieveESP= xTimerCreate("Timer_RecieveEsp", pdMS_TO_TICKS(5000), pdFALSE, &ID_TImer_RecieveESP, CallBack_TimerLCDBuzzer);
+//
+//	/************************************TASKS_Creation************************************************/
+//	Status_GPS = xTaskCreate(TASK_GPS, "GPS", 150, NULL, Priority_TASK_GPS, &Handle_GPS);
+//
+//	configASSERT(Status_GPS==pdPASS);
+//
+//	Status_CarControl = xTaskCreate(TASK_CarControl, "CarControl", 200, NULL, Priority_TASK_CarControl, &Handle_CarControl);
+//
+//	configASSERT(Status_CarControl==pdPASS);
+//
+//	Status_ESP_Periodic = xTaskCreate(TASK_ESPSend_PeriodicData, "ESP_Periodic", 200, NULL, Priority_TASK_ESP_Periodic, &Handle_ESP_Periodic);
+//
+//	configASSERT(Status_ESP_Periodic==pdPASS);
+//
+//	Status_ESP_Status = xTaskCreate(TASK_ESP_SendStatus, "ESP_Status", 200, NULL, Priority_TASK_ESP_Status, &Handle_ESP_Status);
+//
+//	configASSERT(Status_ESP_Status==pdPASS);
+//
+//	Status_ESP_Receive = xTaskCreate(TASK_ESP_Receive, "ESP_Receive", 200, NULL, Priority_TASK_ESP_Receive, &Handle_ESP_Receive);
+//
+//	configASSERT(Status_ESP_Receive==pdPASS);
+//
+//	Status_LightSensor = xTaskCreate(TASK_LightSensor, "LightSensor", 200, NULL, Priority_TASK_LightSensor, &Handle_LightSensor);
+//
+//	configASSERT(Status_LightSensor==pdPASS);
+//
+//
+//	/**********************************Schedular_Starting********************************************/
+//	vTaskStartScheduler();
 
 
   /* USER CODE END 2 */
+	//uint16_t Flux=0;
 
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
+	/* Infinite loop */
+	/* USER CODE BEGIN WHILE */
 	while (1)
 	{
-    /* USER CODE END WHILE */
+		/* USER CODE END WHILE */
+		//LightSensor_uint8ReadIntensity(Flux);
+		Buzzer_voidHighSound();
 
-    /* USER CODE BEGIN 3 */
+		/* USER CODE BEGIN 3 */
 
 		/* USER CODE BEGIN 3 */
 
