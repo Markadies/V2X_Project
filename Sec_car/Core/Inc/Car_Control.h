@@ -10,7 +10,8 @@ void Car_Move_Backward(void);
 void Car_Rotate_Right(void);
 void Car_Rotate_Left(void);
 void Car_Stop(void);
-
+void Light_On(void);
+void Light_OFF(void);
 
 //Configuration Macros
 

@@ -130,10 +130,10 @@ void TASK_CarControl(void *pvParameters)
 			Car_Rotate_Right();
 			break;
 		case 'l':
-			// light on
+			Light_On();
 			break;
 		case 'f':
-			// light off
+			Light_OFF();
 			break;
 
 		 }

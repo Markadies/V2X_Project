@@ -152,13 +152,13 @@ int main(void)
   MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
 	/********************************Hardware_Initializing*********************************************/
-	GPS_voidInit(); // Note that LCD_Init is included in this API
+	//GPS_voidInit(); // Note that LCD_Init is included in this API
 
 	/********************************Interrupts_Starting***********************************************/
-	HAL_UART_Receive_IT(&huart5,&ESP_Recieved_Char,1);                   //ESP
-	HAL_UART_Receive_IT(&huart3,&received_char ,1);                      //Bluetooth
-	__HAL_TIM_ENABLE_IT(&htim2, TIM_IT_UPDATE);                          //Speed
-	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);                          //Speed
+//	HAL_UART_Receive_IT(&huart5,&ESP_Recieved_Char,1);                   //ESP
+//	HAL_UART_Receive_IT(&huart3,&received_char ,1);                      //Bluetooth
+//	__HAL_TIM_ENABLE_IT(&htim2, TIM_IT_UPDATE);                          //Speed
+//	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);                          //Speed
 
 	/********************************SEGGER_Starting***************************************************/
 	//Enable the CYCCN counter (For SEGGER)
@@ -169,31 +169,31 @@ int main(void)
 	//	SEGGER_SYSVIEW_Start();
 
 	/************************************SW_Timers-Creation********************************************/
-	Handle_Timer_RecieveESP= xTimerCreate("Timer_RecieveEsp", pdMS_TO_TICKS(5000), pdFALSE, &ID_TImer_RecieveESP, CallBack_TimerLCDBuzzer);
-
-	/************************************TASKS_Creation************************************************/
-	Status_GPS = xTaskCreate(TASK_GPS, "GPS", 150, NULL, Priority_TASK_GPS, &Handle_GPS);
-
-	configASSERT(Status_GPS==pdPASS);
-
-	Status_CarControl = xTaskCreate(TASK_CarControl, "CarControl", 200, NULL, Priority_TASK_CarControl, &Handle_CarControl);
-
-	configASSERT(Status_CarControl==pdPASS);
-
-	Status_ESP_Periodic = xTaskCreate(TASK_ESPSend_PeriodicData, "ESP_Periodic", 200, NULL, Priority_TASK_ESP_Periodic, &Handle_ESP_Periodic);
-
-	configASSERT(Status_ESP_Periodic==pdPASS);
-
-	Status_ESP_Status = xTaskCreate(TASK_ESP_SendStatus, "ESP_Status", 200, NULL, Priority_TASK_ESP_Status, &Handle_ESP_Status);
-
-	configASSERT(Status_ESP_Status==pdPASS);
-
-	Status_ESP_Receive = xTaskCreate(TASK_ESP_Receive, "ESP_Receive", 200, NULL, Priority_TASK_ESP_Receive, &Handle_ESP_Receive);
-
-	configASSERT(Status_ESP_Receive==pdPASS);
-
-	/**********************************Schedular_Starting********************************************/
-	vTaskStartScheduler();
+//	Handle_Timer_RecieveESP= xTimerCreate("Timer_RecieveEsp", pdMS_TO_TICKS(5000), pdFALSE, &ID_TImer_RecieveESP, CallBack_TimerLCDBuzzer);
+//
+//	/************************************TASKS_Creation************************************************/
+//	Status_GPS = xTaskCreate(TASK_GPS, "GPS", 150, NULL, Priority_TASK_GPS, &Handle_GPS);
+//
+//	configASSERT(Status_GPS==pdPASS);
+//
+//	Status_CarControl = xTaskCreate(TASK_CarControl, "CarControl", 200, NULL, Priority_TASK_CarControl, &Handle_CarControl);
+//
+//	configASSERT(Status_CarControl==pdPASS);
+//
+//	Status_ESP_Periodic = xTaskCreate(TASK_ESPSend_PeriodicData, "ESP_Periodic", 200, NULL, Priority_TASK_ESP_Periodic, &Handle_ESP_Periodic);
+//
+//	configASSERT(Status_ESP_Periodic==pdPASS);
+//
+//	Status_ESP_Status = xTaskCreate(TASK_ESP_SendStatus, "ESP_Status", 200, NULL, Priority_TASK_ESP_Status, &Handle_ESP_Status);
+//
+//	configASSERT(Status_ESP_Status==pdPASS);
+//
+//	Status_ESP_Receive = xTaskCreate(TASK_ESP_Receive, "ESP_Receive", 200, NULL, Priority_TASK_ESP_Receive, &Handle_ESP_Receive);
+//
+//	configASSERT(Status_ESP_Receive==pdPASS);
+//
+//	/**********************************Schedular_Starting********************************************/
+//	vTaskStartScheduler();
 
   /* USER CODE END 2 */
 
@@ -202,6 +202,7 @@ int main(void)
 	while (1)
 	{
     /* USER CODE END WHILE */
+
 
     /* USER CODE BEGIN 3 */
 

@@ -170,10 +170,10 @@ void Car_Rotate_RightForward(void)
 	HAL_TIM_PWM_Start(Motor4_Timer,Motor4_Channel);
 
 	/*Making  motors rotate at opposite direction*/
-		Motor1_Rotate_CW();
-		Motor2_Rotate_CW();
-		Motor3_Rotate_CW();
-		Motor4_Rotate_CW();
+	Motor1_Rotate_CW();
+	Motor2_Rotate_CW();
+	Motor3_Rotate_CW();
+	Motor4_Rotate_CW();
 
 
 
@@ -201,10 +201,10 @@ void Car_Rotate_LeftForward(void)
 	HAL_TIM_PWM_Start(Motor4_Timer,Motor4_Channel);
 
 	/*Making  motors rotate at opposite direction*/
-		Motor1_Rotate_CW();
-		Motor2_Rotate_CW();
-		Motor3_Rotate_CW();
-		Motor4_Rotate_CW();
+	Motor1_Rotate_CW();
+	Motor2_Rotate_CW();
+	Motor3_Rotate_CW();
+	Motor4_Rotate_CW();
 
 
 
@@ -212,7 +212,7 @@ void Car_Rotate_LeftForward(void)
 }
 void Car_Stop(void)
 {
-    /*Stopping the PWM generation on both motors*/
+	/*Stopping the PWM generation on both motors*/
 	HAL_TIM_PWM_Stop(Motor1_Timer, Motor1_Channel);
 	HAL_TIM_PWM_Stop(Motor2_Timer, Motor2_Channel);
 	HAL_TIM_PWM_Stop(Motor3_Timer, Motor3_Channel);
@@ -221,6 +221,18 @@ void Car_Stop(void)
 	Motors_Disabling();
 
 }
+
+void Light_On(void)
+{
+	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_11 ,GPIO_PIN_SET);
+}
+void Light_OFF(void)
+{
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_RESET);
+}
+
+
+
 static void Motors_Disabling(void)
 {
 	HAL_GPIO_WritePin(Motor1_Port, IN1, GPIO_PIN_RESET);
@@ -232,13 +244,13 @@ static void Motors_Disabling(void)
 	HAL_GPIO_WritePin(Motor4_Port, IN7, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(Motor4_Port, IN8, GPIO_PIN_RESET);
 }
- void Motor1_Rotate_CW(void)
+void Motor1_Rotate_CW(void)
 {
 
 	HAL_GPIO_WritePin(Motor1_Port,IN1, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(Motor1_Port,IN2, GPIO_PIN_RESET);
 }
- void Motor1_Rotate_CCW(void)
+void Motor1_Rotate_CCW(void)
 {
 	HAL_GPIO_WritePin(Motor1_Port,IN1, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(Motor1_Port,IN2, GPIO_PIN_SET);
@@ -258,13 +270,13 @@ void Motor2_Rotate_CCW(void)
 
 
 
- void Motor3_Rotate_CW(void)
+void Motor3_Rotate_CW(void)
 {
 
 	HAL_GPIO_WritePin(Motor3_Port,IN5, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(Motor3_Port,IN6, GPIO_PIN_SET);
 }
- void Motor3_Rotate_CCW(void)
+void Motor3_Rotate_CCW(void)
 {
 	HAL_GPIO_WritePin(Motor3_Port,IN5, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(Motor3_Port,IN6, GPIO_PIN_RESET);
@@ -272,13 +284,13 @@ void Motor2_Rotate_CCW(void)
 
 
 
- void Motor4_Rotate_CW(void)
+void Motor4_Rotate_CW(void)
 {
 
 	HAL_GPIO_WritePin(Motor4_Port,IN7, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(Motor4_Port,IN8, GPIO_PIN_SET);
 }
- void Motor4_Rotate_CCW(void)
+void Motor4_Rotate_CCW(void)
 {
 	HAL_GPIO_WritePin(Motor4_Port,IN7, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(Motor4_Port,IN8, GPIO_PIN_RESET);
