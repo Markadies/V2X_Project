@@ -23,8 +23,8 @@ void TASK_ESP_Receive (void *pvParameters);
 #define Priority_TASK_CarControl            2
 #define Priority_TASK_GPS                   2
 #define Priority_TASK_ESP_Periodic          2
-#define Priority_TASK_ESP_Status            1
-#define Priority_TASK_ESP_Receive           1
+#define Priority_TASK_ESP_Status            3
+#define Priority_TASK_ESP_Receive           3
 
   /***************************************Private Macros*************************************************/
 

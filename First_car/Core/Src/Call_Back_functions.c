@@ -16,7 +16,7 @@
 #include "Buzzer.h"
 #include "LCD_I2C.h"
 
-extern UART_HandleTypeDef huart5;
+extern UART_HandleTypeDef huart4;
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart3;
 extern UART_HandleTypeDef huart6;
@@ -46,8 +46,17 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 }
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
+	/*ESP Interrupt*/
+	if(huart->Instance==UART4)
+	{
+		HAL_UART_Receive_IT(&huart4,&ESP_Recieved_Char,1);
+
+		/*Give the Notification to the Recieve esp task*/
+		xTaskNotifyFromISR(Handle_ESP_Status,NULL,eNoAction,NULL);
+
+	}
 	/*Bluetooth interrupt*/
-	if(huart->Instance==USART3)
+	else if(huart->Instance==USART3)
 	{
 		HAL_UART_Receive_IT(&huart3, &received_char, 1);
 
@@ -55,15 +64,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		xTaskNotifyFromISR(Handle_CarControl,NULL,eNoAction,NULL);
 
 	}
-	/*ESP Interrupt*/
-	else if(huart->Instance==UART5)
-	{
-		HAL_UART_Receive_IT(&huart5,&ESP_Recieved_Char,1);
 
-		/*Give the Notification to the Recieve esp task*/
-		xTaskNotifyFromISR(Handle_ESP_Status,NULL,eNoAction,NULL);
-
-	}
 }
 
 /*********************************************Application_Hook*************************************************************/

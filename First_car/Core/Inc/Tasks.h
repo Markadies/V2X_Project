@@ -21,11 +21,11 @@ void TASK_LightSensor(void *pvParameters);
 
 //Tasks Priority
 #define Priority_TASK_LCDBuzzer             2
-#define Priority_TASK_CarControl            2
+#define Priority_TASK_CarControl            3
 #define Priority_TASK_GPS                   2
 #define Priority_TASK_ESP_Periodic          2
-#define Priority_TASK_ESP_Status            1
-#define Priority_TASK_ESP_Receive           1
+#define Priority_TASK_ESP_Status            3
+#define Priority_TASK_ESP_Receive           3
 #define Priority_TASK_LightSensor           2
 
 
@@ -33,8 +33,7 @@ void TASK_LightSensor(void *pvParameters);
 
 //For light sensor task
   /*Configure the Max flux intensity that consider a problem*/
-#define MAX_LightIntensity           100
-
+#define MAX_LightIntensity           10
 
   /***************************************Private Macros*************************************************/
 

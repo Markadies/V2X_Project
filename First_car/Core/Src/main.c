@@ -61,7 +61,7 @@ TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim6;
 TIM_HandleTypeDef htim12;
 
-UART_HandleTypeDef huart5;
+UART_HandleTypeDef huart4;
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart3;
 UART_HandleTypeDef huart6;
@@ -80,10 +80,10 @@ static void MX_TIM2_Init(void);
 static void MX_I2C2_Init(void);
 static void MX_I2C3_Init(void);
 static void MX_TIM3_Init(void);
-static void MX_UART5_Init(void);
 static void MX_TIM6_Init(void);
 static void MX_TIM12_Init(void);
 static void MX_USART6_UART_Init(void);
+static void MX_UART4_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -156,79 +156,75 @@ int main(void)
   MX_I2C2_Init();
   MX_I2C3_Init();
   MX_TIM3_Init();
-  MX_UART5_Init();
   MX_TIM6_Init();
   MX_TIM12_Init();
   MX_USART6_UART_Init();
+  MX_UART4_Init();
   /* USER CODE BEGIN 2 */
 
 	/********************************Hardware_Initializing*********************************************/
-  	  LCD_voidInit();
+	LCD_voidInit();
 
-  	  //GPS_voidInit(); //Note that LCD Init is included in this API
-  	  LightSensor_voidInit();
+	//GPS_voidInit(); //Note that LCD Init is included in this API
+	LightSensor_voidInit();
 
 	/********************************Interrupts_Starting***********************************************/
-	//HAL_UART_Receive_IT(&huart5,&ESP_Recieved_Char ,1);              //ESP
-//	HAL_UART_Receive_IT(&huart3,&received_char , 1);                 //Bluetooth
-//	__HAL_TIM_ENABLE_IT(&htim2, TIM_IT_UPDATE);                      //Speed
-//	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);                      //Speed
-//
-//	/********************************SEGGER_Starting********************************************
-//	//	//Enable the CYCCN counter (For SEGGER)
-//	//	DWT_CTRL |= (1<<0);
-//	//
-//	//	SEGGER_SYSVIEW_Conf();
-//	//
-//	//	SEGGER_SYSVIEW_Start();
-//	//>>>>>>> Stashed change
-//
-//	/************************************SW_Timers-Creation********************************************/
-//
-//	Handle_Timer_RecieveESP= xTimerCreate("Timer_RecieveEsp", pdMS_TO_TICKS(5000), pdFALSE, &ID_TImer_RecieveESP, CallBack_TimerLCDBuzzer);
-//
-//	/************************************TASKS_Creation************************************************/
-//	Status_GPS = xTaskCreate(TASK_GPS, "GPS", 150, NULL, Priority_TASK_GPS, &Handle_GPS);
-//
-//	configASSERT(Status_GPS==pdPASS);
-//
-//	Status_CarControl = xTaskCreate(TASK_CarControl, "CarControl", 200, NULL, Priority_TASK_CarControl, &Handle_CarControl);
-//
-//	configASSERT(Status_CarControl==pdPASS);
-//
-//	Status_ESP_Periodic = xTaskCreate(TASK_ESPSend_PeriodicData, "ESP_Periodic", 200, NULL, Priority_TASK_ESP_Periodic, &Handle_ESP_Periodic);
-//
-//	configASSERT(Status_ESP_Periodic==pdPASS);
-//
-//	Status_ESP_Status = xTaskCreate(TASK_ESP_SendStatus, "ESP_Status", 200, NULL, Priority_TASK_ESP_Status, &Handle_ESP_Status);
-//
-//	configASSERT(Status_ESP_Status==pdPASS);
-//
-//	Status_ESP_Receive = xTaskCreate(TASK_ESP_Receive, "ESP_Receive", 200, NULL, Priority_TASK_ESP_Receive, &Handle_ESP_Receive);
-//
-//	configASSERT(Status_ESP_Receive==pdPASS);
-//
-//	Status_LightSensor = xTaskCreate(TASK_LightSensor, "LightSensor", 200, NULL, Priority_TASK_LightSensor, &Handle_LightSensor);
-//
-//	configASSERT(Status_LightSensor==pdPASS);
-//
-//
-//	/**********************************Schedular_Starting********************************************/
-//	vTaskStartScheduler();
+	HAL_UART_Receive_IT(&huart4,&ESP_Recieved_Char ,1);              //ESP
+	HAL_UART_Receive_IT(&huart3,&received_char , 1);                 //Bluetooth
+	__HAL_TIM_ENABLE_IT(&htim2, TIM_IT_UPDATE);                      //Speed
+	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);                      //Speed
+
+	/********************************SEGGER_Starting********************************************
+	//	//Enable the CYCCN counter (For SEGGER)
+	//	DWT_CTRL |= (1<<0);
+	//
+	//	SEGGER_SYSVIEW_Conf();
+	//
+	//	SEGGER_SYSVIEW_Start();
+	//>>>>>>> Stashed change
+
+	/************************************SW_Timers-Creation********************************************/
+	Handle_Timer_RecieveESP= xTimerCreate("Timer_RecieveEsp", pdMS_TO_TICKS(5000), pdFALSE, &ID_TImer_RecieveESP, CallBack_TimerLCDBuzzer);
+
+	/************************************TASKS_Creation************************************************/
+	Status_GPS = xTaskCreate(TASK_GPS, "GPS", 150, NULL, Priority_TASK_GPS, &Handle_GPS);
+
+	configASSERT(Status_GPS==pdPASS);
+
+	Status_CarControl = xTaskCreate(TASK_CarControl, "CarControl", 200, NULL, Priority_TASK_CarControl, &Handle_CarControl);
+
+	configASSERT(Status_CarControl==pdPASS);
+
+	Status_ESP_Periodic = xTaskCreate(TASK_ESPSend_PeriodicData, "ESP_Periodic", 200, NULL, Priority_TASK_ESP_Periodic, &Handle_ESP_Periodic);
+
+	configASSERT(Status_ESP_Periodic==pdPASS);
+
+	Status_ESP_Status = xTaskCreate(TASK_ESP_SendStatus, "ESP_Status", 200, NULL, Priority_TASK_ESP_Status, &Handle_ESP_Status);
+
+	configASSERT(Status_ESP_Status==pdPASS);
+
+	Status_ESP_Receive = xTaskCreate(TASK_ESP_Receive, "ESP_Receive", 200, NULL, Priority_TASK_ESP_Receive, &Handle_ESP_Receive);
+
+	configASSERT(Status_ESP_Receive==pdPASS);
+
+	Status_LightSensor = xTaskCreate(TASK_LightSensor, "LightSensor", 200, NULL, Priority_TASK_LightSensor, &Handle_LightSensor);
+
+	configASSERT(Status_LightSensor==pdPASS);
+
+
+	/**********************************Schedular_Starting********************************************/
+	vTaskStartScheduler();
 
 
   /* USER CODE END 2 */
-	//uint16_t Flux=0;
 
-	/* Infinite loop */
-	/* USER CODE BEGIN WHILE */
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
 	while (1)
 	{
-		/* USER CODE END WHILE */
-		//LightSensor_uint8ReadIntensity(Flux);
-		Buzzer_voidHighSound();
+    /* USER CODE END WHILE */
 
-		/* USER CODE BEGIN 3 */
+    /* USER CODE BEGIN 3 */
 
 		/* USER CODE BEGIN 3 */
 
@@ -401,7 +397,7 @@ static void MX_TIM2_Init(void)
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 15999;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 12000;
+  htim2.Init.Period = 1000-1;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_OC_Init(&htim2) != HAL_OK)
@@ -575,35 +571,35 @@ static void MX_TIM12_Init(void)
 }
 
 /**
-  * @brief UART5 Initialization Function
+  * @brief UART4 Initialization Function
   * @param None
   * @retval None
   */
-static void MX_UART5_Init(void)
+static void MX_UART4_Init(void)
 {
 
-  /* USER CODE BEGIN UART5_Init 0 */
+  /* USER CODE BEGIN UART4_Init 0 */
 
-  /* USER CODE END UART5_Init 0 */
+  /* USER CODE END UART4_Init 0 */
 
-  /* USER CODE BEGIN UART5_Init 1 */
+  /* USER CODE BEGIN UART4_Init 1 */
 
-  /* USER CODE END UART5_Init 1 */
-  huart5.Instance = UART5;
-  huart5.Init.BaudRate = 115200;
-  huart5.Init.WordLength = UART_WORDLENGTH_8B;
-  huart5.Init.StopBits = UART_STOPBITS_1;
-  huart5.Init.Parity = UART_PARITY_NONE;
-  huart5.Init.Mode = UART_MODE_TX_RX;
-  huart5.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart5.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart5) != HAL_OK)
+  /* USER CODE END UART4_Init 1 */
+  huart4.Instance = UART4;
+  huart4.Init.BaudRate = 115200;
+  huart4.Init.WordLength = UART_WORDLENGTH_8B;
+  huart4.Init.StopBits = UART_STOPBITS_1;
+  huart4.Init.Parity = UART_PARITY_NONE;
+  huart4.Init.Mode = UART_MODE_TX_RX;
+  huart4.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart4.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart4) != HAL_OK)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN UART5_Init 2 */
+  /* USER CODE BEGIN UART4_Init 2 */
 
-  /* USER CODE END UART5_Init 2 */
+  /* USER CODE END UART4_Init 2 */
 
 }
 
@@ -721,7 +717,6 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
-  __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4

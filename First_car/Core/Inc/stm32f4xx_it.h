@@ -51,10 +51,8 @@ void HardFault_Handler(void);
 void MemManage_Handler(void);
 void BusFault_Handler(void);
 void UsageFault_Handler(void);
-void TIM2_IRQHandler(void);
 void USART1_IRQHandler(void);
 void USART3_IRQHandler(void);
-void UART5_IRQHandler(void);
 void TIM7_IRQHandler(void);
 /* USER CODE BEGIN EFP */
 

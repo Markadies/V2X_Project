@@ -31,7 +31,7 @@ extern uint8_t  received_char;
 extern uint8_t  ESP_Recieved_Char;
 
 uint8_t  Global_GPS_Speed_Completetion=0;
-uint8_t  ESP_TX_Buffer_Status[3];
+uint8_t  ESP_TX_Buffer_Status[4];
 uint8_t  ESP_TX_Buffer_Periodic[27];
 
 uint16_t Global_Speed;
@@ -46,7 +46,7 @@ extern TaskHandle_t Handle_LightSensor;
 
 extern TimerHandle_t Handle_Timer_RecieveESP;
 
-extern UART_HandleTypeDef huart5;
+extern UART_HandleTypeDef huart4;
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart3;
 extern UART_HandleTypeDef huart6;
@@ -182,7 +182,7 @@ void TASK_ESPSend_PeriodicData(void *pvParameters)
 			GPSSPEED_voidBuildMsg(ESP_TX_Buffer_Periodic, GPS_Data.Longitude,GPS_Data.Latitude , Global_Speed);
 
 			/*Transmitting the GPS, SPEED elements */
-			HAL_UART_Transmit(&huart5,ESP_TX_Buffer_Periodic, sizeof(ESP_TX_Buffer_Periodic), 300);
+			HAL_UART_Transmit(&huart4,ESP_TX_Buffer_Periodic, sizeof(ESP_TX_Buffer_Periodic), 1500);
 		}
 		else
 		{
@@ -199,10 +199,10 @@ void TASK_ESP_SendStatus (void *pvParameters)
 
 	BaseType_t Notify_Status;
 	ESP_TX_Buffer_Status[0] = '%';
-	ESP_TX_Buffer_Status[2] = '!';
+	ESP_TX_Buffer_Status[2] = '^';
+	ESP_TX_Buffer_Status[3] = '!';
 	while(1)
 	{
-
 		/*Waiting to be notified from the TASK_LightSensor */
 		Notify_Status = xTaskNotifyWait((uint32_t)NULL,0xffffffff,&Local_Notification_Value,portMAX_DELAY);
 		if(Notify_Status == pdTRUE)
@@ -217,7 +217,7 @@ void TASK_ESP_SendStatus (void *pvParameters)
 				ESP_TX_Buffer_Status[1] = 'L';
 
 				/*Transmitting the Car status to the Esp */
-				HAL_UART_Transmit(&huart5,ESP_TX_Buffer_Status, sizeof(ESP_TX_Buffer_Status), 300);
+				HAL_UART_Transmit(&huart4,ESP_TX_Buffer_Status, sizeof(ESP_TX_Buffer_Status), 1500);
 				break;
 			}
 		}

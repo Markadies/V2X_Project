@@ -28,7 +28,7 @@ extern uint8_t ESP_Recieved_Char;
 
 uint8_t  Global_GPS_Speed_Completetion=0;
 
-uint8_t  ESP_TX_Buffer_Status[3];
+uint8_t  ESP_TX_Buffer_Status[4];
 uint8_t  ESP_TX_Buffer_Periodic[27];
 
 uint16_t Global_Speed;
@@ -155,7 +155,7 @@ void TASK_ESPSend_PeriodicData (void *pvParameters)
 			GPSSPEED_voidBuildMsg(ESP_TX_Buffer_Periodic, GPS_Data.Longitude,GPS_Data.Latitude , Global_Speed);
 
 			/*Transmitting the GPS, SPEED elements */
-			HAL_UART_Transmit(&huart5,ESP_TX_Buffer_Periodic, sizeof(ESP_TX_Buffer_Periodic), 300);
+			HAL_UART_Transmit(&huart5,ESP_TX_Buffer_Periodic, sizeof(ESP_TX_Buffer_Periodic), 1500);
 		}
 		else
 		{
@@ -172,7 +172,8 @@ void TASK_ESP_SendStatus (void *pvParameters)
 
 	BaseType_t Notify_Status;
 	ESP_TX_Buffer_Status[0] = '%';
-	ESP_TX_Buffer_Status[2] = '!';
+	ESP_TX_Buffer_Status[2] = '^';
+	ESP_TX_Buffer_Status[3] = '!';
 	while(1)
 	{
 
@@ -190,7 +191,7 @@ void TASK_ESP_SendStatus (void *pvParameters)
 				ESP_TX_Buffer_Status[1] = 'B';
 
 				/*Transmitting the Car status to the Esp */
-				HAL_UART_Transmit(&huart5,ESP_TX_Buffer_Status, sizeof(ESP_TX_Buffer_Status), 300);
+				HAL_UART_Transmit(&huart5,ESP_TX_Buffer_Status, sizeof(ESP_TX_Buffer_Status), 1500);
 
 				break;
 			}
@@ -215,7 +216,7 @@ void TASK_ESP_Receive (void *pvParameters)
 				vTaskSuspendAll();
 
 				/*Taking the action of Turning the light beam off*/
-				//Ka4af off
+				Light_OFF();
 
 				/*Activating the warning message and the buzzer to alert the driver*/
 				Buzzer_voidMidSound();
