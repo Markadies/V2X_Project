@@ -58,6 +58,7 @@ TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim6;
 TIM_HandleTypeDef htim12;
 
+UART_HandleTypeDef huart4;
 UART_HandleTypeDef huart5;
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart3;
@@ -76,10 +77,11 @@ static void MX_USART3_UART_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_I2C3_Init(void);
 static void MX_TIM3_Init(void);
-static void MX_UART5_Init(void);
 static void MX_TIM6_Init(void);
 static void MX_TIM12_Init(void);
 static void MX_USART6_UART_Init(void);
+static void MX_UART4_Init(void);
+static void MX_UART5_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -146,13 +148,15 @@ int main(void)
   MX_TIM2_Init();
   MX_I2C3_Init();
   MX_TIM3_Init();
-  MX_UART5_Init();
   MX_TIM6_Init();
   MX_TIM12_Init();
   MX_USART6_UART_Init();
+  MX_UART4_Init();
+  MX_UART5_Init();
   /* USER CODE BEGIN 2 */
 	/********************************Hardware_Initializing*********************************************/
 	//GPS_voidInit(); // Note that LCD_Init is included in this API
+	LCD_voidInit();
 
 	/********************************Interrupts_Starting***********************************************/
 	HAL_UART_Receive_IT(&huart5,&ESP_Recieved_Char,1);                   //ESP
@@ -162,38 +166,38 @@ int main(void)
 
 	/********************************SEGGER_Starting***************************************************/
 	//Enable the CYCCN counter (For SEGGER)
-	//	DWT_CTRL |= (1<<0);
-	//
-	//	SEGGER_SYSVIEW_Conf();
-	//
-	//	SEGGER_SYSVIEW_Start();
+//		DWT_CTRL |= (1<<0);
+//
+//		SEGGER_SYSVIEW_Conf();
+//
+//		SEGGER_SYSVIEW_Start();
 
 	/************************************SW_Timers-Creation********************************************/
-	Handle_Timer_RecieveESP= xTimerCreate("Timer_RecieveEsp", pdMS_TO_TICKS(5000), pdFALSE, &ID_TImer_RecieveESP, CallBack_TimerLCDBuzzer);
+		Handle_Timer_RecieveESP= xTimerCreate("Timer_RecieveEsp", pdMS_TO_TICKS(5000), pdFALSE, &ID_TImer_RecieveESP, CallBack_TimerLCDBuzzer);
 
-	/************************************TASKS_Creation************************************************/
-	Status_GPS = xTaskCreate(TASK_GPS, "GPS", 150, NULL, Priority_TASK_GPS, &Handle_GPS);
+		/************************************TASKS_Creation************************************************/
+		Status_GPS = xTaskCreate(TASK_GPS, "GPS", 150, NULL, Priority_TASK_GPS, &Handle_GPS);
 
-	configASSERT(Status_GPS==pdPASS);
+		configASSERT(Status_GPS==pdPASS);
 
-	Status_CarControl = xTaskCreate(TASK_CarControl, "CarControl", 200, NULL, Priority_TASK_CarControl, &Handle_CarControl);
+		Status_CarControl = xTaskCreate(TASK_CarControl, "CarControl", 200, NULL, Priority_TASK_CarControl, &Handle_CarControl);
 
-	configASSERT(Status_CarControl==pdPASS);
+		configASSERT(Status_CarControl==pdPASS);
 
-	Status_ESP_Periodic = xTaskCreate(TASK_ESPSend_PeriodicData, "ESP_Periodic", 200, NULL, Priority_TASK_ESP_Periodic, &Handle_ESP_Periodic);
+		Status_ESP_Periodic = xTaskCreate(TASK_ESPSend_PeriodicData, "ESP_Periodic", 200, NULL, Priority_TASK_ESP_Periodic, &Handle_ESP_Periodic);
 
-	configASSERT(Status_ESP_Periodic==pdPASS);
+		configASSERT(Status_ESP_Periodic==pdPASS);
 
-	Status_ESP_Status = xTaskCreate(TASK_ESP_SendStatus, "ESP_Status", 200, NULL, Priority_TASK_ESP_Status, &Handle_ESP_Status);
+		Status_ESP_Status = xTaskCreate(TASK_ESP_SendStatus, "ESP_Status", 200, NULL, Priority_TASK_ESP_Status, &Handle_ESP_Status);
 
-	configASSERT(Status_ESP_Status==pdPASS);
+		configASSERT(Status_ESP_Status==pdPASS);
 
-	Status_ESP_Receive = xTaskCreate(TASK_ESP_Receive, "ESP_Receive", 200, NULL, Priority_TASK_ESP_Receive, &Handle_ESP_Receive);
+		Status_ESP_Receive = xTaskCreate(TASK_ESP_Receive, "ESP_Receive", 200, NULL, Priority_TASK_ESP_Receive, &Handle_ESP_Receive);
 
-	configASSERT(Status_ESP_Receive==pdPASS);
+		configASSERT(Status_ESP_Receive==pdPASS);
 
-	/**********************************Schedular_Starting********************************************/
-	vTaskStartScheduler();
+/**********************************Schedular_Starting********************************************/
+		vTaskStartScheduler();
 
   /* USER CODE END 2 */
 
@@ -202,7 +206,6 @@ int main(void)
 	while (1)
 	{
     /* USER CODE END WHILE */
-
 
     /* USER CODE BEGIN 3 */
 
@@ -510,6 +513,39 @@ static void MX_TIM12_Init(void)
 
   /* USER CODE END TIM12_Init 2 */
   HAL_TIM_MspPostInit(&htim12);
+
+}
+
+/**
+  * @brief UART4 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_UART4_Init(void)
+{
+
+  /* USER CODE BEGIN UART4_Init 0 */
+
+  /* USER CODE END UART4_Init 0 */
+
+  /* USER CODE BEGIN UART4_Init 1 */
+
+  /* USER CODE END UART4_Init 1 */
+  huart4.Instance = UART4;
+  huart4.Init.BaudRate = 115200;
+  huart4.Init.WordLength = UART_WORDLENGTH_8B;
+  huart4.Init.StopBits = UART_STOPBITS_1;
+  huart4.Init.Parity = UART_PARITY_NONE;
+  huart4.Init.Mode = UART_MODE_TX_RX;
+  huart4.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart4.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart4) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN UART4_Init 2 */
+
+  /* USER CODE END UART4_Init 2 */
 
 }
 
