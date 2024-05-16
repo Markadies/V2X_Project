@@ -169,7 +169,7 @@ int main(void)
 	LightSensor_voidInit();
 
 	/********************************Interrupts_Starting***********************************************/
-	HAL_UART_Receive_IT(&huart4,&ESP_Recieved_Char ,1);              //ESP
+	HAL_UART_Receive_IT(&huart4,&ESP_Recieved_Char ,2);              //ESP
 	HAL_UART_Receive_IT(&huart3,&received_char , 1);                 //Bluetooth
 	__HAL_TIM_ENABLE_IT(&htim2, TIM_IT_UPDATE);                      //Speed
 	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);                      //Speed
@@ -183,7 +183,7 @@ int main(void)
 	//	SEGGER_SYSVIEW_Start();
 	//>>>>>>> Stashed change
 
-	/************************************SW_Timers-Creation********************************************/
+	/************************************SW_Timers_Creation********************************************/
 	Handle_Timer_RecieveESP= xTimerCreate("Timer_RecieveEsp", pdMS_TO_TICKS(5000), pdFALSE, &ID_TImer_RecieveESP, CallBack_TimerLCDBuzzer);
 
 	/************************************TASKS_Creation************************************************/

@@ -9163,25 +9163,25 @@ LOAD D:/GP/IMP_Files/STM32CubeIDE_1.4.0/STM32CubeIDE/plugins/com.st.stm32cube.id
                                       0xce1f2 (size before relaxing)
  .debug_str     0x00000000000cdf3f      0x60f ./Core/Src/Buzzer.o
                                       0xcb05f (size before relaxing)
- .debug_str     0x00000000000ce54e     0x9bcf ./Core/Src/Call_Back_functions.o
-                                      0xd4c84 (size before relaxing)
- .debug_str     0x00000000000d811d      0x3d7 ./Core/Src/Car_Control.o
+ .debug_str     0x00000000000ce54e     0x9bd0 ./Core/Src/Call_Back_functions.o
+                                      0xd4c85 (size before relaxing)
+ .debug_str     0x00000000000d811e      0x3d7 ./Core/Src/Car_Control.o
                                       0xcb309 (size before relaxing)
- .debug_str     0x00000000000d84f4      0xa6b ./Core/Src/GPS.o
+ .debug_str     0x00000000000d84f5      0xa6b ./Core/Src/GPS.o
                                       0xce542 (size before relaxing)
- .debug_str     0x00000000000d8f5f      0x17d ./Core/Src/Help_Functions.o
+ .debug_str     0x00000000000d8f60      0x17d ./Core/Src/Help_Functions.o
                                       0xcab50 (size before relaxing)
- .debug_str     0x00000000000d90dc      0x418 ./Core/Src/LCD_I2C.o
+ .debug_str     0x00000000000d90dd      0x418 ./Core/Src/LCD_I2C.o
                                       0xcb153 (size before relaxing)
- .debug_str     0x00000000000d94f4      0x4cc ./Core/Src/LightSensor.o
+ .debug_str     0x00000000000d94f5      0x4cc ./Core/Src/LightSensor.o
                                       0xcec9b (size before relaxing)
- .debug_str     0x00000000000d99c0      0x264 ./Core/Src/NMEA.o
+ .debug_str     0x00000000000d99c1      0x264 ./Core/Src/NMEA.o
                                        0x8245 (size before relaxing)
- .debug_str     0x00000000000d9c24     0x100c ./Core/Src/Tasks.o
+ .debug_str     0x00000000000d9c25     0x101e ./Core/Src/Tasks.o
                                       0xd5e2a (size before relaxing)
- .debug_str     0x00000000000dac30      0x1db ./Core/Src/UartRingbuffer.o
+ .debug_str     0x00000000000dac43      0x1db ./Core/Src/UartRingbuffer.o
                                       0xce1b0 (size before relaxing)
- .debug_str     0x00000000000dae0b      0x6a1 ./Core/Src/main.o
+ .debug_str     0x00000000000dae1e      0x68e ./Core/Src/main.o
                                       0xd6645 (size before relaxing)
  .debug_str     0x00000000000db4ac      0x668 ./Core/Src/stm32f4xx_hal_msp.o
                                       0xcbb8a (size before relaxing)

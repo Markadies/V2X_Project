@@ -159,7 +159,7 @@ int main(void)
 	LCD_voidInit();
 
 	/********************************Interrupts_Starting***********************************************/
-	HAL_UART_Receive_IT(&huart5,&ESP_Recieved_Char,1);                   //ESP
+	HAL_UART_Receive_IT(&huart5,&ESP_Recieved_Char,2);                   //ESP
 	HAL_UART_Receive_IT(&huart3,&received_char ,1);                      //Bluetooth
 	__HAL_TIM_ENABLE_IT(&htim2, TIM_IT_UPDATE);                          //Speed
 	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);                          //Speed
@@ -196,7 +196,7 @@ int main(void)
 
 		configASSERT(Status_ESP_Receive==pdPASS);
 
-/**********************************Schedular_Starting********************************************/
+///**********************************Schedular_Starting********************************************/
 		vTaskStartScheduler();
 
   /* USER CODE END 2 */
@@ -206,6 +206,7 @@ int main(void)
 	while (1)
 	{
     /* USER CODE END WHILE */
+
 
     /* USER CODE BEGIN 3 */
 

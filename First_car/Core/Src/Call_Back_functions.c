@@ -27,6 +27,7 @@ extern TaskHandle_t Handle_GPS;
 extern TaskHandle_t Handle_ESP_Periodic;
 extern TaskHandle_t Handle_ESP_Status;
 extern TaskHandle_t Handle_LightSensor;
+extern TaskHandle_t Handle_ESP_Receive;
 
 /********************************Global_Variables_Definition******************************/
 extern uint8_t received_char;
@@ -49,10 +50,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	/*ESP Interrupt*/
 	if(huart->Instance==UART4)
 	{
-		HAL_UART_Receive_IT(&huart4,&ESP_Recieved_Char,1);
+		HAL_UART_Receive_IT(&huart4,&ESP_Recieved_Char,2);
 
 		/*Give the Notification to the Recieve esp task*/
-		xTaskNotifyFromISR(Handle_ESP_Status,NULL,eNoAction,NULL);
+		xTaskNotifyFromISR(Handle_ESP_Receive,NULL,eNoAction,NULL);
 
 	}
 	/*Bluetooth interrupt*/

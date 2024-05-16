@@ -33,7 +33,7 @@ void TASK_LightSensor(void *pvParameters);
 
 //For light sensor task
   /*Configure the Max flux intensity that consider a problem*/
-#define MAX_LightIntensity           10
+#define MAX_LightIntensity           20
 
   /***************************************Private Macros*************************************************/
 

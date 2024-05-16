@@ -25,6 +25,7 @@ extern TaskHandle_t Handle_CarControl;
 extern TaskHandle_t Handle_GPS;
 extern TaskHandle_t Handle_ESP_Periodic;
 extern TaskHandle_t Handle_ESP_Status;
+extern TaskHandle_t Handle_ESP_Receive;
 
 /********************************Global_Variables_Definition******************************/
 extern uint8_t received_char;
@@ -58,10 +59,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	else if(huart->Instance==UART5)
 	{
 		/*Reactivating the interrupt*/
-		HAL_UART_Receive_IT(&huart5,&ESP_Recieved_Char,1);
+		HAL_UART_Receive_IT(&huart5,&ESP_Recieved_Char,2);
 
 		/*Give the Notification to the Receive esp task*/
-		xTaskNotifyFromISR(Handle_ESP_Status,NULL,eNoAction,NULL);
+		xTaskNotifyFromISR(Handle_ESP_Receive,NULL,eNoAction,NULL);
 
 	}
 
