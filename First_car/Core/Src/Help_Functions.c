@@ -30,10 +30,10 @@ void LCD_HighLightIntensity_Warning()
 
 void LCD_AvoidHardBraking(void)
 {
-	/*Printing the warning sign*/
+	/* Printing the warning sign */
 	LCD_Print_WarningSign();
 
-	/*Printing the warning message to the driver*/
+	/* Printing the warning message to the driver */
 	LCD_voidSetPositionXY(1,0);
 	LCD_voidSendString("Hit Brakes");
 
@@ -46,10 +46,10 @@ void LCD_AvoidHardBraking(void)
 void LCD_AvoidOvertaking_Warning()
 {
 
-	/*Printing the warning sign*/
+	/* Printing the warning sign */
 	LCD_Print_WarningSign();
 
-	/*Printing the warning message to the driver*/
+	/* Printing the warning message to the driver */
 	LCD_voidSetPositionXY(1,4);
 	LCD_voidSendString("DONT");
 
@@ -62,10 +62,10 @@ void LCD_AvoidOvertaking_Warning()
 void LCD_BeingOvertaken_Warning()
 {
 
-	/*Printing the warning sign*/
+	/* Printing the warning sign */
 	LCD_Print_WarningSign();
 
-	/*Printing the warning message to the driver*/
+	/* Printing the warning message to the driver */
 	LCD_voidSetPositionXY(1,4);
 	LCD_voidSendString("Slow Down");
 
@@ -73,7 +73,7 @@ void LCD_BeingOvertaken_Warning()
 }
 static void LCD_Print_WarningSign(void)
 {
-	/*Saving the elemetents of each block of the LCD in multiple arrays to be sent to the special charachter function*/
+	/* Saving the elements of each block of the LCD in multiple arrays to be sent to the special character function */
 
 	uint8_t LCD_R1_C16_Array[8] =
 	{
@@ -205,7 +205,18 @@ static void LCD_Print_WarningSign(void)
 
 }
 
+void LCD_Normal_Alert(void)
+{
+	/*Printing the warning message to the driver*/
+	LCD_voidSetPositionXY(1,0);
+	LCD_voidSendString("Watch Ahead");
 
+	/*Printing the warning sign*/
+	LCD_Print_WarningSign();
+
+
+
+}
 
 
 

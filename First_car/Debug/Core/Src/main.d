@@ -51,8 +51,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  D:/GP/WS/V2X_Project/First_car/ThirdParty/FreeRTOS/include/queue.h \
  ../Core/Inc/GPS.h ../Core/Inc/Buzzer.h ../Core/Inc/LCD_I2C.h \
  ../Core/Inc/LightSensor.h ../Core/Inc/Help_Functions.h \
- ../Core/Inc/calculateSpeed.h ../Core/Inc/Tasks.h \
- ../Core/Inc/Call_Back_functions.h
+ ../Core/Inc/calculateSpeed.h ../Core/Inc/Ultrasonic.h \
+ ../Core/Inc/Tasks.h ../Core/Inc/Call_Back_functions.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -110,5 +110,6 @@ D:/GP/WS/V2X_Project/First_car/ThirdParty/FreeRTOS/include/queue.h:
 ../Core/Inc/LightSensor.h:
 ../Core/Inc/Help_Functions.h:
 ../Core/Inc/calculateSpeed.h:
+../Core/Inc/Ultrasonic.h:
 ../Core/Inc/Tasks.h:
 ../Core/Inc/Call_Back_functions.h:

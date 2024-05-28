@@ -11,10 +11,12 @@
 #include "task.h"
 #include "timers.h"
 
+#include "Tasks.h"
 #include "Call_Back_functions.h"
 #include "Buzzer.h"
 #include "LCD_I2C.h"
 
+/********************************Handles_Definition**************************************/
 extern UART_HandleTypeDef huart5;
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart3;
@@ -30,7 +32,7 @@ extern TaskHandle_t Handle_ESP_Receive;
 /********************************Global_Variables_Definition******************************/
 extern uint8_t received_char;
 extern uint8_t ESP_Recieved_Char;
-
+extern uint8_t  Global_LightStatus;
 uint32_t edges_counter = 0;
 
 /***************************************Interrupts_Call_Backs********************************************************/
@@ -77,15 +79,39 @@ void vApplicationIdleHook(void)
 }
 
 /*********************************************SW_Timers_CallBacks*********************************************************/
-void CallBack_TimerLCDBuzzer(TimerHandle_t xTimer)
+void CallBack_TimerLightStop(TimerHandle_t xTimer)
 {
-	/*When the LCDBuzzer task starts the timer it should turn off the buzzer and clear the LCD*/
+	if(Global_LightStatus == LIGHT_ON_STATUS)
+	{
+		/* If the still the user didn't turn off the light source it will turn off automatically */
 
-	/*Stopping the buzzer*/
-	Buzzer_voidStop();
+		/* Taking the action of Turning the light beam off */
+		Light_OFF();
 
-	/*Clearing the LCD*/
-	LCD_voidClearDisplay();
+		/* Stopping the buzzer */
+		Buzzer_voidStop();
+
+		/* Clearing the LCD */
+		LCD_voidClearDisplay();
+
+
+
+	}
+	else
+	{
+		/* If the script reaches here means that the light source is not from this car and it reached here by mistake
+		 * because if the light intensity is already off so the timer should be stopped */
+
+		/* Stopping the buzzer */
+		Buzzer_voidStop();
+
+		/* Clearing the LCD */
+		LCD_voidClearDisplay();
+
+	}
+
+
+
 }
 
 

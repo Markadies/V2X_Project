@@ -8,6 +8,6 @@
 #ifndef INC_CALL_BACK_FUNCTIONS_H_
 #define INC_CALL_BACK_FUNCTIONS_H_
 
-void CallBack_TimerLCDBuzzer(TimerHandle_t xTimer);
+void CallBack_TimerLightStop(TimerHandle_t xTimer);
 
 #endif /* INC_CALL_BACK_FUNCTIONS_H_ */

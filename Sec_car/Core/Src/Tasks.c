@@ -30,6 +30,7 @@ uint8_t  Global_GPS_Speed_Completetion=0;
 
 uint8_t  ESP_TX_Buffer_Status[4];
 uint8_t  ESP_TX_Buffer_Periodic[27];
+uint8_t  Global_LightStatus = LIGHT_OFF_STATUS;
 
 uint16_t Global_Speed;
 extern GPS_Data_t GPS_Data;
@@ -42,7 +43,7 @@ extern TaskHandle_t Handle_ESP_Periodic;
 extern TaskHandle_t Handle_ESP_Status;
 extern TaskHandle_t Handle_LightSensor;
 
-extern TimerHandle_t Handle_Timer_RecieveESP;
+extern TimerHandle_t Handle_Timer_LightStop;;
 
 extern UART_HandleTypeDef huart5;
 extern UART_HandleTypeDef huart1;
@@ -61,12 +62,14 @@ void TASK_GPS        (void *pvParameters)
 			/*Update the completetion flag to activate the sendESP_Periodic task*/
 			if(Global_GPS_Speed_Completetion==Nothing_Completed)
 			{
+				/* Updating the variable to notify the speed algorithm that the gps has
+				 * done decoding and it can puplish the periodic data to the WIFI module */
 				Global_GPS_Speed_Completetion = Half_Completed_GPS;
 
 			}
 			else if(Global_GPS_Speed_Completetion==Half_Completed_Speed)
 			{
-
+				/* Reseting the variable for the next update cycle */
 				Global_GPS_Speed_Completetion = Nothing_Completed;
 
 
@@ -101,44 +104,59 @@ void TASK_CarControl(void *pvParameters)
 
 		if(Notify_Status == pdTRUE)
 		{
-		// Read data from UART
-		switch (received_char)
-		  {
-		case '1':
-			Car_Rotate_LeftForward();
-			break;
-		case '2':
-			Car_Rotate_Left();
-			break;
-		case '4':
-			Car_Move_Forward_High_Speed();
-			break;
-		case '5':
-			Car_Stop();
+			// Read data from UART
+			switch (received_char)
+			{
+			case '1':
+				Car_Rotate_LeftForward();
+				break;
+			case '2':
+				Car_Rotate_Left();
+				break;
+			case '4':
+				Car_Move_Forward_High_Speed();
+				break;
+			case '5':
+				Car_Stop();
 
-			/*Notify the sendEspStatus task*/
-			xTaskNotify(Handle_ESP_Status,Notify_TASK_ESPStatus_HardBreaking,eSetValueWithOverwrite);
+				/*Notify the sendEspStatus task*/
+				xTaskNotify(Handle_ESP_Status,Notify_TASK_ESPStatus_HardBreaking,eSetValueWithOverwrite);
 
-			break;
-		case '6':
-			Car_Move_Backward();
-			break;
-		case '7':
-			Car_Rotate_RightForward();
-			break;
-		case '8':
-			Car_Rotate_Right();
-			break;
-		case 'l':
-			Light_On();
-			break;
-		case 'f':
-			Light_OFF();
-			break;
+				break;
+			case '6':
+				Car_Move_Backward();
+				break;
+			case '7':
+				Car_Rotate_RightForward();
+				break;
+			case '8':
+				Car_Rotate_Right();
+				break;
+			case 'l':
+				Light_On();
 
-		 }
+				/* Updating the car light source status*/
+				Global_LightStatus = LIGHT_ON_STATUS;
+
+				break;
+			case 'f':
+				Light_OFF();
+
+				/* Updating the car light source status*/
+				Global_LightStatus = LIGHT_OFF_STATUS;
+
+				/* Stopping the unnecessary warning */
+				Buzzer_voidStop();
+				LCD_voidClearDisplay();
+
+				/* Stop the unnecessary timer because the user already reacted */
+				xTimerStop(Handle_Timer_LightStop,1000);
+
+				break;
+
+			}
+		}
 	}
-  }
 }
 void TASK_ESPSend_PeriodicData (void *pvParameters)
 {
@@ -215,18 +233,18 @@ void TASK_ESP_Receive (void *pvParameters)
 				/*Stopping preemption of other tasks in this critical section*/
 				vTaskSuspendAll();
 
-				/*Taking the action of Turning the light beam off*/
-				Light_OFF();
-
 				/*Activating the warning message and the buzzer to alert the driver*/
-				Buzzer_voidMidSound();
+				Buzzer_voidHighSound();
 				LCD_HighLightIntensity_Warning();
+
+
+				/*Start the timer to autonomously turn off the light source if the user didn't
+				 * & to stop the buzzer and clear LCD after period of specified time */
+				xTimerStart(Handle_Timer_LightStop,1000);
 
 				/*Resuming the tasks*/
 				xTaskResumeAll();
 
-				/*Start the timer to stop the buzzer and clear LCD after period of specified time*/
-				xTimerStart(Handle_Timer_RecieveESP,1000);
 
 
 				break;

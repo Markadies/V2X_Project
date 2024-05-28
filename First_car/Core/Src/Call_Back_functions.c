@@ -33,6 +33,9 @@ extern TaskHandle_t Handle_ESP_Receive;
 extern uint8_t received_char;
 extern uint8_t  ESP_Recieved_Char;
 
+extern uint8_t  Global_Break_Warning_On_Status;
+extern uint8_t  Global_Breaking_Status;
+
 uint32_t edges_counter = 0;
 
 
@@ -47,7 +50,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 }
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-	/*ESP Interrupt*/
+	/* ESP Interrupt */
 	if(huart->Instance==UART4)
 	{
 		HAL_UART_Receive_IT(&huart4,&ESP_Recieved_Char,2);
@@ -56,12 +59,12 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		xTaskNotifyFromISR(Handle_ESP_Receive,NULL,eNoAction,NULL);
 
 	}
-	/*Bluetooth interrupt*/
+	/* Bluetooth interrupt */
 	else if(huart->Instance==USART3)
 	{
 		HAL_UART_Receive_IT(&huart3, &received_char, 1);
 
-		/*Give the Notification to the CarControl task*/
+		/* Give the Notification to the CarControl task */
 		xTaskNotifyFromISR(Handle_CarControl,NULL,eNoAction,NULL);
 
 	}
@@ -71,7 +74,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 /*********************************************Application_Hook*************************************************************/
 void vApplicationIdleHook(void)
 {
-	/*The processor will go to sleep in the IDLE Task*/
+	/* The processor will go to sleep in the IDLE Task */
 	HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
 
 }
@@ -79,11 +82,17 @@ void vApplicationIdleHook(void)
 /*********************************************SW_Timers_CallBacks*********************************************************/
 void CallBack_TimerLCDBuzzer(TimerHandle_t xTimer)
 {
-	/*When the LCDBuzzer task starts the timer it should turn off the buzzer and clear the LCD*/
+	/* When the LCDBuzzer task starts the timer it should turn off the buzzer and clear the LCD */
 
-	/*Stopping the buzzer*/
+	/* Stopping the buzzer */
 	Buzzer_voidStop();
 
-	/*Clearing the LCD*/
+	/* Clearing the LCD */
 	LCD_voidClearDisplay();
+
+	/* Resseting the global warning status */
+	Global_Break_Warning_On_Status = Warning_OFF;
 }
+
+void CallBack_TimerBreakingStatus(TimerHandle_t xTimer){Global_Breaking_Status = Warning_OFF;}
+

@@ -1,4 +1,5 @@
-../Core/Src/Call_Back_functions.c:41:6:HAL_TIM_IC_CaptureCallback	16	static
-../Core/Src/Call_Back_functions.c:48:6:HAL_UART_RxCpltCallback	24	static
-../Core/Src/Call_Back_functions.c:72:6:vApplicationIdleHook	8	static
-../Core/Src/Call_Back_functions.c:80:6:CallBack_TimerLCDBuzzer	16	static
+../Core/Src/Call_Back_functions.c:44:6:HAL_TIM_IC_CaptureCallback	16	static
+../Core/Src/Call_Back_functions.c:51:6:HAL_UART_RxCpltCallback	24	static
+../Core/Src/Call_Back_functions.c:75:6:vApplicationIdleHook	8	static
+../Core/Src/Call_Back_functions.c:83:6:CallBack_TimerLCDBuzzer	16	static
+../Core/Src/Call_Back_functions.c:97:6:CallBack_TimerBreakingStatus	16	static

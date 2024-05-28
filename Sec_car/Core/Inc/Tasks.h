@@ -19,7 +19,6 @@ void TASK_ESP_Receive (void *pvParameters);
   /*************************************Configurations Macros********************************************/
 
 //Tasks Priority
-#define Priority_TASK_LCDBuzzer             2
 #define Priority_TASK_CarControl            2
 #define Priority_TASK_GPS                   2
 #define Priority_TASK_ESP_Periodic          2
@@ -39,5 +38,7 @@ void TASK_ESP_Receive (void *pvParameters);
 #define Half_Completed_Speed                   1
 #define Half_Completed_GPS                     2
 
+#define LIGHT_OFF_STATUS           0
+#define LIGHT_ON_STATUS            1
 
 #endif /* INC_TASKS_H_ */

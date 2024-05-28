@@ -1,6 +1,7 @@
-../Core/Src/Tasks.c:54:6:TASK_GPS	4
-../Core/Src/Tasks.c:97:6:TASK_CarControl	9
-../Core/Src/Tasks.c:144:6:TASK_LightSensor	2
-../Core/Src/Tasks.c:170:6:TASK_ESPSend_PeriodicData	2
-../Core/Src/Tasks.c:196:6:TASK_ESP_SendStatus	3
-../Core/Src/Tasks.c:227:6:TASK_ESP_Receive	3
+../Core/Src/Tasks.c:61:6:TASK_GPS	4
+../Core/Src/Tasks.c:106:6:TASK_CarControl	10
+../Core/Src/Tasks.c:172:6:TASK_LightSensor	2
+../Core/Src/Tasks.c:198:6:TASK_ESPSend_PeriodicData	2
+../Core/Src/Tasks.c:223:6:TASK_ESP_SendStatus	3
+../Core/Src/Tasks.c:254:6:TASK_ESP_Receive	9
+../Core/Src/Tasks.c:355:6:TASK_Distance_AboveThreshold	7

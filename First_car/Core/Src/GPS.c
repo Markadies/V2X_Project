@@ -40,8 +40,8 @@ void GPS_voidInit(void)
 	Ringbuf_init();
 	HAL_Delay(500);
 
-	/*LCD initializing*/
-	LCD_voidInit();
+	/*LCD clearing*/
+	LCD_voidClearDisplay();
 
 	/*Writing on LCD that the gps still warming up*/
 	LCD_voidSetPositionXY(0,2);

@@ -109,8 +109,9 @@ BaseType_t Status_ESP_Status;
 BaseType_t Status_ESP_Receive;
 
 /*Creating SW Timers handle and id*/
-TimerHandle_t Handle_Timer_RecieveESP;
-uint8_t ID_TImer_RecieveESP = 3;
+
+TimerHandle_t Handle_Timer_LightStop;
+uint8_t ID_TImer_LightStop = 4;
 
 /* USER CODE END 0 */
 
@@ -153,9 +154,10 @@ int main(void)
   MX_USART6_UART_Init();
   MX_UART4_Init();
   MX_UART5_Init();
+
   /* USER CODE BEGIN 2 */
 	/********************************Hardware_Initializing*********************************************/
-	//GPS_voidInit(); // Note that LCD_Init is included in this API
+	//GPS_voidInit();
 	LCD_voidInit();
 
 	/********************************Interrupts_Starting***********************************************/
@@ -172,8 +174,8 @@ int main(void)
 //
 //		SEGGER_SYSVIEW_Start();
 
-	/************************************SW_Timers-Creation********************************************/
-		Handle_Timer_RecieveESP= xTimerCreate("Timer_RecieveEsp", pdMS_TO_TICKS(5000), pdFALSE, &ID_TImer_RecieveESP, CallBack_TimerLCDBuzzer);
+		/************************************SW_Timers-Creation********************************************/
+		Handle_Timer_LightStop = xTimerCreate("Timer_LightStop", pdMS_TO_TICKS(3500), pdFALSE, &ID_TImer_LightStop, CallBack_TimerLightStop);
 
 		/************************************TASKS_Creation************************************************/
 		Status_GPS = xTaskCreate(TASK_GPS, "GPS", 150, NULL, Priority_TASK_GPS, &Handle_GPS);
@@ -206,7 +208,6 @@ int main(void)
 	while (1)
 	{
     /* USER CODE END WHILE */
-
 
     /* USER CODE BEGIN 3 */
 

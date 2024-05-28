@@ -32,6 +32,8 @@
 #include "LightSensor.h"
 #include "Help_Functions.h"
 #include "calculateSpeed.h"
+#include "Ultrasonic.h"
+
 #include "Tasks.h"
 #include "Call_Back_functions.h"
 /* USER CODE END Includes */
@@ -54,11 +56,11 @@
 /* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c1;
 I2C_HandleTypeDef hi2c2;
-I2C_HandleTypeDef hi2c3;
 
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim6;
+TIM_HandleTypeDef htim10;
 TIM_HandleTypeDef htim12;
 
 UART_HandleTypeDef huart4;
@@ -78,12 +80,12 @@ static void MX_USART1_UART_Init(void);
 static void MX_USART3_UART_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_I2C2_Init(void);
-static void MX_I2C3_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_TIM6_Init(void);
 static void MX_TIM12_Init(void);
 static void MX_USART6_UART_Init(void);
 static void MX_UART4_Init(void);
+static void MX_TIM10_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -104,6 +106,7 @@ TaskHandle_t Handle_ESP_Periodic;
 TaskHandle_t Handle_ESP_Status;
 TaskHandle_t Handle_ESP_Receive;
 TaskHandle_t Handle_LightSensor;
+TaskHandle_t Handle_Distance_AboveThreshold;
 
 /*Creating a variable to save the return of the xcreateTask function (pdPass or pdFail) */
 
@@ -113,10 +116,14 @@ BaseType_t Status_ESP_Periodic;
 BaseType_t Status_ESP_Status;
 BaseType_t Status_ESP_Receive;
 BaseType_t Status_LightSensor;
+BaseType_t Status_Distance_AboveThreshold;
 
 /*Creating SW Timers handle and id*/
 TimerHandle_t Handle_Timer_RecieveESP;
 uint8_t ID_TImer_RecieveESP = 3;
+
+TimerHandle_t Handle_Timer_Breaking_Status;
+uint8_t ID_TImer_Breaking_Status = 4;
 
 /* USER CODE END 0 */
 
@@ -154,18 +161,18 @@ int main(void)
   MX_USART3_UART_Init();
   MX_TIM2_Init();
   MX_I2C2_Init();
-  MX_I2C3_Init();
   MX_TIM3_Init();
   MX_TIM6_Init();
   MX_TIM12_Init();
   MX_USART6_UART_Init();
   MX_UART4_Init();
+  MX_TIM10_Init();
   /* USER CODE BEGIN 2 */
 
 	/********************************Hardware_Initializing*********************************************/
 	LCD_voidInit();
-
-	//GPS_voidInit(); //Note that LCD Init is included in this API
+    Ultasonic_voidInit();
+	//GPS_voidInit();
 	LightSensor_voidInit();
 
 	/********************************Interrupts_Starting***********************************************/
@@ -184,33 +191,37 @@ int main(void)
 	//>>>>>>> Stashed change
 
 	/************************************SW_Timers_Creation********************************************/
-	Handle_Timer_RecieveESP= xTimerCreate("Timer_RecieveEsp", pdMS_TO_TICKS(5000), pdFALSE, &ID_TImer_RecieveESP, CallBack_TimerLCDBuzzer);
+	Handle_Timer_RecieveESP= xTimerCreate("Timer_RecieveEsp", pdMS_TO_TICKS(7000), pdFALSE, &ID_TImer_RecieveESP, CallBack_TimerLCDBuzzer);
+	Handle_Timer_Breaking_Status = xTimerCreate("Breaking_Status_Elimination", pdMS_TO_TICKS(1500), pdFALSE, &ID_TImer_Breaking_Status, CallBack_TimerBreakingStatus);
 
 	/************************************TASKS_Creation************************************************/
 	Status_GPS = xTaskCreate(TASK_GPS, "GPS", 150, NULL, Priority_TASK_GPS, &Handle_GPS);
 
-	configASSERT(Status_GPS==pdPASS);
+	configASSERT(Status_GPS == pdPASS);
 
 	Status_CarControl = xTaskCreate(TASK_CarControl, "CarControl", 200, NULL, Priority_TASK_CarControl, &Handle_CarControl);
 
-	configASSERT(Status_CarControl==pdPASS);
+	configASSERT(Status_CarControl == pdPASS);
 
 	Status_ESP_Periodic = xTaskCreate(TASK_ESPSend_PeriodicData, "ESP_Periodic", 200, NULL, Priority_TASK_ESP_Periodic, &Handle_ESP_Periodic);
 
-	configASSERT(Status_ESP_Periodic==pdPASS);
+	configASSERT(Status_ESP_Periodic == pdPASS);
 
 	Status_ESP_Status = xTaskCreate(TASK_ESP_SendStatus, "ESP_Status", 200, NULL, Priority_TASK_ESP_Status, &Handle_ESP_Status);
 
-	configASSERT(Status_ESP_Status==pdPASS);
+	configASSERT(Status_ESP_Status == pdPASS);
 
 	Status_ESP_Receive = xTaskCreate(TASK_ESP_Receive, "ESP_Receive", 200, NULL, Priority_TASK_ESP_Receive, &Handle_ESP_Receive);
 
-	configASSERT(Status_ESP_Receive==pdPASS);
+	configASSERT(Status_ESP_Receive == pdPASS);
 
 	Status_LightSensor = xTaskCreate(TASK_LightSensor, "LightSensor", 200, NULL, Priority_TASK_LightSensor, &Handle_LightSensor);
 
-	configASSERT(Status_LightSensor==pdPASS);
+	configASSERT(Status_LightSensor == pdPASS);
 
+	Status_Distance_AboveThreshold = xTaskCreate(TASK_Distance_AboveThreshold, "D_Above_T", 150, NULL ,Priority_TASK_Distance_AboveThreshold, &Handle_Distance_AboveThreshold);
+
+	configASSERT(Status_Distance_AboveThreshold == pdPASS);
 
 	/**********************************Schedular_Starting********************************************/
 	vTaskStartScheduler();
@@ -339,40 +350,6 @@ static void MX_I2C2_Init(void)
   /* USER CODE BEGIN I2C2_Init 2 */
 
   /* USER CODE END I2C2_Init 2 */
-
-}
-
-/**
-  * @brief I2C3 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_I2C3_Init(void)
-{
-
-  /* USER CODE BEGIN I2C3_Init 0 */
-
-  /* USER CODE END I2C3_Init 0 */
-
-  /* USER CODE BEGIN I2C3_Init 1 */
-
-  /* USER CODE END I2C3_Init 1 */
-  hi2c3.Instance = I2C3;
-  hi2c3.Init.ClockSpeed = 100000;
-  hi2c3.Init.DutyCycle = I2C_DUTYCYCLE_2;
-  hi2c3.Init.OwnAddress1 = 0;
-  hi2c3.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-  hi2c3.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-  hi2c3.Init.OwnAddress2 = 0;
-  hi2c3.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-  hi2c3.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-  if (HAL_I2C_Init(&hi2c3) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN I2C3_Init 2 */
-
-  /* USER CODE END I2C3_Init 2 */
 
 }
 
@@ -525,6 +502,37 @@ static void MX_TIM6_Init(void)
   /* USER CODE BEGIN TIM6_Init 2 */
 
   /* USER CODE END TIM6_Init 2 */
+
+}
+
+/**
+  * @brief TIM10 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM10_Init(void)
+{
+
+  /* USER CODE BEGIN TIM10_Init 0 */
+
+  /* USER CODE END TIM10_Init 0 */
+
+  /* USER CODE BEGIN TIM10_Init 1 */
+
+  /* USER CODE END TIM10_Init 1 */
+  htim10.Instance = TIM10;
+  htim10.Init.Prescaler = 16-1;
+  htim10.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim10.Init.Period = 65535;
+  htim10.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim10.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim10) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM10_Init 2 */
+
+  /* USER CODE END TIM10_Init 2 */
 
 }
 
@@ -717,13 +725,14 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4
                           |GPIO_PIN_8|GPIO_PIN_9, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5|GPIO_PIN_9, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5|GPIO_PIN_8|GPIO_PIN_9, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : PC13 PC2 PC3 PC4
                            PC8 PC9 */
@@ -734,8 +743,22 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PB5 PB9 */
-  GPIO_InitStruct.Pin = GPIO_PIN_5|GPIO_PIN_9;
+  /*Configure GPIO pin : PD2 */
+  GPIO_InitStruct.Pin = GPIO_PIN_2;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PB4 */
+  GPIO_InitStruct.Pin = GPIO_PIN_4;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  GPIO_InitStruct.Alternate = GPIO_AF4_I2C3;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PB5 PB8 PB9 */
+  GPIO_InitStruct.Pin = GPIO_PIN_5|GPIO_PIN_8|GPIO_PIN_9;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

@@ -3,3 +3,4 @@
 ../Core/Src/Help_Functions.c:46:6:LCD_AvoidOvertaking_Warning	8	static
 ../Core/Src/Help_Functions.c:62:6:LCD_BeingOvertaken_Warning	8	static
 ../Core/Src/Help_Functions.c:74:13:LCD_Print_WarningSign	88	static
+../Core/Src/Help_Functions.c:208:6:LCD_Normal_Alert	8	static
