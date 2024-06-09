@@ -28,10 +28,13 @@ extern TaskHandle_t Handle_ESP_Periodic;
 extern TaskHandle_t Handle_ESP_Status;
 extern TaskHandle_t Handle_LightSensor;
 extern TaskHandle_t Handle_ESP_Receive;
+extern TaskHandle_t Handle_Rasp_ReceiveData;
+extern TaskHandle_t Handle_Rasp_SendData;
 
 /********************************Global_Variables_Definition******************************/
 extern uint8_t received_char;
 extern uint8_t  ESP_Recieved_Char;
+extern uint8_t  Rasp_Recieved_Char;
 
 extern uint8_t  Global_Break_Warning_On_Status;
 extern uint8_t  Global_Breaking_Status;
@@ -55,11 +58,20 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	{
 		HAL_UART_Receive_IT(&huart4,&ESP_Recieved_Char,2);
 
-		/*Give the Notification to the Recieve esp task*/
-		xTaskNotifyFromISR(Handle_ESP_Receive,NULL,eNoAction,NULL);
+		if((ESP_Recieved_Char == Notify_TASK_RaspSend_Overtake_Clear) || (ESP_Recieved_Char == Notify_TASK_RaspSend_Overtake_NotClear))
+		{
+			/* Give the Notification to the Raspberry send task is it Clear or Not CLear to overtake */
+			xTaskNotifyFromISR(Handle_Rasp_SendData,ESP_Recieved_Char,eSetValueWithOverwrite,NULL);
+		}
+		else
+		{
 
+			/* Give the Notification to the Receive ESP task */
+			xTaskNotifyFromISR(Handle_ESP_Receive,NULL,eNoAction,NULL);
+
+		}
 	}
-	/* Bluetooth interrupt */
+	/* Blue tooth interrupt */
 	else if(huart->Instance==USART3)
 	{
 		HAL_UART_Receive_IT(&huart3, &received_char, 1);
@@ -67,6 +79,14 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		/* Give the Notification to the CarControl task */
 		xTaskNotifyFromISR(Handle_CarControl,NULL,eNoAction,NULL);
 
+	}
+	/* Raspberry pi interrupt */
+	else if (huart->Instance==USART6)
+	{
+		HAL_UART_Receive_IT(&huart6,&Rasp_Recieved_Char,2);
+
+		/*Give the Notification to the Receive Raspberry task*/
+		xTaskNotifyFromISR(Handle_Rasp_ReceiveData,NULL,eNoAction,NULL);
 	}
 
 }

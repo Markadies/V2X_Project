@@ -92,10 +92,10 @@ int decodeGGA(char *GGAbuffer, GGASTRUCT *gga) {
 	gga->tim.sec = atoi(buffer) % 100;
 
 	/***************** Get LATITUDE  **********************/
-	inx++;   // Reach the first number in the lattitude
+	inx++;   // Reach the first number in the latitude
 	memset(buffer, '\0', 12);
 	i = 0;
-	while (GGAbuffer[inx] != ',') // copy upto the we reach the after lattitude ','
+	while (GGAbuffer[inx] != ',') // copy up to the we reach the after latitude ','
 	{
 		buffer[i] = GGAbuffer[inx];
 		i++;
@@ -109,9 +109,9 @@ int decodeGGA(char *GGAbuffer, GGASTRUCT *gga) {
 		j++;   // Figure out how many digits before the decimal
 	j++;
 	int declen = (strlen(buffer)) - j; // calculate the number of digit after decimal
-	int dec = atoi((char*) buffer + j); // conver the decimal part a a separate number
+	int dec = atoi((char*) buffer + j); // convert the decimal part a a separate number
 	double lat = (num / 100.0) + (dec / pow(10, (declen + 2))); // 1234.56789 = 12.3456789
-	gga->lcation.latitude = lat;  // save the lattitude data into the strucure
+	gga->lcation.latitude = lat;  // save the latitude data into the structure
 	inx++;
 	gga->lcation.NS = GGAbuffer[inx];  // save the N/S into the structure
 
@@ -132,7 +132,7 @@ int decodeGGA(char *GGAbuffer, GGASTRUCT *gga) {
 		j++;  // Figure out how many digits before the decimal
 	j++;
 	declen = (strlen(buffer)) - j; // calculate the number of digit after decimal
-	dec = atoi((char*) buffer + j); // conver the decimal part a a separate number
+	dec = atoi((char*) buffer + j); // convert the decimal part a a separate number
 	lat = (num / 100.0) + (dec / pow(10, (declen + 2))); // 1234.56789 = 12.3456789
 	gga->lcation.longitude = lat;  // save the longitude data into the strucure
 	inx++;

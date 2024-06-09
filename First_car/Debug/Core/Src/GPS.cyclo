@@ -1,3 +1,4 @@
-../Core/Src/GPS.c:37:6:GPS_voidInit	4
-../Core/Src/GPS.c:81:9:GPS_uint8DecodeGGAData	4
-../Core/Src/GPS.c:112:6:GPS_voidLCD_Data_Display	1
+../Core/Src/GPS.c:39:6:GPS_voidInit	4
+../Core/Src/GPS.c:83:9:GPS_uint8DecodeGGAData	4
+../Core/Src/GPS.c:113:6:GPS_voidLCD_Data_Display	1
+../Core/Src/GPS.c:147:8:GPS_doubleLongLat_Calculation	1

@@ -17,6 +17,8 @@ void TASK_ESP_SendStatus (void *pvParameters);
 void TASK_ESP_Receive (void *pvParameters);
 void TASK_LightSensor(void *pvParameters);
 void TASK_Distance_AboveThreshold(void *pvParameters);
+void TASK_Rasp_Receive(void *pvParameters);
+void TASK_Rasp_Send(void *pvParameters);
 
 /*************************************Configurations Macros********************************************/
 
@@ -28,7 +30,8 @@ void TASK_Distance_AboveThreshold(void *pvParameters);
 #define Priority_TASK_ESP_Receive                       3
 #define Priority_TASK_LightSensor                       2
 #define Priority_TASK_Distance_AboveThreshold           2
-
+#define Priority_TASK_Rasp_Recieve			            3
+#define Priority_TASK_Rasp_Send				            3
 
 
 //For light sensor task
@@ -41,10 +44,19 @@ void TASK_Distance_AboveThreshold(void *pvParameters);
 
 /***************************************Private Macros*************************************************/
 
-#define Notify_TASK_ESPRecieve_Light            'L'
-#define Notify_TASK_ESPRecieve_Break            'B'
-#define Notify_TASK_ESPRecieve_AvoidOvertake    'o'
-#define Notify_TASK_ESPRecieve_BeingOvertaken   'v'
+#define Notify_TASK_ESPRecieve_Light            	'L'
+#define Notify_TASK_ESPRecieve_Break            	'B'
+#define Notify_TASK_ESPSend_AvoidOvertake	  	  	'o'
+#define Notify_TASK_ESPSend_RequestOvertake			'v'
+
+#define Notify_TASK_RaspRecieve_pass_RightLane  	146
+#define Notify_TASK_RaspRecieve_pass_LeftLane   	158
+#define Notify_TASK_RaspSend_Overtake_Clear     	'O'
+#define Notify_TASK_RaspSend_Overtake_NotClear  	'N'
+
+#define  Notify_TASK_RaspRecieve_TurnRight			'A'
+#define  Notify_TASK_RaspRecieve_TurnLeft	 		'Z'
+
 
 #define Notify_TASK_ESPSend_HighLight		   5
 

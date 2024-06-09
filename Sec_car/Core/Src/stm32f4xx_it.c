@@ -176,8 +176,12 @@ void TIM2_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM2_IRQn 0 */
   if (__HAL_TIM_GET_IT_SOURCE(&htim2, TIM_IT_UPDATE) != RESET) {
+
 		// Timer overflow interrupt
 		Global_Speed = round(Calculate_Car_Speed());
+
+
+
         if(Global_GPS_Speed_Completetion==Nothing_Completed)
         {
         	Global_GPS_Speed_Completetion=Half_Completed_Speed;
@@ -191,8 +195,10 @@ void TIM2_IRQHandler(void)
         	xTaskNotifyFromISR(Handle_ESP_Periodic,0,eNoAction,NULL);
         }
 
-	}else {
-		edges_counter++;
+	}
+  else
+    {
+	/* Do Nothing */
 	}
   
   /* USER CODE END TIM2_IRQn 0 */
@@ -210,7 +216,7 @@ void USART1_IRQHandler(void)
   /* USER CODE BEGIN USART1_IRQn 0 */
 	Uart_isr(&huart1);
   /* USER CODE END USART1_IRQn 0 */
-  //HAL_UART_IRQHandler(&huart1);
+  HAL_UART_IRQHandler(&huart1);
   /* USER CODE BEGIN USART1_IRQn 1 */
 
   /* USER CODE END USART1_IRQn 1 */

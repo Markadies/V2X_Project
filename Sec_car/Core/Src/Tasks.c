@@ -76,8 +76,8 @@ void TASK_GPS        (void *pvParameters)
 				/*Activate the ESPTask*/
 				xTaskNotify(Handle_ESP_Periodic,0,eNoAction);
 			}
-			/*Stopping the task for 400ms to free the processor*/
-			vTaskDelay(pdMS_TO_TICKS(400));
+			/*Stopping the task for 1 second to free the processor*/
+			vTaskDelay(pdMS_TO_TICKS(1000));
 		}
 		else if(Decode_Error_Code==Decode_Failed)
 		{

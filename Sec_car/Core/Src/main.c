@@ -154,7 +154,6 @@ int main(void)
   MX_USART6_UART_Init();
   MX_UART4_Init();
   MX_UART5_Init();
-
   /* USER CODE BEGIN 2 */
 	/********************************Hardware_Initializing*********************************************/
 	//GPS_voidInit();
@@ -165,6 +164,7 @@ int main(void)
 	HAL_UART_Receive_IT(&huart3,&received_char ,1);                      //Bluetooth
 	__HAL_TIM_ENABLE_IT(&htim2, TIM_IT_UPDATE);                          //Speed
 	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);                          //Speed
+	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_2);							 //Speed
 
 	/********************************SEGGER_Starting***************************************************/
 	//Enable the CYCCN counter (For SEGGER)
@@ -175,7 +175,7 @@ int main(void)
 //		SEGGER_SYSVIEW_Start();
 
 		/************************************SW_Timers-Creation********************************************/
-		Handle_Timer_LightStop = xTimerCreate("Timer_LightStop", pdMS_TO_TICKS(3500), pdFALSE, &ID_TImer_LightStop, CallBack_TimerLightStop);
+		Handle_Timer_LightStop = xTimerCreate("Timer_LightStop", pdMS_TO_TICKS(2500), pdFALSE, &ID_TImer_LightStop, CallBack_TimerLightStop);
 
 		/************************************TASKS_Creation************************************************/
 		Status_GPS = xTaskCreate(TASK_GPS, "GPS", 150, NULL, Priority_TASK_GPS, &Handle_GPS);
@@ -345,7 +345,7 @@ static void MX_TIM2_Init(void)
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 15999;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 12000;
+  htim2.Init.Period = 999;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_IC_Init(&htim2) != HAL_OK)

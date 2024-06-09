@@ -33,5 +33,7 @@ void GPS_voidLCD_Data_Display(void);
 /*Function to send the GPS data (latitude,long,E/W,N/S) to the LCD */
 void GPS_voidESP_Data_Send(void);
 
+/* Function that converts long, lat to minutes */
+double GPS_doubleLongLat_Calculation(double lat);
 
 #endif /* INC_GPS_H_ */

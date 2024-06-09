@@ -98,6 +98,8 @@ uint8_t received_char;
 
 uint8_t ESP_Recieved_Char;
 
+uint8_t Rasp_Recieved_Char;
+
 /*Creating tasks handlers*/
 
 TaskHandle_t Handle_CarControl;
@@ -107,6 +109,9 @@ TaskHandle_t Handle_ESP_Status;
 TaskHandle_t Handle_ESP_Receive;
 TaskHandle_t Handle_LightSensor;
 TaskHandle_t Handle_Distance_AboveThreshold;
+TaskHandle_t Handle_Rasp_ReceiveData;
+TaskHandle_t Handle_Rasp_SendData;
+
 
 /*Creating a variable to save the return of the xcreateTask function (pdPass or pdFail) */
 
@@ -117,6 +122,8 @@ BaseType_t Status_ESP_Status;
 BaseType_t Status_ESP_Receive;
 BaseType_t Status_LightSensor;
 BaseType_t Status_Distance_AboveThreshold;
+BaseType_t Status_Rasp_Receive;
+BaseType_t Status_Rasp_Send;
 
 /*Creating SW Timers handle and id*/
 TimerHandle_t Handle_Timer_RecieveESP;
@@ -172,14 +179,16 @@ int main(void)
 	/********************************Hardware_Initializing*********************************************/
 	LCD_voidInit();
     Ultasonic_voidInit();
-	//GPS_voidInit();
+    GPS_voidInit();
 	LightSensor_voidInit();
 
 	/********************************Interrupts_Starting***********************************************/
 	HAL_UART_Receive_IT(&huart4,&ESP_Recieved_Char ,2);              //ESP
+	HAL_UART_Receive_IT(&huart6,&Rasp_Recieved_Char,2);				 //Raspberry Recieve
 	HAL_UART_Receive_IT(&huart3,&received_char , 1);                 //Bluetooth
 	__HAL_TIM_ENABLE_IT(&htim2, TIM_IT_UPDATE);                      //Speed
 	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);                      //Speed
+	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_2);                      //Speed
 
 	/********************************SEGGER_Starting********************************************
 	//	//Enable the CYCCN counter (For SEGGER)
@@ -222,6 +231,14 @@ int main(void)
 	Status_Distance_AboveThreshold = xTaskCreate(TASK_Distance_AboveThreshold, "D_Above_T", 150, NULL ,Priority_TASK_Distance_AboveThreshold, &Handle_Distance_AboveThreshold);
 
 	configASSERT(Status_Distance_AboveThreshold == pdPASS);
+
+	Status_Rasp_Receive = xTaskCreate(TASK_Rasp_Receive, "Rasp_Recieve", 200, NULL ,Priority_TASK_Rasp_Recieve, &Handle_Rasp_ReceiveData);
+
+	configASSERT(Status_Rasp_Receive == pdPASS);
+
+	Status_Rasp_Send = xTaskCreate(TASK_Rasp_Send, "Rasp_Send", 200, NULL ,Priority_TASK_Rasp_Send, &Handle_Rasp_SendData);
+
+	configASSERT(Status_Rasp_Send == pdPASS);
 
 	/**********************************Schedular_Starting********************************************/
 	vTaskStartScheduler();
@@ -366,7 +383,7 @@ static void MX_TIM2_Init(void)
   /* USER CODE END TIM2_Init 0 */
 
   TIM_MasterConfigTypeDef sMasterConfig = {0};
-  TIM_OC_InitTypeDef sConfigOC = {0};
+  TIM_IC_InitTypeDef sConfigIC = {0};
 
   /* USER CODE BEGIN TIM2_Init 1 */
 
@@ -374,10 +391,10 @@ static void MX_TIM2_Init(void)
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 15999;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 1000-1;
+  htim2.Init.Period = 999;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_OC_Init(&htim2) != HAL_OK)
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  if (HAL_TIM_IC_Init(&htim2) != HAL_OK)
   {
     Error_Handler();
   }
@@ -387,22 +404,21 @@ static void MX_TIM2_Init(void)
   {
     Error_Handler();
   }
-  sConfigOC.OCMode = TIM_OCMODE_TIMING;
-  sConfigOC.Pulse = 0;
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  if (HAL_TIM_OC_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING;
+  sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+  sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+  sConfigIC.ICFilter = 0;
+  if (HAL_TIM_IC_ConfigChannel(&htim2, &sConfigIC, TIM_CHANNEL_1) != HAL_OK)
   {
     Error_Handler();
   }
-  if (HAL_TIM_OC_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
+  if (HAL_TIM_IC_ConfigChannel(&htim2, &sConfigIC, TIM_CHANNEL_2) != HAL_OK)
   {
     Error_Handler();
   }
   /* USER CODE BEGIN TIM2_Init 2 */
 
   /* USER CODE END TIM2_Init 2 */
-  HAL_TIM_MspPostInit(&htim2);
 
 }
 
@@ -693,7 +709,7 @@ static void MX_USART6_UART_Init(void)
 
   /* USER CODE END USART6_Init 1 */
   huart6.Instance = USART6;
-  huart6.Init.BaudRate = 9600;
+  huart6.Init.BaudRate = 115200;
   huart6.Init.WordLength = UART_WORDLENGTH_8B;
   huart6.Init.StopBits = UART_STOPBITS_1;
   huart6.Init.Parity = UART_PARITY_NONE;

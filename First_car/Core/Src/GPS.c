@@ -13,8 +13,10 @@
 #include <math.h>
 
 
+
 #define  Valid_Data      2
 #define  unValid_Data    1
+
 
 
 /*This is the buffer which contains th undecoded GGA data*/
@@ -36,11 +38,11 @@ GPS_Data_t GPS_Data;
 /*Waits till the gps gets right information and its done*/
 void GPS_voidInit(void)
 {
-	/*Ringbuffer initialization*/
+	/*Ring Buffer initialization*/
 	Ringbuf_init();
 	HAL_Delay(500);
 
-	/*LCD clearing*/
+	/* LCD clear */
 	LCD_voidClearDisplay();
 
 	/*Writing on LCD that the gps still warming up*/
@@ -92,8 +94,8 @@ uint8_t GPS_uint8DecodeGGAData()
 	if(flagGGA==Valid_Data)
 	{
 		Local_uint8ErrorCode=Decode_Success;
-		GPS_Data.Latitude  = GPS_NMEA_DATA.ggastruct.lcation.latitude;
-		GPS_Data.Longitude = GPS_NMEA_DATA.ggastruct.lcation.longitude;
+		GPS_Data.Latitude    =    GPS_doubleLongLat_Calculation(GPS_NMEA_DATA.ggastruct.lcation.latitude);
+		GPS_Data.Longitude   =    GPS_doubleLongLat_Calculation(GPS_NMEA_DATA.ggastruct.lcation.longitude);
 
 		GPS_Data.East_West = GPS_NMEA_DATA.ggastruct.lcation.EW;
 		GPS_Data.North_South = GPS_NMEA_DATA.ggastruct.lcation.NS;
@@ -101,7 +103,6 @@ uint8_t GPS_uint8DecodeGGAData()
 	else
 	{
 		Local_uint8ErrorCode=Decode_Failed;
-;
 	}
 
 
@@ -143,9 +144,14 @@ void GPS_voidLCD_Data_Display(void)
 
 }
 
+double GPS_doubleLongLat_Calculation(double lat)
+{
+	uint8_t intValue ;
+	double fraction;
+	intValue = lat; //intValue = 31 instead of 31.39049
+	fraction = lat - intValue; // fraction = 0.39049
+	fraction = (double) ((fraction * 100.0) / 60.0) ; //fraction = (39.049)/60 = 0.6532
 
-
-
-
-
+	return (double) (intValue + fraction); // return value = 31 + 0.6532 = 31.6532
+}
 
