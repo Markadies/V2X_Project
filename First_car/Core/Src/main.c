@@ -98,7 +98,7 @@ uint8_t received_char;
 
 uint8_t ESP_Recieved_Char;
 
-uint8_t Rasp_Recieved_Char;
+uint16_t Rasp_Recieved_Char;
 
 /*Creating tasks handlers*/
 
@@ -179,12 +179,12 @@ int main(void)
 	/********************************Hardware_Initializing*********************************************/
 	LCD_voidInit();
     Ultasonic_voidInit();
-    GPS_voidInit();
+   // GPS_voidInit();
 	LightSensor_voidInit();
 
 	/********************************Interrupts_Starting***********************************************/
 	HAL_UART_Receive_IT(&huart4,&ESP_Recieved_Char ,2);              //ESP
-	HAL_UART_Receive_IT(&huart6,&Rasp_Recieved_Char,2);				 //Raspberry Recieve
+	HAL_UART_Receive_IT(&huart6,&Rasp_Recieved_Char,1);				 //Raspberry
 	HAL_UART_Receive_IT(&huart3,&received_char , 1);                 //Bluetooth
 	__HAL_TIM_ENABLE_IT(&htim2, TIM_IT_UPDATE);                      //Speed
 	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);                      //Speed
@@ -200,8 +200,8 @@ int main(void)
 	//>>>>>>> Stashed change
 
 	/************************************SW_Timers_Creation********************************************/
-	Handle_Timer_RecieveESP= xTimerCreate("Timer_RecieveEsp", pdMS_TO_TICKS(7000), pdFALSE, &ID_TImer_RecieveESP, CallBack_TimerLCDBuzzer);
-	Handle_Timer_Breaking_Status = xTimerCreate("Breaking_Status_Elimination", pdMS_TO_TICKS(1500), pdFALSE, &ID_TImer_Breaking_Status, CallBack_TimerBreakingStatus);
+	Handle_Timer_RecieveESP = xTimerCreate("Timer_RecieveEsp", pdMS_TO_TICKS(6000), pdFALSE, &ID_TImer_RecieveESP, CallBack_TimerLCDBuzzer);
+	Handle_Timer_Breaking_Status = xTimerCreate("Breaking_Status_Elimination", pdMS_TO_TICKS(1000), pdFALSE, &ID_TImer_Breaking_Status, CallBack_TimerBreakingStatus);
 
 	/************************************TASKS_Creation************************************************/
 	Status_GPS = xTaskCreate(TASK_GPS, "GPS", 150, NULL, Priority_TASK_GPS, &Handle_GPS);
@@ -236,7 +236,7 @@ int main(void)
 
 	configASSERT(Status_Rasp_Receive == pdPASS);
 
-	Status_Rasp_Send = xTaskCreate(TASK_Rasp_Send, "Rasp_Send", 200, NULL ,Priority_TASK_Rasp_Send, &Handle_Rasp_SendData);
+	Status_Rasp_Send = xTaskCreate(TASK_Rasp_Send, "Rasp_Send", 150, NULL ,Priority_TASK_Rasp_Send, &Handle_Rasp_SendData);
 
 	configASSERT(Status_Rasp_Send == pdPASS);
 

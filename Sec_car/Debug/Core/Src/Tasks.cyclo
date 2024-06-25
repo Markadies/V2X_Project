@@ -1,5 +1,6 @@
-../Core/Src/Tasks.c:53:6:TASK_GPS	4
-../Core/Src/Tasks.c:97:6:TASK_CarControl	11
-../Core/Src/Tasks.c:161:6:TASK_ESPSend_PeriodicData	2
-../Core/Src/Tasks.c:187:6:TASK_ESP_SendStatus	3
-../Core/Src/Tasks.c:220:6:TASK_ESP_Receive	3
+../Core/Src/Tasks.c:54:6:TASK_GPS	4
+../Core/Src/Tasks.c:98:6:TASK_CarControl	11
+../Core/Src/Tasks.c:162:6:TASK_ESPSend_PeriodicData	2
+../Core/Src/Tasks.c:188:6:TASK_ESP_SendStatus	6
+../Core/Src/Tasks.c:242:6:TASK_ESP_Receive	4
+../Core/Src/Tasks.c:302:6:TASK_Rasp_Receive	4

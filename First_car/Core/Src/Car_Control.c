@@ -2,9 +2,9 @@
 #include "Car_Control.h"
 
 /*Defining the Macros for the duty cycles to configure if needed*/
-#define HIGH_SPEED    99
-#define LOW_SPEED     70
-
+#define HIGH_SPEED        99
+#define LOW_SPEED         20
+#define VERY_LOW_SPEED    14
 extern TIM_HandleTypeDef htim3;
 
 
@@ -130,10 +130,10 @@ void Car_Rotate_Left(void)
 
 	/*Setting the PWM for both motors to high Speed & Starting the PWM generation on both motors*/
 	/*Assigning the duty cycle*/
-	PWM_Motor_1=LOW_SPEED;
-	PWM_Motor_2=LOW_SPEED;
-	PWM_Motor_3=LOW_SPEED;
-	PWM_Motor_4=LOW_SPEED;
+	PWM_Motor_1=HIGH_SPEED;
+	PWM_Motor_2=HIGH_SPEED;
+	PWM_Motor_3=HIGH_SPEED;
+	PWM_Motor_4=HIGH_SPEED;
 
 	/*Starting the generation*/
 	HAL_TIM_PWM_Start(Motor1_Timer,Motor1_Channel);
@@ -157,9 +157,9 @@ void Car_Rotate_RightForward(void)
 	/*Right motors rotate high speed and the Left with low speed*/
 	/*Assigning the duty cycle*/
 
-	PWM_Motor_1=LOW_SPEED;
+	PWM_Motor_1=8;
 	PWM_Motor_2=HIGH_SPEED;
-	PWM_Motor_3=LOW_SPEED;
+	PWM_Motor_3=8;
 	PWM_Motor_4=HIGH_SPEED;
 
 	/*Starting the generation*/
@@ -189,9 +189,9 @@ void Car_Rotate_LeftForward(void)
 	/*Assigning the duty cycle*/
 
 	PWM_Motor_1=HIGH_SPEED;
-	PWM_Motor_2=LOW_SPEED;
+	PWM_Motor_2=25;
 	PWM_Motor_3=HIGH_SPEED;
-	PWM_Motor_4=LOW_SPEED;
+	PWM_Motor_4=25;
 
 	/*Starting the generation*/
 

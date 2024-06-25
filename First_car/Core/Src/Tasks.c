@@ -30,7 +30,7 @@
 
 extern uint8_t  received_char;
 extern uint8_t  ESP_Recieved_Char;
-extern uint8_t Rasp_Recieved_Char;
+extern uint16_t Rasp_Recieved_Char;
 
 uint8_t  Global_GPS_Speed_Completetion=0;
 
@@ -39,6 +39,7 @@ uint8_t  ESP_TX_Buffer_Periodic[27];
 
 uint8_t  Global_Breaking_Status = Breaking_OFF;
 uint8_t  Global_Break_Warning_On_Status = 0;
+uint8_t  Global_Overtake_Warning_Status = 0 ;
 uint16_t Global_Speed;
 
 extern GPS_Data_t GPS_Data;
@@ -179,7 +180,7 @@ void TASK_LightSensor(void *pvParameters)
 
 	while(1)
 	{
-		/*Read the intensity*/
+		/* Read the intensity */
 		LightSensor_uint8ReadIntensity(&Local_uint16LightSensor_Flux);
 
 		if(Local_uint16LightSensor_Flux>MAX_LightIntensity)
@@ -188,7 +189,7 @@ void TASK_LightSensor(void *pvParameters)
 			xTaskNotify(Handle_ESP_Status,Notify_TASK_ESPSend_HighLight,eSetValueWithOverwrite);
 
 			/*Delaying the task to free the processor*/
-			vTaskDelay(pdMS_TO_TICKS(3300));
+			vTaskDelay(pdMS_TO_TICKS(6500));
 		}
 		else
 		{
@@ -234,12 +235,10 @@ void TASK_ESP_SendStatus (void *pvParameters)
 	ESP_TX_Buffer_Status[3] = '!';
 	while(1)
 	{
-		/*Waiting to be notified from the TASK_LightSensor */
+
 		Notify_Status = xTaskNotifyWait((uint32_t)NULL,0xffffffff,&Local_Notification_Value,portMAX_DELAY);
 		if(Notify_Status == pdTRUE)
 		{
-
-			/* Read data from Light_Sensor_Task */
 			switch (Local_Notification_Value)
 			{
 			case Notify_TASK_ESPSend_HighLight:
@@ -253,15 +252,13 @@ void TASK_ESP_SendStatus (void *pvParameters)
 
 			case Notify_TASK_ESPSend_RequestOvertake:
 
-				/* Updating the TX buffer with the avoid Overtaking */
+				/* Updating the TX buffer with the  Overtaking request */
 				ESP_TX_Buffer_Status[1] = 'K';
 
 				/*Transmitting the Car status to the Esp */
 				HAL_UART_Transmit(&huart4,ESP_TX_Buffer_Status, sizeof(ESP_TX_Buffer_Status), 1500);
 				break;
 
-
-				//////////////////////////////
 			}
 		}
 	}
@@ -333,7 +330,7 @@ void TASK_ESP_Receive (void *pvParameters)
 					/* Calculation failed means that most probably the front car is farther than 4 meters so just a visual alert
 					 * and a weak audio alert is enough */
 					LCD_Normal_Alert();
-					Buzzer_voidMidSound();
+					Buzzer_voidHighSound();
 
 					/* Start the timer to stop the buzzer and clear LCD after period of specified time */
 					xTimerStart(Handle_Timer_RecieveESP,1000);
@@ -364,8 +361,6 @@ void TASK_ESP_Receive (void *pvParameters)
 
 
 	}
-
-
 }
 
 void TASK_Distance_AboveThreshold(void *pvParameters)
@@ -381,7 +376,7 @@ void TASK_Distance_AboveThreshold(void *pvParameters)
 		if( (Notify_Status == pdTRUE) && (Global_Breaking_Status == Breaking_OFF))
 		{
 			Local_TickTypeTicks_Now = xTaskGetTickCount();
-			while(((xTaskGetTickCount() - Local_TickTypeTicks_Now) < 1700) && (Global_Breaking_Status == Breaking_OFF))
+			while(((xTaskGetTickCount() - Local_TickTypeTicks_Now) < 3500) && (Global_Breaking_Status == Breaking_OFF))
 			{
 				Local_Ultrasonic_Error_Code = Ultrasonic_uint8Get_Distance_In_Cm(&Local_uint16Distance);
 
@@ -422,8 +417,6 @@ void TASK_Distance_AboveThreshold(void *pvParameters)
 
 	}
 
-
-
 }
 
 void TASK_Rasp_Receive(void *pvParameters)
@@ -443,10 +436,10 @@ void TASK_Rasp_Receive(void *pvParameters)
 			}
 			else if((Rasp_Recieved_Char == Notify_TASK_RaspRecieve_TurnRight))
 			{
-				/* Suspending the carcontrol task to ignore the life threatening wrong user decision */
+				/* Suspending the CarControl task to ignore the life threatening wrong user decision */
 				vTaskSuspend(Handle_CarControl);
 
-				while((Rasp_Recieved_Char != 'Z') &&(Local_uint32Timeout< TIMEOUT_INSTRUCTIONS_TO_2500_Millis) )
+				while((Rasp_Recieved_Char != 'C') && (Local_uint32Timeout < TIMEOUT_INSTRUCTIONS_TO_2500_Millis) )
 				{
 					/* Rotating right till receiving the approval of the raspberry */
 					Car_Rotate_RightForward();
@@ -455,18 +448,37 @@ void TASK_Rasp_Receive(void *pvParameters)
 					Local_uint32Timeout++;
 				}
 
+				/* Stopping the Car */
+				Car_Stop();
+
 				/* After the raspberry approval, giving the control back to the user */
 				vTaskResume(Handle_CarControl);
 
-				/* Resseting the timeout */
+				/* Clearing the warning if still on */
+				if(Global_Overtake_Warning_Status == Warning_ON)
+				{
+					/* Stopping the warning action */
+					Buzzer_voidStop();
+					LCD_voidClearDisplay();
+
+					/* Stopping the unNessecary timer */
+					xTimerStop(Handle_Timer_RecieveESP,100);
+
+					/* Reseting the global variable */
+					Global_Overtake_Warning_Status = Warning_OFF;
+
+				}else{/* Do Nothing */}
+
+				/* Reseting the timeout */
 				Local_uint32Timeout = 0;
 			}
 			else if((Rasp_Recieved_Char == Notify_TASK_RaspRecieve_TurnLeft))
 			{
-				/* Suspending the carcontrol task to ignore the life threatening wrong user decision */
+
+				/* Suspending the CarControl task to ignore the life threatening wrong user decision */
 				vTaskSuspend(Handle_CarControl);
 
-				while((Rasp_Recieved_Char != 'Z') &&(Local_uint32Timeout< TIMEOUT_INSTRUCTIONS_TO_2500_Millis) )
+				while((Rasp_Recieved_Char != 'C') &&(Local_uint32Timeout< TIMEOUT_INSTRUCTIONS_TO_2500_Millis) )
 				{
 					/* Rotating right till receiving the approval of the raspberry */
 					Car_Rotate_LeftForward();
@@ -475,11 +487,30 @@ void TASK_Rasp_Receive(void *pvParameters)
 					Local_uint32Timeout++;
 				}
 
+				/* Stopping the Car */
+				Car_Stop();
+
 				/* After the raspberry approval, giving the control back to the user */
 				vTaskResume(Handle_CarControl);
 
+				/* Clearing the warning if still on */
+				if(Global_Overtake_Warning_Status == Warning_ON)
+				{
+					/* Stopping the warning action */
+					Buzzer_voidStop();
+					LCD_voidClearDisplay();
+
+					/* Stopping the unNessecary timer */
+					xTimerStop(Handle_Timer_RecieveESP,100);
+
+					/* Reseting the global variable */
+					Global_Overtake_Warning_Status = Warning_OFF;
+
+				}else{/* Do Nothing */}
+
 				/* Reseting the timeout */
 				Local_uint32Timeout = 0;
+
 			}
 			else
 			{
@@ -491,7 +522,7 @@ void TASK_Rasp_Receive(void *pvParameters)
 
 		else
 		{
-			/* DO Nothing */
+			/* Do Nothing */
 		}
 
 	}
@@ -507,8 +538,39 @@ void TASK_Rasp_Send(void *pvParameters)
 		Notify_Status = xTaskNotifyWait((uint32_t)NULL,(uint32_t)NULL,&Local_uint32NotificationValue, portMAX_DELAY);
 		if(Notify_Status == pdTRUE)
 		{
-			/* sending the Clear_to_Overtake or NotClear_to_overtake to the Raspberry after receiving it from the ESP */
-			HAL_UART_Transmit(&huart6,&Local_uint32NotificationValue, sizeof(Local_uint32NotificationValue), 1500);
+			if(Local_uint32NotificationValue == Notify_TASK_RaspSend_Overtake_Clear)
+			{
+				/* Sending the Clear_to_Overtake or NotClear_to_overtake to the Raspberry after receiving it from the ESP */
+				HAL_UART_Transmit(&huart6,&Local_uint32NotificationValue, sizeof(Local_uint32NotificationValue),500);
+
+				/* Comforting the driver that he can overtake */
+				LCD_OverTake_Approved();
+
+				/* Start the timer to eliminate the warning after a period of time */
+				xTimerStart(Handle_Timer_RecieveESP,500);
+			}
+			else if(Local_uint32NotificationValue == Notify_TASK_RaspSend_Overtake_NotClear)
+			{
+				/* Sending the Clear_to_Overtake or NotClear_to_overtake to the Raspberry after receiving it from the ESP */
+				HAL_UART_Transmit(&huart6,&Local_uint32NotificationValue, sizeof(Local_uint32NotificationValue),500);
+
+				/* Warning ON */
+				Buzzer_voidHighSound();
+				LCD_AvoidOvertaking_Warning();
+
+				/* Updating the global variable */
+				Global_Overtake_Warning_Status = Warning_ON;
+
+				/* Start the timer to eliminate the warning after a period of time */
+				xTimerStart(Handle_Timer_RecieveESP,500);
+
+
+			}
+			else
+			{
+				/* Do Nothing */
+			}
+
 		}
 	}
 }

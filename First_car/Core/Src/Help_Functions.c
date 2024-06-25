@@ -27,6 +27,20 @@ void LCD_HighLightIntensity_Warning()
 
 }
 
+void LCD_OverTake_Approved()
+{
+
+	/*Printing the warning sign*/
+	LCD_Print_WarningSign();
+
+	/*Printing the warning message to the driver*/
+	LCD_voidSetPositionXY(1,2);
+	LCD_voidSendString("Overtake");
+
+	LCD_voidSetPositionXY(2,2);
+	LCD_voidSendString("Approved");
+
+}
 
 void LCD_AvoidHardBraking(void)
 {

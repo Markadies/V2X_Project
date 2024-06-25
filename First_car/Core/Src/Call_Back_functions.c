@@ -32,12 +32,13 @@ extern TaskHandle_t Handle_Rasp_ReceiveData;
 extern TaskHandle_t Handle_Rasp_SendData;
 
 /********************************Global_Variables_Definition******************************/
-extern uint8_t received_char;
+extern uint8_t  received_char;
 extern uint8_t  ESP_Recieved_Char;
-extern uint8_t  Rasp_Recieved_Char;
+extern uint16_t Rasp_Recieved_Char;
 
 extern uint8_t  Global_Break_Warning_On_Status;
 extern uint8_t  Global_Breaking_Status;
+extern uint8_t  Global_Overtake_Warning_Status;
 
 uint32_t edges_counter = 0;
 
@@ -56,6 +57,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	/* ESP Interrupt */
 	if(huart->Instance==UART4)
 	{
+		/* Reactivating the interrupt */
 		HAL_UART_Receive_IT(&huart4,&ESP_Recieved_Char,2);
 
 		if((ESP_Recieved_Char == Notify_TASK_RaspSend_Overtake_Clear) || (ESP_Recieved_Char == Notify_TASK_RaspSend_Overtake_NotClear))
@@ -74,6 +76,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	/* Blue tooth interrupt */
 	else if(huart->Instance==USART3)
 	{
+		/* Reactivating the interrupt */
 		HAL_UART_Receive_IT(&huart3, &received_char, 1);
 
 		/* Give the Notification to the CarControl task */
@@ -83,9 +86,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	/* Raspberry pi interrupt */
 	else if (huart->Instance==USART6)
 	{
-		HAL_UART_Receive_IT(&huart6,&Rasp_Recieved_Char,2);
+		/* Reactivating the interrupt */
+		HAL_UART_Receive_IT(&huart6,&Rasp_Recieved_Char,1);
 
-		/*Give the Notification to the Receive Raspberry task*/
+		/* Give the Notification to the Receive Raspberry task */
 		xTaskNotifyFromISR(Handle_Rasp_ReceiveData,NULL,eNoAction,NULL);
 	}
 
@@ -110,9 +114,10 @@ void CallBack_TimerLCDBuzzer(TimerHandle_t xTimer)
 	/* Clearing the LCD */
 	LCD_voidClearDisplay();
 
-	/* Resseting the global warning status */
+	/* Reseting the global warning status */
 	Global_Break_Warning_On_Status = Warning_OFF;
+	Global_Overtake_Warning_Status = Warning_OFF;
 }
 
-void CallBack_TimerBreakingStatus(TimerHandle_t xTimer){Global_Breaking_Status = Warning_OFF;}
+void CallBack_TimerBreakingStatus(TimerHandle_t xTimer){Global_Breaking_Status = Breaking_OFF;}
 

@@ -25,6 +25,7 @@
 
 extern uint8_t received_char;
 extern uint8_t ESP_Recieved_Char;
+extern uint16_t Rasp_Recieved_Char;
 
 uint8_t  Global_GPS_Speed_Completetion=0;
 
@@ -77,7 +78,7 @@ void TASK_GPS        (void *pvParameters)
 				xTaskNotify(Handle_ESP_Periodic,0,eNoAction);
 			}
 			/*Stopping the task for 1 second to free the processor*/
-			vTaskDelay(pdMS_TO_TICKS(1000));
+			vTaskDelay(pdMS_TO_TICKS(1500));
 		}
 		else if(Decode_Error_Code==Decode_Failed)
 		{
@@ -135,14 +136,14 @@ void TASK_CarControl(void *pvParameters)
 			case 'l':
 				Light_On();
 
-				/* Updating the car light source status*/
+				/* Updating the car light source status */
 				Global_LightStatus = LIGHT_ON_STATUS;
 
 				break;
 			case 'f':
 				Light_OFF();
 
-				/* Updating the car light source status*/
+				/* Updating the car light source status */
 				Global_LightStatus = LIGHT_OFF_STATUS;
 
 				/* Stopping the unnecessary warning */
@@ -195,23 +196,42 @@ void TASK_ESP_SendStatus (void *pvParameters)
 	while(1)
 	{
 
-		/*Waiting to be notified from the TASK_LightSensor */
 		Notify_Status = xTaskNotifyWait((uint32_t)NULL,0xffffffff,&Local_Notification_Value,portMAX_DELAY);
 		if(Notify_Status == pdTRUE)
 		{
 
-			// Read data from Light_Sensor_Task
 			switch (Local_Notification_Value)
 			{
 			case Notify_TASK_ESPStatus_HardBreaking:
 
-				/*Updating the TX buffer with the problem of the hard breaking*/
+				/* Updating the TX buffer with the problem of the hard breaking */
 				ESP_TX_Buffer_Status[1] = 'B';
 
-				/*Transmitting the Car status to the Esp */
+				/* Transmitting the Car status to the ESP32 */
 				HAL_UART_Transmit(&huart5,ESP_TX_Buffer_Status, sizeof(ESP_TX_Buffer_Status), 1500);
 
 				break;
+
+			case Notify_TASK_ESPStatus_Overtake_NotClear:
+
+				/* Updating the TX buffer with the problem of the hard breaking */
+				ESP_TX_Buffer_Status[1] = 'F';
+
+				/* Transmitting the Car status to the ESP32 */
+				HAL_UART_Transmit(&huart5,ESP_TX_Buffer_Status, sizeof(ESP_TX_Buffer_Status), 1500);
+				break;
+
+			case Notify_TASK_ESPStatus_Overtake_Clear:
+
+				/* Updating the TX buffer with the problem of the hard breaking */
+				ESP_TX_Buffer_Status[1] = 'T';
+
+				/* Transmitting the Car status to the ESP32 */
+				HAL_UART_Transmit(&huart5,ESP_TX_Buffer_Status, sizeof(ESP_TX_Buffer_Status), 1500);
+
+				break;
+
+			default: break;
 			}
 		}
 	}
@@ -237,15 +257,25 @@ void TASK_ESP_Receive (void *pvParameters)
 				Buzzer_voidHighSound();
 				LCD_HighLightIntensity_Warning();
 
-
-				/*Start the timer to autonomously turn off the light source if the user didn't
+				/* Start the timer to autonomously turn off the light source if the user didn't
 				 * & to stop the buzzer and clear LCD after period of specified time */
 				xTimerStart(Handle_Timer_LightStop,1000);
 
 				/*Resuming the tasks*/
 				xTaskResumeAll();
 
+				break;
 
+			case Notify_TASK_ESPRecieve_BeingOvertaken:
+
+				/* Stopping preemption of other tasks in this critical section */
+				vTaskSuspendAll();
+
+				/* Sending the request to the raspberry pi */
+				HAL_UART_Transmit(&huart6,&ESP_Recieved_Char, sizeof(ESP_Recieved_Char), 1500);
+
+				/* Resuming the tasks */
+				xTaskResumeAll();
 
 				break;
 
@@ -258,16 +288,52 @@ void TASK_ESP_Receive (void *pvParameters)
 		}
 		else
 		{
-			/*Do nothing*/
+			/* Do nothing */
+		}
+
+	}
+}
+
+void TASK_Rasp_Receive(void *pvParameters)
+{
+	BaseType_t Notify_Status;
+	uint32_t Local_uint32NotificationValue;
+	uint32_t Local_uint32Timeout = 0;
+	while(1)
+	{
+		Notify_Status = xTaskNotifyWait((uint32_t)NULL,(uint32_t)NULL,&Local_uint32NotificationValue, portMAX_DELAY);
+		if(Notify_Status == pdTRUE)
+		{
+			switch(Rasp_Recieved_Char)
+			{
+			case Notify_TASK_RaspReceieve_Overtake_Clear :
+
+				/* Notify the sendEspStatus task */
+				xTaskNotify(Handle_ESP_Status,Notify_TASK_ESPStatus_Overtake_Clear,eSetValueWithOverwrite);
+
+				break;
+
+			case Notify_TASK_RaspReceieve_Overtake_NotClear:
+
+				/* Notify the sendEspStatus task */
+				xTaskNotify(Handle_ESP_Status,Notify_TASK_ESPStatus_Overtake_NotClear,eSetValueWithOverwrite);
+
+
+				break;
+
+			default:	break;
+
+			}
+
+
+
+
 		}
 
 
 	}
 
-
 }
-
-
 
 
 

@@ -28,11 +28,14 @@ extern TaskHandle_t Handle_GPS;
 extern TaskHandle_t Handle_ESP_Periodic;
 extern TaskHandle_t Handle_ESP_Status;
 extern TaskHandle_t Handle_ESP_Receive;
+extern TaskHandle_t Handle_Rasp_ReceiveData;
 
 /********************************Global_Variables_Definition******************************/
 extern uint8_t received_char;
 extern uint8_t ESP_Recieved_Char;
+extern uint16_t Rasp_Recieved_Char;
 extern uint8_t  Global_LightStatus;
+
 uint32_t edges_counter = 0;
 
 /***************************************Interrupts_Call_Backs********************************************************/
@@ -49,24 +52,33 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	/*BT interrupt*/
 	if(huart->Instance==USART3)
 	{
-		/*Reactivating the interrupt*/
+		/* Reactivating the interrupt */
 		HAL_UART_Receive_IT(&huart3, &received_char, 1);
 
 		/*Give the Notification to the CarControl task*/
 		xTaskNotifyFromISR(Handle_CarControl,NULL,eNoAction,NULL);
 
 	}
-
-	/*ESP receive*/
+	/* ESP receive */
 	else if(huart->Instance==UART5)
 	{
-		/*Reactivating the interrupt*/
+		/* Reactivating the interrupt */
 		HAL_UART_Receive_IT(&huart5,&ESP_Recieved_Char,2);
 
-		/*Give the Notification to the Receive esp task*/
+		/* Give the Notification to the Receive esp task */
 		xTaskNotifyFromISR(Handle_ESP_Receive,NULL,eNoAction,NULL);
 
 	}
+	/* Raspberry pi interrupt */
+	else if (huart->Instance==USART6)
+	{
+		/* Reactivating the interrupt */
+		HAL_UART_Receive_IT(&huart6,&Rasp_Recieved_Char,1);
+
+		/* Give the Notification to the Receive Raspberry task */
+		xTaskNotifyFromISR(Handle_Rasp_ReceiveData,NULL,eNoAction,NULL);
+	}
+	else{/* Do Nothing */}
 
 }
 
@@ -99,8 +111,6 @@ void CallBack_TimerLightStop(TimerHandle_t xTimer)
 	}
 	else
 	{
-		/* If the script reaches here means that the light source is not from this car and it reached here by mistake
-		 * because if the light intensity is already off so the timer should be stopped */
 
 		/* Stopping the buzzer */
 		Buzzer_voidStop();

@@ -1,6 +1,7 @@
 ../Core/Src/Help_Functions.c:15:6:LCD_HighLightIntensity_Warning	8	static
-../Core/Src/Help_Functions.c:31:6:LCD_AvoidHardBraking	8	static
-../Core/Src/Help_Functions.c:46:6:LCD_AvoidOvertaking_Warning	8	static
-../Core/Src/Help_Functions.c:62:6:LCD_BeingOvertaken_Warning	8	static
-../Core/Src/Help_Functions.c:74:13:LCD_Print_WarningSign	88	static
-../Core/Src/Help_Functions.c:208:6:LCD_Normal_Alert	8	static
+../Core/Src/Help_Functions.c:30:6:LCD_OverTake_Approved	8	static
+../Core/Src/Help_Functions.c:45:6:LCD_AvoidHardBraking	8	static
+../Core/Src/Help_Functions.c:60:6:LCD_AvoidOvertaking_Warning	8	static
+../Core/Src/Help_Functions.c:76:6:LCD_BeingOvertaken_Warning	8	static
+../Core/Src/Help_Functions.c:88:13:LCD_Print_WarningSign	88	static
+../Core/Src/Help_Functions.c:222:6:LCD_Normal_Alert	8	static

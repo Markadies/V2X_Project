@@ -36,7 +36,7 @@
 
 #define TIMEOUT_INSTRUCTIONS_TO_10_Millis   160000 		//This is based on 16MHZ clock frequency
 #define TIMEOUT_INSTRUCTIONS_TO_25_Millis   400000 		//This is based on 16MHZ clock frequency
-#define TIMEOUT_INSTRUCTIONS_TO_2500_Millis 40000000 	//This is based on 16MHZ clock frequency
+#define TIMEOUT_INSTRUCTIONS_TO_2500_Millis 25000 	//This is based on 16MHZ clock frequency
 
 
 /*******************************Library_APIs*************************************/

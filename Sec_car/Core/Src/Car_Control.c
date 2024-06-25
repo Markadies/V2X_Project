@@ -2,8 +2,8 @@
 #include "Car_Control.h"
 
 /*Defining the Macros for the duty cycles to configure if needed*/
-#define HIGH_SPEED    99
-#define LOW_SPEED     70
+#define HIGH_SPEED    32
+#define LOW_SPEED     30
 
 extern TIM_HandleTypeDef htim3;
 

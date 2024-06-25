@@ -89,10 +89,11 @@ static void MX_UART5_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 /*****************************************Global_Varibles****************************************/
-/*Received Global Bluetooth*/
+/*Received Global Blue tooth*/
 uint8_t received_char;
 
 uint8_t  ESP_Recieved_Char;
+uint16_t Rasp_Recieved_Char;
 
 /*Creating tasks handlers*/
 TaskHandle_t Handle_CarControl;
@@ -100,6 +101,7 @@ TaskHandle_t Handle_GPS;
 TaskHandle_t Handle_ESP_Periodic;
 TaskHandle_t Handle_ESP_Status;
 TaskHandle_t Handle_ESP_Receive;
+TaskHandle_t Handle_Rasp_ReceiveData;
 
 /*Creating a variable to save the return of the xcreateTask function (pdPass or pdFail)*/
 BaseType_t Status_CarControl;
@@ -107,9 +109,9 @@ BaseType_t Status_GPS;
 BaseType_t Status_ESP_Periodic;
 BaseType_t Status_ESP_Status;
 BaseType_t Status_ESP_Receive;
+BaseType_t Status_Rasp_Receive;
 
-/*Creating SW Timers handle and id*/
-
+/* Creating SW Timers handles and ID */
 TimerHandle_t Handle_Timer_LightStop;
 uint8_t ID_TImer_LightStop = 4;
 
@@ -161,21 +163,22 @@ int main(void)
 
 	/********************************Interrupts_Starting***********************************************/
 	HAL_UART_Receive_IT(&huart5,&ESP_Recieved_Char,2);                   //ESP
-	HAL_UART_Receive_IT(&huart3,&received_char ,1);                      //Bluetooth
+	HAL_UART_Receive_IT(&huart6,&Rasp_Recieved_Char,1);				 	 //Raspberry
+	HAL_UART_Receive_IT(&huart3,&received_char ,1);                      //Blue tooth
 	__HAL_TIM_ENABLE_IT(&htim2, TIM_IT_UPDATE);                          //Speed
 	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);                          //Speed
 	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_2);							 //Speed
 
 	/********************************SEGGER_Starting***************************************************/
 	//Enable the CYCCN counter (For SEGGER)
-//		DWT_CTRL |= (1<<0);
-//
-//		SEGGER_SYSVIEW_Conf();
-//
-//		SEGGER_SYSVIEW_Start();
+	//		DWT_CTRL |= (1<<0);
+	//
+	//		SEGGER_SYSVIEW_Conf();
+	//
+	//		SEGGER_SYSVIEW_Start();
 
 		/************************************SW_Timers-Creation********************************************/
-		Handle_Timer_LightStop = xTimerCreate("Timer_LightStop", pdMS_TO_TICKS(2500), pdFALSE, &ID_TImer_LightStop, CallBack_TimerLightStop);
+		Handle_Timer_LightStop = xTimerCreate("Timer_LightStop", pdMS_TO_TICKS(5000), pdFALSE, &ID_TImer_LightStop, CallBack_TimerLightStop);
 
 		/************************************TASKS_Creation************************************************/
 		Status_GPS = xTaskCreate(TASK_GPS, "GPS", 150, NULL, Priority_TASK_GPS, &Handle_GPS);
@@ -198,7 +201,11 @@ int main(void)
 
 		configASSERT(Status_ESP_Receive==pdPASS);
 
-///**********************************Schedular_Starting********************************************/
+		Status_Rasp_Receive = xTaskCreate(TASK_Rasp_Receive, "Rasp_Recieve", 200, NULL ,Priority_TASK_Rasp_Recieve, &Handle_Rasp_ReceiveData);
+
+		configASSERT(Status_Rasp_Receive == pdPASS);
+
+		/**********************************Schedular_Starting********************************************/
 		vTaskStartScheduler();
 
   /* USER CODE END 2 */
@@ -666,7 +673,7 @@ static void MX_USART6_UART_Init(void)
 
   /* USER CODE END USART6_Init 1 */
   huart6.Instance = USART6;
-  huart6.Init.BaudRate = 9600;
+  huart6.Init.BaudRate = 115200;
   huart6.Init.WordLength = UART_WORDLENGTH_8B;
   huart6.Init.StopBits = UART_STOPBITS_1;
   huart6.Init.Parity = UART_PARITY_NONE;

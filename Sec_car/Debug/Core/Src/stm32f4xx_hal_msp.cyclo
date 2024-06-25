@@ -9,4 +9,4 @@
 ../Core/Src/stm32f4xx_hal_msp.c:389:6:HAL_TIM_PWM_MspDeInit	3
 ../Core/Src/stm32f4xx_hal_msp.c:422:6:HAL_TIM_Base_MspDeInit	2
 ../Core/Src/stm32f4xx_hal_msp.c:444:6:HAL_UART_MspInit	6
-../Core/Src/stm32f4xx_hal_msp.c:604:6:HAL_UART_MspDeInit	6
+../Core/Src/stm32f4xx_hal_msp.c:607:6:HAL_UART_MspDeInit	6

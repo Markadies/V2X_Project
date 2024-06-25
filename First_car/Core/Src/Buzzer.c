@@ -256,7 +256,7 @@ void Buzzer_voidHighSound(void)
 #endif
 #elif Buzzer_Timer_Connected == TIMER12
 #if Buzzer_TimerChannel_Connected == TIMER_CHANNEL_1
-	TIM12->CCR1=90;
+	TIM12->CCR1=99;
 	HAL_TIM_PWM_Start(&htim12,TIM_CHANNEL_1);
 
 

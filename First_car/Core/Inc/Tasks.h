@@ -36,11 +36,11 @@ void TASK_Rasp_Send(void *pvParameters);
 
 //For light sensor task
 /*Configure the Max flux intensity that consider a problem */
-#define MAX_LightIntensity           20
+#define MAX_LightIntensity           3
 
 //For light sensor task
 /*Configure the threshold distance to take the appropriate action*/
-#define THRESHOLD_DISTANCE_INFRONT_IN_CENTIMETER   60
+#define THRESHOLD_DISTANCE_INFRONT_IN_CENTIMETER   130
 
 /***************************************Private Macros*************************************************/
 
@@ -49,8 +49,8 @@ void TASK_Rasp_Send(void *pvParameters);
 #define Notify_TASK_ESPSend_AvoidOvertake	  	  	'o'
 #define Notify_TASK_ESPSend_RequestOvertake			'v'
 
-#define Notify_TASK_RaspRecieve_pass_RightLane  	146
-#define Notify_TASK_RaspRecieve_pass_LeftLane   	158
+#define Notify_TASK_RaspRecieve_pass_RightLane  	'W'
+#define Notify_TASK_RaspRecieve_pass_LeftLane   	'E'
 #define Notify_TASK_RaspSend_Overtake_Clear     	'O'
 #define Notify_TASK_RaspSend_Overtake_NotClear  	'N'
 

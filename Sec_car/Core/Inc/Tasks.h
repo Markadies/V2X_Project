@@ -15,6 +15,7 @@ void TASK_GPS        (void *pvParameters);
 void TASK_ESPSend_PeriodicData (void *pvParameters);
 void TASK_ESP_SendStatus (void *pvParameters);
 void TASK_ESP_Receive (void *pvParameters);
+void TASK_Rasp_Receive(void *pvParameters);
 
   /*************************************Configurations Macros********************************************/
 
@@ -24,13 +25,19 @@ void TASK_ESP_Receive (void *pvParameters);
 #define Priority_TASK_ESP_Periodic          2
 #define Priority_TASK_ESP_Status            3
 #define Priority_TASK_ESP_Receive           3
+#define Priority_TASK_Rasp_Recieve			3
 
   /***************************************Private Macros*************************************************/
 
-#define Notify_TASK_ESPRecieve_Light            'L'
-#define Notify_TASK_ESPRecieve_Break            'B'
-#define Notify_TASK_ESPRecieve_AvoidOvertake    'o'
-#define Notify_TASK_ESPRecieve_BeingOvertaken   'v'
+#define Notify_TASK_ESPRecieve_Light                   'L'
+#define Notify_TASK_ESPRecieve_Break           		   'B'
+#define Notify_TASK_ESPRecieve_BeingOvertaken   	   'G'
+
+#define Notify_TASK_ESPStatus_Overtake_Clear           'T'
+#define Notify_TASK_ESPStatus_Overtake_NotClear        'F'
+
+#define Notify_TASK_RaspReceieve_Overtake_Clear        'T'
+#define Notify_TASK_RaspReceieve_Overtake_NotClear     'F'
 
 #define Notify_TASK_ESPStatus_HardBreaking	   5
 
